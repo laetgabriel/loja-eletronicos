@@ -1,24 +1,18 @@
-package org.acgprojeto.model.entidades;
+package org.acgprojeto.dto;
 
-import org.acgprojeto.dto.ClienteDTO;
+import org.acgprojeto.model.entidades.Cliente;
 
 import java.util.Objects;
 
-public class Cliente {
+public class ClienteDTO {
 
     private Cliente cliente;
     private String nome;
     private String email;
     private String telefone;
 
-    public Cliente(ClienteDTO clienteDTO) {
-        cliente = clienteDTO.getCliente();
-        nome = clienteDTO.getNome();
-        email = clienteDTO.getEmail();
-        telefone = clienteDTO.getTelefone();
-    }
 
-    public Cliente getIdCliente() {
+    public Cliente getCliente() {
         return cliente;
     }
 
@@ -34,7 +28,7 @@ public class Cliente {
         return telefone;
     }
 
-    public void setIdCliente(Cliente cliente) {
+    public void setCliente(Cliente cliente) {
         this.cliente = cliente;
     }
 
@@ -64,7 +58,7 @@ public class Cliente {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Cliente cliente = (Cliente) o;
+        ClienteDTO cliente = (ClienteDTO) o;
         return Objects.equals(cliente, cliente.cliente) && Objects.equals(nome, cliente.nome) && Objects.equals(email, cliente.email) && Objects.equals(telefone, cliente.telefone);
     }
 
