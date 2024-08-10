@@ -8,17 +8,12 @@ import java.math.BigDecimal;
 public class ServicoDTO {
 
     private Integer idServico;
-    private PedidoDTO pedido;
     private String descricao;
     private BigDecimal preco;
     private Tipo tipo;
 
     public Integer getIdServico() {
         return idServico;
-    }
-
-    public PedidoDTO getPedido() {
-        return pedido;
     }
 
     public String getDescricao() {
@@ -35,10 +30,6 @@ public class ServicoDTO {
 
     public void setIdServico(Integer idServico) {
         this.idServico = idServico;
-    }
-
-    public void setPedido(PedidoDTO pedido) {
-        this.pedido = pedido;
     }
 
     public void setDescricao(String descricao) {
