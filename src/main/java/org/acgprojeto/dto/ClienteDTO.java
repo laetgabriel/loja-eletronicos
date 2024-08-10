@@ -6,14 +6,14 @@ import java.util.Objects;
 
 public class ClienteDTO {
 
-    private Cliente cliente;
+    private Integer idCliente;
     private String nome;
     private String email;
     private String telefone;
 
 
-    public Cliente getCliente() {
-        return cliente;
+    public Integer getIdCliente() {
+        return idCliente;
     }
 
     public String getNome() {
@@ -28,8 +28,8 @@ public class ClienteDTO {
         return telefone;
     }
 
-    public void setCliente(Cliente cliente) {
-        this.cliente = cliente;
+    public void setIdCliente(Integer idCliente) {
+        this.idCliente = idCliente;
     }
 
     public void setNome(String nome) {
@@ -47,19 +47,11 @@ public class ClienteDTO {
     @Override
     public String toString() {
         return "Cliente{" +
-                "idCliente=" + cliente +
+                "idCliente=" + idCliente +
                 ", nome='" + nome + '\'' +
                 ", email='" + email + '\'' +
                 ", telefone='" + telefone + '\'' +
                 '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        ClienteDTO cliente = (ClienteDTO) o;
-        return Objects.equals(cliente, cliente.cliente) && Objects.equals(nome, cliente.nome) && Objects.equals(email, cliente.email) && Objects.equals(telefone, cliente.telefone);
     }
 
 }

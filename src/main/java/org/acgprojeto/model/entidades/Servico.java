@@ -1,5 +1,7 @@
 package org.acgprojeto.model.entidades;
 
+import org.acgprojeto.dto.PedidoDTO;
+import org.acgprojeto.dto.ServicoDTO;
 import org.acgprojeto.model.enums.Tipo;
 
 import java.math.BigDecimal;
@@ -7,27 +9,27 @@ import java.math.BigDecimal;
 public class Servico {
 
     private Integer idServico;
-    private Integer idPedido;
+    private Pedido pedido;
     private String descricao;
     private BigDecimal preco;
     private Tipo tipo;
 
     public Servico() {}
 
-    public Servico(Integer idServico, Integer idPedido, String descricao, BigDecimal preco, Tipo tipo) {
-        this.idServico = idServico;
-        this.idPedido = idPedido;
-        this.descricao = descricao;
-        this.preco = preco;
-        this.tipo = tipo;
+    public Servico(ServicoDTO servicoDTO) {
+        this.idServico = servicoDTO.getIdServico();
+        this.pedido = new Pedido(servicoDTO.getPedido());
+        this.descricao = servicoDTO.getDescricao();
+        this.preco = servicoDTO.getPreco();
+        this.tipo = servicoDTO.getTipo();
     }
 
     public Integer getIdServico() {
         return idServico;
     }
 
-    public Integer getIdPedido() {
-        return idPedido;
+    public Pedido getIdPedido() {
+        return pedido;
     }
 
     public String getDescricao() {
@@ -46,8 +48,8 @@ public class Servico {
         this.idServico = idServico;
     }
 
-    public void setIdPedido(Integer idPedido) {
-        this.idPedido = idPedido;
+    public void setIdPedido(Pedido pedido) {
+        this.pedido = pedido;
     }
 
     public void setDescricao(String descricao) {

@@ -1,5 +1,6 @@
 package org.acgprojeto.model.entidades;
 
+import org.acgprojeto.dto.ProdutoDTO;
 import org.acgprojeto.model.enums.Categoria;
 
 import java.math.BigDecimal;
@@ -7,12 +8,20 @@ import java.util.Objects;
 
 public class Produto {
 
-    private int idProduto;
+    private Integer idProduto;
     private String nomeProduto;
     private Categoria categoria;
     private BigDecimal preco;
     private Integer quantidadeEstoque;
 
+
+    public Produto(ProdutoDTO produtoDTO) {
+        idProduto = produtoDTO.getIdProduto();
+        nomeProduto = produtoDTO.getNomeProduto();
+        categoria = produtoDTO.getCategoria();
+        preco = produtoDTO.getPreco();
+        quantidadeEstoque = produtoDTO.getQuantidadeEstoque();
+    }
 
     public int getIdProduto() {
         return idProduto;
@@ -70,7 +79,7 @@ public class Produto {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Produto produto = (Produto) o;
-        return idProduto == produto.idProduto && Objects.equals(nomeProduto, produto.nomeProduto) && categoria == produto.categoria && Objects.equals(preco, produto.preco) && Objects.equals(quantidadeEstoque, produto.quantidadeEstoque);
+        return Objects.equals(idProduto, produto.idProduto) && Objects.equals(nomeProduto, produto.nomeProduto) && categoria == produto.categoria && Objects.equals(preco, produto.preco) && Objects.equals(quantidadeEstoque, produto.quantidadeEstoque);
     }
 
     @Override
