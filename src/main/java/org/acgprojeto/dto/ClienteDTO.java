@@ -1,6 +1,8 @@
 package org.acgprojeto.dto;
 
 
+import org.acgprojeto.model.entidades.Cliente;
+
 public class ClienteDTO {
 
     private Integer idCliente;
@@ -15,6 +17,13 @@ public class ClienteDTO {
         this.nome = nome;
         this.email = email;
         this.telefone = telefone;
+    }
+
+    public ClienteDTO(Cliente cliente){
+        idCliente = cliente.getIdCliente();
+        nome = cliente.getNome();
+        email = cliente.getEmail();
+        telefone = cliente.getTelefone();
     }
 
     public Integer getIdCliente() {

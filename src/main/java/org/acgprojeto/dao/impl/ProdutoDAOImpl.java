@@ -98,7 +98,7 @@ public class ProdutoDAOImpl implements ProdutoDAO {
     }
 
     @Override
-    public Produto listarProdutoPorId(Integer id) {
+    public ProdutoDTO listarProdutoPorId(Integer id) {
         PreparedStatement stmt = null;
         ResultSet rs = null;
         try {
@@ -121,7 +121,7 @@ public class ProdutoDAOImpl implements ProdutoDAO {
     }
 
     @Override
-    public List<Produto> listarTodosOsProdutos() {
+    public List<ProdutoDTO> listarTodosOsProdutos() {
         PreparedStatement stmt = null;
         ResultSet rs = null;
         try{
@@ -129,7 +129,7 @@ public class ProdutoDAOImpl implements ProdutoDAO {
                     "select * from produto"
             );
             rs = stmt.executeQuery();
-            List<Produto> produtos = new ArrayList<>();
+            List<ProdutoDTO> produtos = new ArrayList<>();
 
             while (rs.next()){
                 produtos.add(instanciarProduto(rs));
@@ -143,9 +143,8 @@ public class ProdutoDAOImpl implements ProdutoDAO {
         }
     }
 
-    private Produto instanciarProduto(ResultSet rs) throws SQLException {
-        Produto produto;
-        produto = new Produto();
+    private ProdutoDTO instanciarProduto(ResultSet rs) throws SQLException {
+        Produto produto = new Produto();
         produto.setIdProduto(rs.getInt("Id_Produto"));
         produto.setNomeProduto(rs.getString("Nome"));
         String categoriaStr = rs.getString("Categoria");
@@ -153,6 +152,6 @@ public class ProdutoDAOImpl implements ProdutoDAO {
         produto.setCategoria(categoria);
         produto.setPreco(rs.getBigDecimal("Preco"));
         produto.setQuantidadeEstoque(rs.getInt("Quant_Estoque"));
-        return produto;
+        return new ProdutoDTO(produto);
     }
 }

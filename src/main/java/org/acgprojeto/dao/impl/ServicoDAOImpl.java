@@ -29,12 +29,12 @@ public class ServicoDAOImpl implements ServicoDAO {
     }
 
     @Override
-    public Cliente buscarServicoPorId(Integer id) {
+    public ServicoDTO buscarServicoPorId(Integer id) {
         return null;
     }
 
     @Override
-    public List<Cliente> listarTodosOsServicos() {
+    public List<ServicoDTO> listarTodosOsServicos() {
         return List.of();
     }
 }

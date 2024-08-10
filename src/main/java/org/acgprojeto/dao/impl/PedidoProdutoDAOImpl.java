@@ -9,6 +9,7 @@ import java.util.List;
 public class PedidoProdutoDAOImpl implements PedidoProdutoDAO {
 
     private Connection conexao;
+
     public PedidoProdutoDAOImpl(Connection conexao) {
         this.conexao = conexao;
     }

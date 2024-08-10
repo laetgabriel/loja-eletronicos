@@ -1,5 +1,6 @@
 package org.acgprojeto.dto;
 
+import org.acgprojeto.model.entidades.Produto;
 import org.acgprojeto.model.enums.Categoria;
 
 import java.math.BigDecimal;
@@ -20,6 +21,14 @@ public class ProdutoDTO {
         this.nomeProduto = nomeProduto;
         this.categoria = categoria;
         this.preco = preco;
+    }
+
+    public ProdutoDTO(Produto produto){
+        this.idProduto = produto.getIdProduto();
+        this.quantidadeEstoque = produto.getQuantidadeEstoque();
+        this.nomeProduto = produto.getNomeProduto();
+        this.categoria = produto.getCategoria();
+        this.preco = produto.getPreco();
     }
 
     public Integer getIdProduto() {
@@ -61,17 +70,5 @@ public class ProdutoDTO {
     public void setQuantidadeEstoque(Integer quantidadeEstoque) {
         this.quantidadeEstoque = quantidadeEstoque;
     }
-
-    @Override
-    public String toString() {
-        return "Produto{" +
-                "idProduto=" + idProduto +
-                ", nomeProduto='" + nomeProduto + '\'' +
-                ", categoria=" + categoria +
-                ", preco=" + preco +
-                ", quantidadeEstoque=" + quantidadeEstoque +
-                '}';
-    }
-
 
 }
