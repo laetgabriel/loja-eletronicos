@@ -4,7 +4,6 @@ import org.acgprojeto.dto.PedidoDTO;
 import org.acgprojeto.model.enums.Estado;
 
 import java.util.Date;
-import java.util.Objects;
 
 public class Pedido {
 
