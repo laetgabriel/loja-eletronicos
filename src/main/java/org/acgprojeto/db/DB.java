@@ -4,9 +4,7 @@ import org.acgprojeto.db.exceptions.DBException;
 
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.Properties;
 
 public class DB {
@@ -45,6 +43,26 @@ public class DB {
             return prop;
         }catch (IOException e){
             throw new DBException("Erro ao abrir o arquivo db.properties");
+        }
+    }
+
+    public static void fecharStatement(Statement st){
+        if(st != null){
+            try {
+                st.close();
+            } catch (SQLException e) {
+                throw new DBException("Erro ao fechar o statement: " + e.getMessage());
+            }
+        }
+    }
+
+    public static void fecharResultSet(ResultSet rs){
+        if(rs != null){
+            try{
+                rs.close();
+            } catch (SQLException e) {
+                throw new DBException("Erro ao fechar o ResultSet: " + e.getMessage());
+            }
         }
     }
 }
