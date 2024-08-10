@@ -7,7 +7,7 @@ import java.util.List;
 public interface ProdutoDAO {
 
     void inserirProduto(ProdutoDTO produto);
-    void alterarProduto(ProdutoDTO produto);
+    void atualizarProduto(ProdutoDTO produto);
     void excluirProduto(ProdutoDTO produto);
     ProdutoDTO listarProdutoPorId(Integer produto);
     List<ProdutoDTO> listarTodosOsProdutos();
