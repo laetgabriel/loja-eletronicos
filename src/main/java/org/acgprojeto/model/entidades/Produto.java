@@ -14,6 +14,7 @@ public class Produto {
     private BigDecimal preco;
     private Integer quantidadeEstoque;
 
+    public Produto() {}
 
     public Produto(ProdutoDTO produtoDTO) {
         idProduto = produtoDTO.getIdProduto();

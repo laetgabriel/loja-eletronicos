@@ -4,9 +4,15 @@ import org.acgprojeto.dao.ServicoDAO;
 import org.acgprojeto.dto.ServicoDTO;
 import org.acgprojeto.model.entidades.Cliente;
 
+import java.sql.Connection;
 import java.util.List;
 
 public class ServicoDAOImpl implements ServicoDAO {
+
+    private Connection conexao;
+    public ServicoDAOImpl(Connection conexao) {
+    }
+
     @Override
     public void inserirServico(ServicoDTO cliente) {
 

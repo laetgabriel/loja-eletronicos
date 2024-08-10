@@ -11,17 +11,14 @@ public class Pedido {
     private Cliente cliente;
     private Estado estado;
     private Date data;
-    private Servico servico;
 
-    public Pedido() {
-    }
+    public Pedido(){}
 
     public Pedido(PedidoDTO pedidoDTO) {
         this.idPedido = pedidoDTO.getIdPedido();
         this.cliente = new Cliente(pedidoDTO.getCliente());
         this.estado = pedidoDTO.getEstado();
         this.data = pedidoDTO.getData();
-        this.servico = new Servico();
     }
 
     public Integer getIdPedido() {
@@ -52,14 +49,6 @@ public class Pedido {
         this.data = data;
     }
 
-    public Servico getServico() {
-        return servico;
-    }
-
-    public void setServico(Servico servico) {
-        this.servico = servico;
-    }
-
     @Override
     public String toString() {
         return "Pedido{" +
@@ -67,7 +56,7 @@ public class Pedido {
                 ", cliente=" + cliente +
                 ", estado=" + estado +
                 ", data=" + data +
-                ", servico=" + servico +
                 '}';
     }
+
 }

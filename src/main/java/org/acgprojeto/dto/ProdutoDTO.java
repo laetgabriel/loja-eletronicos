@@ -12,8 +12,17 @@ public class ProdutoDTO {
     private BigDecimal preco;
     private Integer quantidadeEstoque;
 
+    public ProdutoDTO() {}
 
-    public int getIdProduto() {
+    public ProdutoDTO(Integer IdProduto, Integer quantidadeEstoque, String nomeProduto, Categoria categoria, BigDecimal preco) {
+        this.idProduto = IdProduto;
+        this.quantidadeEstoque = quantidadeEstoque;
+        this.nomeProduto = nomeProduto;
+        this.categoria = categoria;
+        this.preco = preco;
+    }
+
+    public Integer getIdProduto() {
         return idProduto;
     }
 

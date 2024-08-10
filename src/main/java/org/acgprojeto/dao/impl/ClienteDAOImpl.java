@@ -67,7 +67,7 @@ public class ClienteDAOImpl implements ClienteDAO {
             stmt.executeUpdate();
 
         }catch(SQLException e){
-            throw new DBException("Erro ao inserir cliente");
+            throw new DBException("Erro ao atualizar cliente");
         }finally {
             DB.fecharStatement(stmt);
         }

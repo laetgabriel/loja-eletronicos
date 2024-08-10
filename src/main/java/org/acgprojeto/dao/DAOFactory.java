@@ -10,18 +10,18 @@ public class DAOFactory {
     }
 
     public static ProdutoDAO criarProdutoDAO() {
-        return new ProdutoDAOImpl();
+        return new ProdutoDAOImpl(DB.getConexao());
     }
 
     public static PedidoDAO criarPedidoDAO() {
-        return new PedidoDAOImpl();
+        return new PedidoDAOImpl(DB.getConexao());
     }
 
     public static PedidoProdutoDAO criarPedidoProdutoDAO() {
-        return new PedidoProdutoDAOImpl();
+        return new PedidoProdutoDAOImpl(DB.getConexao());
     }
 
     public static ServicoDAO criarServicoDAO() {
-        return new ServicoDAOImpl();
+        return new ServicoDAOImpl(DB.getConexao());
     }
 }
