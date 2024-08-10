@@ -1,8 +1,5 @@
 package org.acgprojeto.dto;
 
-import org.acgprojeto.model.entidades.Cliente;
-
-import java.util.Objects;
 
 public class ClienteDTO {
 
