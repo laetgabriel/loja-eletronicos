@@ -11,6 +11,8 @@ public class Cliente {
     private String email;
     private String telefone;
 
+    public Cliente(){}
+
     public Cliente(ClienteDTO clienteDTO) {
         idCliente = clienteDTO.getIdCliente();
         nome = clienteDTO.getNome();
@@ -34,7 +36,7 @@ public class Cliente {
         return telefone;
     }
 
-    public void setCliente(Integer idCliente) {
+    public void setIdCliente(Integer idCliente) {
         this.idCliente = idCliente;
     }
 

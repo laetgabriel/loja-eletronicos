@@ -9,7 +9,7 @@ public interface ServicoDAO {
 
     void inserirServico(ServicoDTO cliente);
     void atualizarServico(ServicoDTO cliente);
-    void excluirServico(ServicoDTO cliente);
+    void excluirServico(Integer id);
     Cliente buscarServicoPorId(Integer id);
     List<Cliente> listarTodosOsServicos();
 }

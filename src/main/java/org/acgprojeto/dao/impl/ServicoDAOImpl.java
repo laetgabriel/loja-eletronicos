@@ -18,7 +18,7 @@ public class ServicoDAOImpl implements ServicoDAO {
     }
 
     @Override
-    public void excluirServico(ServicoDTO cliente) {
+    public void excluirServico(Integer id) {
 
     }
 

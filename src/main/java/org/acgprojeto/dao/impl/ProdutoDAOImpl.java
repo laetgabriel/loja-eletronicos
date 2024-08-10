@@ -17,7 +17,7 @@ public class ProdutoDAOImpl implements ProdutoDAO {
     }
 
     @Override
-    public void excluirProduto(ProdutoDTO produto) {
+    public void excluirProduto(Integer id) {
 
     }
 

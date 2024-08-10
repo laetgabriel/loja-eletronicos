@@ -17,7 +17,7 @@ public class PedidoDAOImpl implements PedidoDAO {
     }
 
     @Override
-    public void excluirPedido(PedidoDTO pedido) {
+    public void excluirPedido(Integer id) {
 
     }
 

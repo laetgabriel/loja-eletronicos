@@ -1,11 +1,12 @@
 package org.acgprojeto.dao;
 
 import org.acgprojeto.dao.impl.*;
+import org.acgprojeto.db.DB;
 
 public class DAOFactory {
 
     public static ClienteDAO criarClienteDAO() {
-        return new ClienteDAOImpl();
+        return new ClienteDAOImpl(DB.getConexao());
     }
 
     public static ProdutoDAO criarProdutoDAO() {

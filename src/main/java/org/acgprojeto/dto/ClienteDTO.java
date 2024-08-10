@@ -8,6 +8,14 @@ public class ClienteDTO {
     private String email;
     private String telefone;
 
+    public ClienteDTO() {}
+
+    public ClienteDTO(Integer idCliente, String nome, String email, String telefone) {
+        this.idCliente = idCliente;
+        this.nome = nome;
+        this.email = email;
+        this.telefone = telefone;
+    }
 
     public Integer getIdCliente() {
         return idCliente;

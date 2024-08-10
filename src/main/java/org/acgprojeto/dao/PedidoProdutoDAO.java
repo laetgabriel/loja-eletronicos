@@ -8,6 +8,6 @@ public interface PedidoProdutoDAO {
 
     void inserirPedidoProduto(PedidoProdutoDTO pedidoProduto);
     void atualizarPedidoProduto(PedidoProdutoDTO pedidoProduto);
-    void excluirPedidoProduto(PedidoProdutoDTO pedidoProduto);
+    void excluirPedidoProduto(Integer id);
     List<PedidoProdutoDTO> listarPedidoProduto();
 }

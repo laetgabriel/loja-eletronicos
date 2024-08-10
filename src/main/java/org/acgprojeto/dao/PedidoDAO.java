@@ -9,7 +9,7 @@ public interface PedidoDAO {
 
     void inserirPedido(PedidoDTO pedido);
     void atualizarPedido(PedidoDTO pedido);
-    void excluirPedido(PedidoDTO pedido);
+    void excluirPedido(Integer id);
     PedidoDTO buscarPedidoPorId(Integer id);
     List<PedidoDTO> buscarPedidos();
 }
