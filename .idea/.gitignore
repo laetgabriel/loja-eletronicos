@@ -1,4 +1,5 @@
 # Default ignored files
+db.properties
 /shelf/
 /workspace.xml
 # Editor-based HTTP Client requests
