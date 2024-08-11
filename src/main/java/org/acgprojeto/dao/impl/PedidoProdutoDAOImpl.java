@@ -82,7 +82,7 @@ public class PedidoProdutoDAOImpl implements PedidoProdutoDAO {
     }
 
     @Override
-    public void excluirPedidoProduto(Integer id_pedido, Integer id_produto) {
+    public void excluirPedidoProduto(Integer idPedido, Integer idProduto) {
         PreparedStatement stmt = null;
         try {
             stmt = conexao.prepareStatement(
@@ -90,19 +90,19 @@ public class PedidoProdutoDAOImpl implements PedidoProdutoDAO {
                     "pedido_possui_produto.Id_Pedido = ?"
             );
 
-            stmt.setInt(1, id_produto);
-            stmt.setInt(2, id_pedido);
+            stmt.setInt(1, idProduto);
+            stmt.setInt(2, idPedido);
 
             stmt.executeUpdate();
         } catch (SQLException e) {
-            throw new DBException("Erro ao excluir PedidoProduto de idPedido = " + id_pedido + " e IdProduto = " + id_produto);
+            throw new DBException("Erro ao excluir PedidoProduto de idPedido = " + idPedido + " e IdProduto = " + idProduto);
         } finally {
             DB.fecharStatement(stmt);
         }
     }
 
     @Override
-    public PedidoProdutoDTO buscarPedidoProduto(Integer id_pedido, Integer id_produto) {
+    public PedidoProdutoDTO buscarPedidoProduto(Integer idPedido, Integer idProduto) {
         PreparedStatement stmt = null;
         ResultSet rs = null;
         try{
@@ -111,8 +111,8 @@ public class PedidoProdutoDAOImpl implements PedidoProdutoDAO {
                         "where pp.Id_Pedido = ? and pp.Id_Produto = ?"
             );
 
-            stmt.setInt(1, id_pedido);
-            stmt.setInt(2, id_produto);
+            stmt.setInt(1, idPedido);
+            stmt.setInt(2, idProduto);
 
             rs = stmt.executeQuery();
 
@@ -121,7 +121,7 @@ public class PedidoProdutoDAOImpl implements PedidoProdutoDAO {
             }
 
         }catch(SQLException e){
-            throw new DBException("Erro ao buscar PedidoProduto de idPedido = " + id_pedido + " e IdProduto = " + id_produto);
+            throw new DBException("Erro ao buscar PedidoProduto de idPedido = " + idPedido + " e IdProduto = " + idProduto);
         }finally {
             DB.fecharStatement(stmt);
             DB.fecharResultSet(rs);
