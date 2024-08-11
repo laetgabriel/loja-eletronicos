@@ -1,15 +1,24 @@
 package org.acgprojeto.application;
-import org.acgprojeto.dao.*;
-import org.acgprojeto.dao.impl.*;
+import org.acgprojeto.dao.ClienteDAO;
+import org.acgprojeto.dao.PedidoDAO;
+import org.acgprojeto.dao.PedidoProdutoDAO;
+import org.acgprojeto.dao.ProdutoDAO;
+import org.acgprojeto.dao.impl.ClienteDAOImpl;
+import org.acgprojeto.dao.impl.PedidoDAOImpl;
+import org.acgprojeto.dao.impl.PedidoProdutoDAOImpl;
+import org.acgprojeto.dao.impl.ProdutoDAOImpl;
 import org.acgprojeto.db.DB;
-import org.acgprojeto.dto.*;
+import org.acgprojeto.dto.ClienteDTO;
+import org.acgprojeto.dto.PedidoDTO;
+import org.acgprojeto.dto.PedidoProdutoDTO;
+import org.acgprojeto.dto.ProdutoDTO;
 import org.acgprojeto.model.enums.Categoria;
 import org.acgprojeto.model.enums.Estado;
-import org.acgprojeto.model.enums.Tipo;
 
 import java.math.BigDecimal;
 import java.sql.Connection;
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 
@@ -18,37 +27,42 @@ public class Main {
 
         Connection conexao = DB.getConexao();
 
+        /*
+        ClienteDAO clienteDAO = new ClienteDAOImpl(conexao);
+        clienteDAO.inserirCliente(new ClienteDTO(null,"Brunno","cicerobrnn111@gmail.com", null));
+        clienteDAO.inserirCliente(new ClienteDTO(null,"Gabriel","gabriel@gmail.com", null));
+        List<ClienteDTO> clientes = clienteDAO.listarTodosOsClientes();
+        for(ClienteDTO cliente : clientes){
+            System.out.println(cliente);
+        }
+
 
         ClienteDAO clienteDAO = new ClienteDAOImpl(conexao);
-        ClienteDTO clienteDTO = clienteDAO.buscarClientePorId(9);
+        ClienteDTO clienteDTO = clienteDAO.buscarClientePorId(1);
         PedidoDAO pedidoDAO = new PedidoDAOImpl(conexao);
         PedidoDTO pedidoDTO = new PedidoDTO(null, clienteDTO, Estado.PAGO, LocalDate.parse("2024-08-10"));
-        pedidoDAO.inserirPedido(pedidoDTO);
+        //pedidoDAO.inserirPedido(pedidoDTO);
 
         ProdutoDAO produtoDAO = new ProdutoDAOImpl(conexao);
         Categoria categoria = Categoria.CELULAR;
         BigDecimal preco = new BigDecimal(20);
         ProdutoDTO produtoDTO = new ProdutoDTO(null, 9, "Capinha", categoria, preco );
         ProdutoDTO produtoDTO2 = new ProdutoDTO(null, 2, "Bateria", categoria, preco.add(new BigDecimal(100)) );
-        ServicoDAO servicoDAO = new ServicoDAOImpl(conexao);
-        produtoDAO.inserirProduto(produtoDTO);
-        produtoDAO.inserirProduto(produtoDTO2);
+        //produtoDAO.inserirProduto(produtoDTO);
+        //produtoDAO.inserirProduto(produtoDTO2);
 
-        PedidoDTO pedidoDTO1 = new PedidoDAOImpl(conexao).buscarPedidoPorId(3);
-        ProdutoDTO produtoDTO1 = new ProdutoDAOImpl(conexao).buscarProdutoPorId(5);
+        PedidoDTO pedidoDTO = new PedidoDAOImpl(conexao).buscarPedidoPorId(1);
+        ProdutoDTO produtoDTO = new ProdutoDAOImpl(conexao).buscarProdutoPorId(1);
 
-        ServicoDTO servicoDTO = new ServicoDTO(null, pedidoDTO, "um projetinho meu!" , new BigDecimal(50), Tipo.CONSERTO);
-        servicoDAO.inserirServico(servicoDTO);
         PedidoProdutoDAO pedidoProdutoDAO = new PedidoProdutoDAOImpl(conexao);
         BigDecimal quant = new BigDecimal(2);
-        PedidoProdutoDTO pedidoProdutoDTO = new PedidoProdutoDTO(pedidoDTO1, produtoDTO1, new BigDecimal(String.valueOf(produtoDTO1.getPreco().multiply(quant))), quant.intValue());
-        pedidoProdutoDAO.inserirPedidoProduto(pedidoProdutoDTO);
+        PedidoProdutoDTO pedidoProdutoDTO = new PedidoProdutoDTO(pedidoDTO, produtoDTO, new BigDecimal(String.valueOf(produtoDTO.getPreco().multiply(quant))), quant.intValue());
+        pedidoProdutoDAO.inserirPedidoProduto(pedidoProdutoDTO);*/
 
-        PedidoProdutoDTO pedidoProdutoDTO1 = new PedidoProdutoDAOImpl(conexao).buscarPedidoProduto(3,5);
-        System.out.println(pedidoProdutoDTO1.getPreco());
+        PedidoProdutoDTO pedidoProdutoDTO = new PedidoProdutoDAOImpl(conexao).buscarPedidoProduto(1,1);
+        System.out.println(pedidoProdutoDTO.getPreco());
 
         DB.fecharConexao();
-       // ola amigos
+
     }
 }
-

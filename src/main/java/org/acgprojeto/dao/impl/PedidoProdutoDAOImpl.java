@@ -1,4 +1,3 @@
-
 package org.acgprojeto.dao.impl;
 
 import org.acgprojeto.dao.PedidoDAO;
@@ -88,7 +87,7 @@ public class PedidoProdutoDAOImpl implements PedidoProdutoDAO {
         try {
             stmt = conexao.prepareStatement(
                     "delete from pedido_possui_produto where pedido_possui_produto.Id_Produto = ? and " +
-                            "pedido_possui_produto.Id_Pedido = ?"
+                    "pedido_possui_produto.Id_Pedido = ?"
             );
 
             stmt.setInt(1, id_produto);
@@ -109,7 +108,7 @@ public class PedidoProdutoDAOImpl implements PedidoProdutoDAO {
         try{
             stmt = conexao.prepareStatement(
                     "select * from pedido_possui_produto as pp " +
-                            "where pp.Id_Pedido = ? and pp.Id_Produto = ?"
+                        "where pp.Id_Pedido = ? and pp.Id_Produto = ?"
             );
 
             stmt.setInt(1, id_pedido);
