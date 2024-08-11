@@ -11,6 +11,8 @@ public class DB {
 
     private static Connection conexao = null;
 
+    private DB(){}
+
     public static Connection getConexao() {
         if (conexao == null) {
             try{
