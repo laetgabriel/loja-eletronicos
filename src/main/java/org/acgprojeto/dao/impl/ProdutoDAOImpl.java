@@ -1,3 +1,4 @@
+
 package org.acgprojeto.dao.impl;
 
 import org.acgprojeto.dao.ProdutoDAO;
@@ -48,7 +49,7 @@ public class ProdutoDAOImpl implements ProdutoDAO {
             } else
                 throw new DBException("Erro ao inserir linha");
         } catch (SQLException e) {
-            throw new DBException("Erro ao inserir produto");
+            throw new DBException("Erro ao inserir Produto");
         } finally {
             DB.fecharStatement(stmt);
             DB.fecharResultSet(rs);
@@ -73,7 +74,7 @@ public class ProdutoDAOImpl implements ProdutoDAO {
             stmt.executeUpdate();
 
         } catch (SQLException e) {
-            throw new DBException("Erro ao atualizar produto");
+            throw new DBException("Erro ao atualizar Produto ");
         } finally {
             DB.fecharStatement(stmt);
         }
@@ -91,14 +92,14 @@ public class ProdutoDAOImpl implements ProdutoDAO {
 
             stmt.executeUpdate();
         } catch (SQLException e) {
-            throw new DBException("Erro ao excluir Produto");
+            throw new DBException("Erro ao excluir Produto de ID = " + id);
         } finally {
             DB.fecharStatement(stmt);
         }
     }
 
     @Override
-    public Produto listarProdutoPorId(Integer id) {
+    public ProdutoDTO buscarProdutoPorId(Integer id) {
         PreparedStatement stmt = null;
         ResultSet rs = null;
         try {
@@ -112,7 +113,7 @@ public class ProdutoDAOImpl implements ProdutoDAO {
                 return instanciarProduto(rs);
             }
         } catch (SQLException e) {
-            throw new DBException(e.getMessage());
+            throw new DBException("Erro ao buscar Produto de ID = " + id);
         } finally {
             DB.fecharStatement(stmt);
             DB.fecharResultSet(rs);
@@ -121,7 +122,7 @@ public class ProdutoDAOImpl implements ProdutoDAO {
     }
 
     @Override
-    public List<Produto> listarTodosOsProdutos() {
+    public List<ProdutoDTO> listarTodosOsProdutos() {
         PreparedStatement stmt = null;
         ResultSet rs = null;
         try{
@@ -129,23 +130,22 @@ public class ProdutoDAOImpl implements ProdutoDAO {
                     "select * from produto"
             );
             rs = stmt.executeQuery();
-            List<Produto> produtos = new ArrayList<>();
+            List<ProdutoDTO> produtos = new ArrayList<>();
 
             while (rs.next()){
                 produtos.add(instanciarProduto(rs));
             }
             return produtos;
         }catch(SQLException e){
-            throw new DBException(e.getMessage());
+            throw new DBException("Erro ao listar Produtos");
         }finally {
             DB.fecharStatement(stmt);
             DB.fecharResultSet(rs);
         }
     }
 
-    private Produto instanciarProduto(ResultSet rs) throws SQLException {
-        Produto produto;
-        produto = new Produto();
+    private ProdutoDTO instanciarProduto(ResultSet rs) throws SQLException {
+        Produto produto = new Produto();
         produto.setIdProduto(rs.getInt("Id_Produto"));
         produto.setNomeProduto(rs.getString("Nome"));
         String categoriaStr = rs.getString("Categoria");
@@ -153,6 +153,6 @@ public class ProdutoDAOImpl implements ProdutoDAO {
         produto.setCategoria(categoria);
         produto.setPreco(rs.getBigDecimal("Preco"));
         produto.setQuantidadeEstoque(rs.getInt("Quant_Estoque"));
-        return produto;
+        return new ProdutoDTO(produto);
     }
 }

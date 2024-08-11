@@ -1,3 +1,4 @@
+
 package org.acgprojeto.dao.impl;
 
 import org.acgprojeto.dao.ClienteDAO;
@@ -67,7 +68,7 @@ public class ClienteDAOImpl implements ClienteDAO {
             stmt.executeUpdate();
 
         }catch(SQLException e){
-            throw new DBException("Erro ao atualizar cliente");
+            throw new DBException("Erro ao atualizar Cliente");
         }finally {
             DB.fecharStatement(stmt);
         }
@@ -86,14 +87,14 @@ public class ClienteDAOImpl implements ClienteDAO {
 
             stmt.executeUpdate();
         }catch(SQLException e){
-            throw new DBException("Erro ao excluir cliente");
+            throw new DBException("Erro ao excluir Cliente de ID = " + id);
         }finally {
             DB.fecharStatement(stmt);
         }
     }
 
     @Override
-    public Cliente buscarClientePorId(Integer id) {
+    public ClienteDTO buscarClientePorId(Integer id) {
         PreparedStatement stmt = null;
         ResultSet rs = null;
         try{
@@ -104,10 +105,10 @@ public class ClienteDAOImpl implements ClienteDAO {
             stmt.setInt(1, id);
             rs = stmt.executeQuery();
             if (rs.next()){
-                return instanciarCliente(rs);
+                return instanciarClienteDTO(rs);
             }
         }catch(SQLException e){
-            throw new DBException(e.getMessage());
+            throw new DBException("Erro ao buscar Cliente de ID = " + id);
         }finally {
             DB.fecharStatement(stmt);
             DB.fecharResultSet(rs);
@@ -116,7 +117,7 @@ public class ClienteDAOImpl implements ClienteDAO {
     }
 
     @Override
-    public List<Cliente> listarTodosOsClientes() {
+    public List<ClienteDTO> listarTodosOsClientes() {
         PreparedStatement stmt = null;
         ResultSet rs = null;
         try{
@@ -124,23 +125,23 @@ public class ClienteDAOImpl implements ClienteDAO {
                     "select * from cliente"
             );
             rs = stmt.executeQuery();
-            List<Cliente> clientes = new ArrayList<>();
+            List<ClienteDTO> clientes = new ArrayList<>();
 
             while (rs.next()){
-                clientes.add(instanciarCliente(rs));
+                clientes.add(instanciarClienteDTO(rs));
             }
             return clientes;
         }catch(SQLException e){
-            throw new DBException(e.getMessage());
+            throw new DBException("Erro ao listar Clientes");
         }
     }
 
-    private Cliente instanciarCliente(ResultSet rs) throws SQLException {
+    private ClienteDTO instanciarClienteDTO(ResultSet rs) throws SQLException {
         Cliente cliente = new Cliente();
         cliente.setIdCliente(rs.getInt("Id_Cliente"));
         cliente.setNome(rs.getString("Nome"));
         cliente.setEmail(rs.getString("Email"));
         cliente.setTelefone(rs.getString("Telefone"));
-        return cliente;
+        return new ClienteDTO(cliente);
     }
 }

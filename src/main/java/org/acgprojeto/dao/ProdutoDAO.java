@@ -10,6 +10,6 @@ public interface ProdutoDAO {
     void inserirProduto(ProdutoDTO produto);
     void atualizarProduto(ProdutoDTO produto);
     void excluirProduto(Integer id);
-    Produto listarProdutoPorId(Integer produto);
-    List<Produto> listarTodosOsProdutos();
+    ProdutoDTO buscarProdutoPorId(Integer produto);
+    List<ProdutoDTO> listarTodosOsProdutos();
 }

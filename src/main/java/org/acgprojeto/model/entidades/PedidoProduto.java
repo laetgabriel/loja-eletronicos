@@ -1,3 +1,4 @@
+
 package org.acgprojeto.model.entidades;
 
 import org.acgprojeto.dto.PedidoProdutoDTO;
@@ -12,6 +13,13 @@ public class PedidoProduto {
     private Integer quantidade;
 
     public PedidoProduto() {}
+
+    public PedidoProduto(Pedido pedido, Produto produto, BigDecimal preco, Integer quantidade) {
+        this.pedido = pedido;
+        this.produto = produto;
+        this.preco = preco;
+        this.quantidade = quantidade;
+    }
 
     public PedidoProduto(PedidoProdutoDTO pedidoProduto) {
         this.pedido = new Pedido(pedidoProduto.getPedido());

@@ -1,6 +1,5 @@
 package org.acgprojeto.model.entidades;
 
-import org.acgprojeto.dto.PedidoDTO;
 import org.acgprojeto.dto.ServicoDTO;
 import org.acgprojeto.model.enums.Tipo;
 
@@ -28,7 +27,7 @@ public class Servico {
         return idServico;
     }
 
-    public Pedido getIdPedido() {
+    public Pedido getPedido() {
         return pedido;
     }
 
@@ -48,7 +47,7 @@ public class Servico {
         this.idServico = idServico;
     }
 
-    public void setIdPedido(Pedido pedido) {
+    public void setPedido(Pedido pedido) {
         this.pedido = pedido;
     }
 
