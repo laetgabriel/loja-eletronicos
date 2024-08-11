@@ -12,7 +12,7 @@ import java.util.List;
 
 public class ClienteDAOImpl implements ClienteDAO {
 
-    private Connection conexao;
+    private final Connection conexao;
 
     public ClienteDAOImpl(Connection conexao) {
         this.conexao = conexao;
@@ -21,44 +21,35 @@ public class ClienteDAOImpl implements ClienteDAO {
     @Override
     public void inserirCliente(ClienteDTO clienteDTO) {
         Cliente cliente = new Cliente(clienteDTO);
-        PreparedStatement stmt = null;
-        ResultSet rs = null;
 
-        try{
-            stmt = conexao.prepareStatement(
-                    "INSERT INTO cliente(Nome, Email, Telefone) " +
-                            "values (?, ?, ?)", Statement.RETURN_GENERATED_KEYS
-            );
+        try (PreparedStatement stmt = conexao.prepareStatement(
+                "INSERT INTO cliente (Nome, Email, Telefone) VALUES (?, ?, ?)", Statement.RETURN_GENERATED_KEYS)) {
+
             stmt.setString(1, cliente.getNome());
             stmt.setString(2, cliente.getEmail());
             stmt.setString(3, cliente.getTelefone());
 
             int linhasAfetadas = stmt.executeUpdate();
             if (linhasAfetadas > 0) {
-                rs = stmt.getGeneratedKeys();
-                if(rs.next()){
-                    int id = rs.getInt(1);
-                    cliente.setIdCliente(id);
+                try (ResultSet rs = stmt.getGeneratedKeys()) {
+                    if (rs.next()) {
+                        int id = rs.getInt(1);
+                        cliente.setIdCliente(id);
+                    }
                 }
-            }else
+            } else {
                 throw new DBException("Erro ao inserir linha");
-        }catch(SQLException e){
-            throw new DBException("Erro ao inserir cliente");
-        }finally {
-            DB.fecharStatement(stmt);
-            DB.fecharResultSet(rs);
+            }
+        } catch (SQLException e) {
+            throw new DBException("Erro ao inserir cliente: ");
         }
     }
 
     @Override
     public void atualizarCliente(ClienteDTO clienteDTO) {
-        PreparedStatement stmt = null;
+        try (PreparedStatement stmt = conexao.prepareStatement(
+                "UPDATE cliente SET Nome = ?, Email = ?, Telefone = ? WHERE Id_Cliente = ?")) {
 
-        try{
-            stmt = conexao.prepareStatement(
-                    "update cliente set Nome = ?, Email = ?, Telefone = ?" +
-                            " where cliente.Id_Cliente = ?"
-            );
             stmt.setString(1, clienteDTO.getNome());
             stmt.setString(2, clienteDTO.getEmail());
             stmt.setString(3, clienteDTO.getTelefone());
@@ -66,73 +57,53 @@ public class ClienteDAOImpl implements ClienteDAO {
 
             stmt.executeUpdate();
 
-        }catch(SQLException e){
-            throw new DBException("Erro ao atualizar Cliente");
-        }finally {
-            DB.fecharStatement(stmt);
+        } catch (SQLException e) {
+            throw new DBException("Erro ao atualizar cliente: ");
         }
     }
 
     @Override
     public void excluirCliente(Integer id) {
-
-        PreparedStatement stmt = null;
-        try{
-            stmt = conexao.prepareStatement(
-                    "delete from cliente where cliente.Id_Cliente = ?"
-            );
+        try (PreparedStatement stmt = conexao.prepareStatement(
+                "DELETE FROM cliente WHERE Id_Cliente = ?")) {
 
             stmt.setInt(1, id);
-
             stmt.executeUpdate();
-        }catch(SQLException e){
-            throw new DBException("Erro ao excluir Cliente de ID = " + id);
-        }finally {
-            DB.fecharStatement(stmt);
+        } catch (SQLException e) {
+            throw new DBException("Erro ao excluir cliente com ID = " + id);
         }
     }
 
     @Override
     public ClienteDTO buscarClientePorId(Integer id) {
-        PreparedStatement stmt = null;
-        ResultSet rs = null;
-        try{
-            stmt = conexao.prepareStatement(
-                    "SELECT * FROM cliente WHERE cliente.Id_Cliente = ?"
-            );
+        try (PreparedStatement stmt = conexao.prepareStatement(
+                "SELECT * FROM cliente WHERE Id_Cliente = ?")) {
 
             stmt.setInt(1, id);
-            rs = stmt.executeQuery();
-            if (rs.next()){
-                return instanciarClienteDTO(rs);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return instanciarClienteDTO(rs);
+                }
             }
-        }catch(SQLException e){
-            throw new DBException("Erro ao buscar Cliente de ID = " + id);
-        }finally {
-            DB.fecharStatement(stmt);
-            DB.fecharResultSet(rs);
+        } catch (SQLException e) {
+            throw new DBException("Erro ao buscar cliente com ID = " + id);
         }
         return null;
     }
 
     @Override
     public List<ClienteDTO> listarTodosOsClientes() {
-        PreparedStatement stmt = null;
-        ResultSet rs = null;
-        try{
-            stmt = conexao.prepareStatement(
-                    "select * from cliente"
-            );
-            rs = stmt.executeQuery();
-            List<ClienteDTO> clientes = new ArrayList<>();
+        List<ClienteDTO> clientes = new ArrayList<>();
+        try (PreparedStatement stmt = conexao.prepareStatement("SELECT * FROM cliente");
+             ResultSet rs = stmt.executeQuery()) {
 
-            while (rs.next()){
+            while (rs.next()) {
                 clientes.add(instanciarClienteDTO(rs));
             }
-            return clientes;
-        }catch(SQLException e){
-            throw new DBException("Erro ao listar Clientes");
+        } catch (SQLException e) {
+            throw new DBException("Erro ao listar clientes: ");
         }
+        return clientes;
     }
 
     private ClienteDTO instanciarClienteDTO(ResultSet rs) throws SQLException {

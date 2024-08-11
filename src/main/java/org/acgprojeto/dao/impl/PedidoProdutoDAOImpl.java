@@ -2,11 +2,10 @@ package org.acgprojeto.dao.impl;
 
 import org.acgprojeto.dao.PedidoDAO;
 import org.acgprojeto.dao.PedidoProdutoDAO;
+import org.acgprojeto.dao.ProdutoDAO;
 import org.acgprojeto.db.DB;
 import org.acgprojeto.db.exceptions.DBException;
 import org.acgprojeto.dto.PedidoProdutoDTO;
-import org.acgprojeto.dto.ProdutoDTO;
-import org.acgprojeto.model.entidades.Cliente;
 import org.acgprojeto.model.entidades.Pedido;
 import org.acgprojeto.model.entidades.PedidoProduto;
 import org.acgprojeto.model.entidades.Produto;
@@ -18,7 +17,7 @@ import java.util.List;
 
 public class PedidoProdutoDAOImpl implements PedidoProdutoDAO {
 
-    private Connection conexao;
+    private final Connection conexao;
 
     public PedidoProdutoDAOImpl(Connection conexao) {
         this.conexao = conexao;
@@ -27,14 +26,9 @@ public class PedidoProdutoDAOImpl implements PedidoProdutoDAO {
     @Override
     public void inserirPedidoProduto(PedidoProdutoDTO pedidoProdutoDTO) {
         PedidoProduto pedidoProduto = new PedidoProduto(pedidoProdutoDTO);
-        PreparedStatement stmt = null;
-        ResultSet rs = null;
+        String sql = "INSERT INTO pedido_possui_produto(Id_Pedido, Id_Produto, Preco, Quant) VALUES (?, ?, ?, ?)";
 
-        try{
-            stmt = conexao.prepareStatement(
-                    "INSERT INTO pedido_possui_produto(Id_Pedido, Id_Produto, Preco, Quant) " +
-                            "values (?, ?, ?, ?)"
-            );
+        try (PreparedStatement stmt = conexao.prepareStatement(sql)) {
             stmt.setInt(1, pedidoProduto.getPedido().getIdPedido());
             stmt.setInt(2, pedidoProduto.getProduto().getIdProduto());
             stmt.setBigDecimal(3, pedidoProduto.getPreco());
@@ -45,26 +39,17 @@ public class PedidoProdutoDAOImpl implements PedidoProdutoDAO {
             if (linhasAfetadas <= 0) {
                 throw new DBException("Erro ao inserir linha");
             }
-
-        }catch(SQLException e){
-            throw new DBException("Erro ao inserir PedidoProduto");
-        }finally {
-            DB.fecharStatement(stmt);
-            DB.fecharResultSet(rs);
+        } catch (SQLException e) {
+            throw new DBException("Erro ao inserir PedidoProduto: ");
         }
     }
 
     @Override
     public void atualizarPedidoProduto(PedidoProdutoDTO pedidoProdutoDTO) {
         PedidoProduto pedidoProduto = new PedidoProduto(pedidoProdutoDTO);
-        PreparedStatement stmt = null;
+        String sql = "UPDATE pedido_possui_produto SET Id_Pedido = ?, Id_Produto = ?, Preco = ?, Quant = ? WHERE Id_Produto = ? AND Id_Pedido = ?";
 
-        try {
-            stmt = conexao.prepareStatement(
-                    "update pedido_possui_produto set Id_Pedido = ?, Id_Produto  = ?, Preco = ?, Quant = ?" +
-                            " where pedido_possui_produto.Id_Produto = ? and " +
-                            "pedido_possui_produto.Id_Pedido = ?"
-            );
+        try (PreparedStatement stmt = conexao.prepareStatement(sql)) {
             stmt.setInt(1, pedidoProduto.getPedido().getIdPedido());
             stmt.setInt(2, pedidoProduto.getProduto().getIdProduto());
             stmt.setBigDecimal(3, pedidoProduto.getPreco());
@@ -73,95 +58,72 @@ public class PedidoProdutoDAOImpl implements PedidoProdutoDAO {
             stmt.setInt(6, pedidoProduto.getPedido().getIdPedido());
 
             stmt.executeUpdate();
-
         } catch (SQLException e) {
-            throw new DBException("Erro ao atualizar PedidoProduto");
-        } finally {
-            DB.fecharStatement(stmt);
+            throw new DBException("Erro ao atualizar PedidoProduto: ");
         }
     }
 
     @Override
-    public void excluirPedidoProduto(Integer id_pedido, Integer id_produto) {
-        PreparedStatement stmt = null;
-        try {
-            stmt = conexao.prepareStatement(
-                    "delete from pedido_possui_produto where pedido_possui_produto.Id_Produto = ? and " +
-                    "pedido_possui_produto.Id_Pedido = ?"
-            );
+    public void excluirPedidoProduto(Integer idPedido, Integer idProduto) {
+        String sql = "DELETE FROM pedido_possui_produto WHERE Id_Produto = ? AND Id_Pedido = ?";
 
-            stmt.setInt(1, id_produto);
-            stmt.setInt(2, id_pedido);
+        try (PreparedStatement stmt = conexao.prepareStatement(sql)) {
+            stmt.setInt(1, idProduto);
+            stmt.setInt(2, idPedido);
 
             stmt.executeUpdate();
         } catch (SQLException e) {
-            throw new DBException("Erro ao excluir PedidoProduto de idPedido = " + id_pedido + " e IdProduto = " + id_produto);
-        } finally {
-            DB.fecharStatement(stmt);
+            throw new DBException("Erro ao excluir PedidoProduto de idPedido = " + idPedido + " e IdProduto = " + idProduto);
         }
     }
 
     @Override
-    public PedidoProdutoDTO buscarPedidoProduto(Integer id_pedido, Integer id_produto) {
-        PreparedStatement stmt = null;
-        ResultSet rs = null;
-        try{
-            stmt = conexao.prepareStatement(
-                    "select * from pedido_possui_produto as pp " +
-                        "where pp.Id_Pedido = ? and pp.Id_Produto = ?"
-            );
+    public PedidoProdutoDTO buscarPedidoProduto(Integer idPedido, Integer idProduto) {
+        String sql = "SELECT * FROM pedido_possui_produto WHERE Id_Pedido = ? AND Id_Produto = ?";
 
-            stmt.setInt(1, id_pedido);
-            stmt.setInt(2, id_produto);
+        try (PreparedStatement stmt = conexao.prepareStatement(sql)) {
+            stmt.setInt(1, idPedido);
+            stmt.setInt(2, idProduto);
 
-            rs = stmt.executeQuery();
-
-            if(rs.next()) {
-                return instanciarPedidoProduto(rs);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return instanciarPedidoProduto(rs);
+                }
             }
-
-        }catch(SQLException e){
-            throw new DBException("Erro ao buscar PedidoProduto de idPedido = " + id_pedido + " e IdProduto = " + id_produto);
-        }finally {
-            DB.fecharStatement(stmt);
-            DB.fecharResultSet(rs);
+        } catch (SQLException e) {
+            throw new DBException("Erro ao buscar PedidoProduto de idPedido = " + idPedido + " e IdProduto = " + idProduto);
         }
         return null;
     }
 
     @Override
     public List<PedidoProdutoDTO> listarPedidoProduto() {
-        PreparedStatement stmt = null;
-        ResultSet rs = null;
-        try{
-            stmt = conexao.prepareStatement(
-                    "select * from pedido_possui_produto"
-            );
+        String sql = "SELECT * FROM pedido_possui_produto";
+        List<PedidoProdutoDTO> pedidoProdutos = new ArrayList<>();
 
-            rs = stmt.executeQuery();
+        try (PreparedStatement stmt = conexao.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
 
-            List<PedidoProdutoDTO> pedidoProdutos = new ArrayList<>();
-
-            while (rs.next()){
+            while (rs.next()) {
                 pedidoProdutos.add(instanciarPedidoProduto(rs));
             }
-
-            return pedidoProdutos;
-
-        }catch(SQLException e){
-            throw new DBException("Erro ao listar PedidoProduto");
-        }finally {
-            DB.fecharStatement(stmt);
-            DB.fecharResultSet(rs);
+        } catch (SQLException e) {
+            throw new DBException("Erro ao listar PedidoProduto: ");
         }
+        return pedidoProdutos;
     }
 
     private PedidoProdutoDTO instanciarPedidoProduto(ResultSet rs) throws SQLException {
         PedidoProduto pedidoProduto = new PedidoProduto();
-        pedidoProduto.setPedido(new Pedido(new PedidoDAOImpl(conexao).buscarPedidoPorId(rs.getInt("Id_Pedido"))));
-        pedidoProduto.setProduto(new Produto(new ProdutoDAOImpl(conexao).buscarProdutoPorId(rs.getInt("Id_Produto"))));
+        PedidoDAO pedidoDAO = new PedidoDAOImpl(conexao);
+        ProdutoDAO produtoDAO = new ProdutoDAOImpl(conexao);
+
+        pedidoProduto.setPedido(new Pedido(pedidoDAO.buscarPedidoPorId(rs.getInt("Id_Pedido"))));
+        pedidoProduto.setProduto(new Produto(produtoDAO.buscarProdutoPorId(rs.getInt("Id_Produto"))));
         pedidoProduto.setPreco(rs.getBigDecimal("Preco"));
         pedidoProduto.setQuantidade(rs.getInt("Quant"));
+
         return new PedidoProdutoDTO(pedidoProduto);
     }
 }
+

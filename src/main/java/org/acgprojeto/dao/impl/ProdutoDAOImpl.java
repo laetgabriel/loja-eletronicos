@@ -4,7 +4,6 @@ import org.acgprojeto.dao.ProdutoDAO;
 import org.acgprojeto.db.DB;
 import org.acgprojeto.db.exceptions.DBException;
 import org.acgprojeto.dto.ProdutoDTO;
-import org.acgprojeto.model.entidades.Cliente;
 import org.acgprojeto.model.entidades.Produto;
 import org.acgprojeto.model.enums.Categoria;
 
@@ -14,133 +13,101 @@ import java.util.List;
 
 public class ProdutoDAOImpl implements ProdutoDAO {
 
-    private Connection conexao;
+    private final Connection conexao;
 
     public ProdutoDAOImpl(Connection conexao) {
         this.conexao = conexao;
     }
 
-
     @Override
     public void inserirProduto(ProdutoDTO produtoDTO) {
         Produto produto = new Produto(produtoDTO);
-        PreparedStatement stmt = null;
-        ResultSet rs = null;
+        String sql = "INSERT INTO Produto(Nome, Categoria, Preco, Quant_Estoque) VALUES (?, ?, ?, ?)";
 
-        try {
-            stmt = conexao.prepareStatement(
-                    "INSERT INTO Produto(Nome, Categoria, Preco, Quant_Estoque) " +
-                            "values (?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS
-            );
+        try (PreparedStatement stmt = conexao.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             stmt.setString(1, produto.getNomeProduto());
             stmt.setString(2, produto.getCategoria().toString());
             stmt.setBigDecimal(3, produto.getPreco());
             stmt.setInt(4, produto.getQuantidadeEstoque());
 
-
             int linhasAfetadas = stmt.executeUpdate();
             if (linhasAfetadas > 0) {
-                rs = stmt.getGeneratedKeys();
-                if (rs.next()) {
-                    int id = rs.getInt(1);
-                    produto.setIdProduto(id);
+                try (ResultSet rs = stmt.getGeneratedKeys()) {
+                    if (rs.next()) {
+                        int id = rs.getInt(1);
+                        produto.setIdProduto(id);
+                    }
                 }
-            } else
+            } else {
                 throw new DBException("Erro ao inserir linha");
+            }
         } catch (SQLException e) {
-            throw new DBException("Erro ao inserir Produto");
-        } finally {
-            DB.fecharStatement(stmt);
-            DB.fecharResultSet(rs);
+            throw new DBException("Erro ao inserir Produto: ");
         }
     }
 
     @Override
-    public void atualizarProduto(ProdutoDTO produto) {
-        PreparedStatement stmt = null;
+    public void atualizarProduto(ProdutoDTO produtoDTO) {
+        String sql = "UPDATE produto SET Nome = ?, Categoria = ?, Preco = ?, Quant_Estoque = ? WHERE Id_Produto = ?";
 
-        try {
-            stmt = conexao.prepareStatement(
-                    "update produto set Nome = ?, Categoria = ?, Preco = ?, Quant_Estoque = ?" +
-                            " where produto.Id_Produto = ?"
-            );
-            stmt.setString(1, produto.getNomeProduto());
-            stmt.setString(2, produto.getCategoria().toString());
-            stmt.setBigDecimal(3, produto.getPreco());
-            stmt.setInt(4, produto.getQuantidadeEstoque());
-            stmt.setInt(5, produto.getIdProduto());
+        try (PreparedStatement stmt = conexao.prepareStatement(sql)) {
+            stmt.setString(1, produtoDTO.getNomeProduto());
+            stmt.setString(2, produtoDTO.getCategoria().toString());
+            stmt.setBigDecimal(3, produtoDTO.getPreco());
+            stmt.setInt(4, produtoDTO.getQuantidadeEstoque());
+            stmt.setInt(5, produtoDTO.getIdProduto());
 
             stmt.executeUpdate();
-
         } catch (SQLException e) {
-            throw new DBException("Erro ao atualizar Produto ");
-        } finally {
-            DB.fecharStatement(stmt);
+            throw new DBException("Erro ao atualizar Produto: ");
         }
     }
 
     @Override
     public void excluirProduto(Integer id) {
-        PreparedStatement stmt = null;
-        try {
-            stmt = conexao.prepareStatement(
-                    "delete from produto where produto.Id_Produto = ?"
-            );
+        String sql = "DELETE FROM produto WHERE Id_Produto = ?";
 
+        try (PreparedStatement stmt = conexao.prepareStatement(sql)) {
             stmt.setInt(1, id);
-
             stmt.executeUpdate();
         } catch (SQLException e) {
             throw new DBException("Erro ao excluir Produto de ID = " + id);
-        } finally {
-            DB.fecharStatement(stmt);
         }
     }
 
     @Override
     public ProdutoDTO buscarProdutoPorId(Integer id) {
-        PreparedStatement stmt = null;
-        ResultSet rs = null;
-        try {
-            stmt = conexao.prepareStatement(
-                    "SELECT * FROM produto WHERE produto.Id_Produto = ?"
-            );
+        String sql = "SELECT * FROM produto WHERE Id_Produto = ?";
 
+        try (PreparedStatement stmt = conexao.prepareStatement(sql)) {
             stmt.setInt(1, id);
-            rs = stmt.executeQuery();
-            if (rs.next()) {
-                return instanciarProduto(rs);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return instanciarProduto(rs);
+                }
             }
         } catch (SQLException e) {
             throw new DBException("Erro ao buscar Produto de ID = " + id);
-        } finally {
-            DB.fecharStatement(stmt);
-            DB.fecharResultSet(rs);
         }
         return null;
     }
 
     @Override
     public List<ProdutoDTO> listarTodosOsProdutos() {
-        PreparedStatement stmt = null;
-        ResultSet rs = null;
-        try{
-            stmt = conexao.prepareStatement(
-                    "select * from produto"
-            );
-            rs = stmt.executeQuery();
-            List<ProdutoDTO> produtos = new ArrayList<>();
+        String sql = "SELECT * FROM produto";
+        List<ProdutoDTO> produtos = new ArrayList<>();
 
-            while (rs.next()){
+        try (PreparedStatement stmt = conexao.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
                 produtos.add(instanciarProduto(rs));
             }
-            return produtos;
-        }catch(SQLException e){
-            throw new DBException("Erro ao listar Produtos");
-        }finally {
-            DB.fecharStatement(stmt);
-            DB.fecharResultSet(rs);
+        } catch (SQLException e) {
+            throw new DBException("Erro ao listar Produtos: ");
         }
+        return produtos;
     }
 
     private ProdutoDTO instanciarProduto(ResultSet rs) throws SQLException {
