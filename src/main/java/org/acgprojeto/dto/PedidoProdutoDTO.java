@@ -1,6 +1,7 @@
 package org.acgprojeto.dto;
 
 import org.acgprojeto.model.entidades.Pedido;
+import org.acgprojeto.model.entidades.PedidoProduto;
 import org.acgprojeto.model.entidades.Produto;
 
 import java.math.BigDecimal;
@@ -11,6 +12,20 @@ public class PedidoProdutoDTO {
     private ProdutoDTO produto;
     private BigDecimal preco;
     private Integer quantidade;
+
+    public PedidoProdutoDTO(PedidoDTO pedido, ProdutoDTO produto, BigDecimal preco, Integer quantidade) {
+        this.pedido = pedido;
+        this.produto = produto;
+        this.preco = preco;
+        this.quantidade = quantidade;
+    }
+
+    public PedidoProdutoDTO(PedidoProduto pedidoProduto) {
+        this.pedido = new PedidoDTO(pedidoProduto.getPedido());
+        this.produto = new ProdutoDTO(pedidoProduto.getProduto());
+        this.preco = pedidoProduto.getPreco();
+        this.quantidade = pedidoProduto.getQuantidade();
+    }
 
     public PedidoDTO getPedido() {
         return pedido;

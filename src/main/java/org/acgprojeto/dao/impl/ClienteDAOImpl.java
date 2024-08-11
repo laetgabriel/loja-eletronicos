@@ -67,7 +67,7 @@ public class ClienteDAOImpl implements ClienteDAO {
             stmt.executeUpdate();
 
         }catch(SQLException e){
-            throw new DBException("Erro ao atualizar cliente");
+            throw new DBException("Erro ao atualizar Cliente");
         }finally {
             DB.fecharStatement(stmt);
         }
@@ -86,7 +86,7 @@ public class ClienteDAOImpl implements ClienteDAO {
 
             stmt.executeUpdate();
         }catch(SQLException e){
-            throw new DBException("Erro ao excluir cliente");
+            throw new DBException("Erro ao excluir Cliente de ID = " + id);
         }finally {
             DB.fecharStatement(stmt);
         }
@@ -107,7 +107,7 @@ public class ClienteDAOImpl implements ClienteDAO {
                 return instanciarClienteDTO(rs);
             }
         }catch(SQLException e){
-            throw new DBException(e.getMessage());
+            throw new DBException("Erro ao buscar Cliente de ID = " + id);
         }finally {
             DB.fecharStatement(stmt);
             DB.fecharResultSet(rs);
@@ -131,7 +131,7 @@ public class ClienteDAOImpl implements ClienteDAO {
             }
             return clientes;
         }catch(SQLException e){
-            throw new DBException(e.getMessage());
+            throw new DBException("Erro ao listar Clientes");
         }
     }
 

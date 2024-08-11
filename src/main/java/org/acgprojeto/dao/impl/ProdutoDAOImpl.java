@@ -48,7 +48,7 @@ public class ProdutoDAOImpl implements ProdutoDAO {
             } else
                 throw new DBException("Erro ao inserir linha");
         } catch (SQLException e) {
-            throw new DBException("Erro ao inserir produto");
+            throw new DBException("Erro ao inserir Produto");
         } finally {
             DB.fecharStatement(stmt);
             DB.fecharResultSet(rs);
@@ -73,7 +73,7 @@ public class ProdutoDAOImpl implements ProdutoDAO {
             stmt.executeUpdate();
 
         } catch (SQLException e) {
-            throw new DBException("Erro ao atualizar produto");
+            throw new DBException("Erro ao atualizar Produto ");
         } finally {
             DB.fecharStatement(stmt);
         }
@@ -91,14 +91,14 @@ public class ProdutoDAOImpl implements ProdutoDAO {
 
             stmt.executeUpdate();
         } catch (SQLException e) {
-            throw new DBException("Erro ao excluir Produto");
+            throw new DBException("Erro ao excluir Produto de ID = " + id);
         } finally {
             DB.fecharStatement(stmt);
         }
     }
 
     @Override
-    public ProdutoDTO listarProdutoPorId(Integer id) {
+    public ProdutoDTO buscarProdutoPorId(Integer id) {
         PreparedStatement stmt = null;
         ResultSet rs = null;
         try {
@@ -112,7 +112,7 @@ public class ProdutoDAOImpl implements ProdutoDAO {
                 return instanciarProduto(rs);
             }
         } catch (SQLException e) {
-            throw new DBException(e.getMessage());
+            throw new DBException("Erro ao buscar Produto de ID = " + id);
         } finally {
             DB.fecharStatement(stmt);
             DB.fecharResultSet(rs);
@@ -136,7 +136,7 @@ public class ProdutoDAOImpl implements ProdutoDAO {
             }
             return produtos;
         }catch(SQLException e){
-            throw new DBException(e.getMessage());
+            throw new DBException("Erro ao listar Produtos");
         }finally {
             DB.fecharStatement(stmt);
             DB.fecharResultSet(rs);

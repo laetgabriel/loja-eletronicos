@@ -1,7 +1,9 @@
 package org.acgprojeto.dto;
 
+import org.acgprojeto.model.entidades.Pedido;
 import org.acgprojeto.model.enums.Estado;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 
@@ -10,7 +12,21 @@ public class PedidoDTO {
     private Integer idPedido;
     private ClienteDTO cliente;
     private Estado estado;
-    private Date data;
+    private LocalDate data;
+
+    public PedidoDTO(Integer idPedido, ClienteDTO cliente, Estado estado, LocalDate data) {
+        this.idPedido = idPedido;
+        this.cliente = cliente;
+        this.estado = estado;
+        this.data = data;
+    }
+
+    public PedidoDTO(Pedido pedido) {
+        idPedido = pedido.getIdPedido();
+        cliente = new ClienteDTO(pedido.getCliente());
+        estado = pedido.getEstado();
+        data = pedido.getData();
+    }
 
     public Integer getIdPedido() {
         return idPedido;
@@ -36,11 +52,11 @@ public class PedidoDTO {
         this.estado = estado;
     }
 
-    public Date getData() {
+    public LocalDate getData() {
         return data;
     }
 
-    public void setData(Date data) {
+    public void setData(LocalDate data) {
         this.data = data;
     }
 
