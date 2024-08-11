@@ -26,7 +26,9 @@ public class Main {
     public static void main(String[] args) {
 
         Connection conexao = DB.getConexao();
-
+        DB db = new DB();
+        DB db2 = new DB();
+        String s = new String();
         /*
         ClienteDAO clienteDAO = new ClienteDAOImpl(conexao);
         clienteDAO.inserirCliente(new ClienteDTO(null,"Brunno","cicerobrnn111@gmail.com", null));
