@@ -21,7 +21,13 @@ public class ProdutoDAOImpl implements ProdutoDAO {
 
     @Override
     public void inserirProduto(ProdutoDTO produtoDTO) {
-        Produto produto = new Produto(produtoDTO);
+        Produto produto = Produto.ProdutoBuilder.aProduto()
+                .nomeProduto(produtoDTO.getNomeProduto())
+                .preco(produtoDTO.getPreco())
+                .categoria(produtoDTO.getCategoria())
+                .quantidadeEstoque(produtoDTO.getQuantidadeEstoque())
+                .build();
+
         String sql = "INSERT INTO Produto(Nome, Categoria, Preco, Quant_Estoque) VALUES (?, ?, ?, ?)";
 
         try (PreparedStatement stmt = conexao.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
@@ -111,14 +117,15 @@ public class ProdutoDAOImpl implements ProdutoDAO {
     }
 
     private ProdutoDTO instanciarProduto(ResultSet rs) throws SQLException {
-        Produto produto = new Produto();
-        produto.setIdProduto(rs.getInt("Id_Produto"));
-        produto.setNomeProduto(rs.getString("Nome"));
         String categoriaStr = rs.getString("Categoria");
         Categoria categoria = Categoria.valueOf(categoriaStr.toUpperCase());
-        produto.setCategoria(categoria);
-        produto.setPreco(rs.getBigDecimal("Preco"));
-        produto.setQuantidadeEstoque(rs.getInt("Quant_Estoque"));
-        return new ProdutoDTO(produto);
+        return ProdutoDTO.ProdutoDTOBuilder.aProdutoDTO()
+                .idProduto(rs.getInt("Id_Produto"))
+                .nomeProduto(rs.getString("Nome"))
+                .categoria(categoria)
+                .preco(rs.getBigDecimal("Preco"))
+                .quantidadeEstoque(rs.getInt("Quant_Estoque"))
+                .build();
+
     }
 }
