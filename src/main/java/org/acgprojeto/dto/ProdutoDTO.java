@@ -14,10 +14,18 @@ public class ProdutoDTO {
     private BigDecimal preco;
     private Integer quantidadeEstoque;
 
-    public ProdutoDTO() {}
+    private ProdutoDTO() {}
 
-    public ProdutoDTO(Integer IdProduto, Integer quantidadeEstoque, String nomeProduto, Categoria categoria, BigDecimal preco) {
-        this.idProduto = IdProduto;
+    public ProdutoDTO(Integer idProduto, String nomeProduto, Categoria categoria, BigDecimal preco, Integer quantidadeEstoque) {
+        this.idProduto = idProduto;
+        this.nomeProduto = nomeProduto;
+        this.categoria = categoria;
+        this.preco = preco;
+        this.quantidadeEstoque = quantidadeEstoque;
+    }
+
+    public ProdutoDTO(Integer idProduto, Integer quantidadeEstoque, String nomeProduto, Categoria categoria, BigDecimal preco) {
+        this.idProduto = idProduto;
         this.quantidadeEstoque = quantidadeEstoque;
         this.nomeProduto = nomeProduto;
         this.categoria = categoria;
@@ -72,4 +80,51 @@ public class ProdutoDTO {
         this.quantidadeEstoque = quantidadeEstoque;
     }
 
+
+    public static final class ProdutoDTOBuilder {
+        private Integer idProduto;
+        private String nomeProduto;
+        private Categoria categoria;
+        private BigDecimal preco;
+        private Integer quantidadeEstoque;
+
+        private ProdutoDTOBuilder() {
+        }
+
+        public static ProdutoDTOBuilder aProdutoDTO() {
+            return new ProdutoDTOBuilder();
+        }
+
+        public ProdutoDTOBuilder idProduto(Integer idProduto) {
+            this.idProduto = idProduto;
+            return this;
+        }
+
+        public ProdutoDTOBuilder nomeProduto(String nomeProduto) {
+            this.nomeProduto = nomeProduto;
+            return this;
+        }
+
+        public ProdutoDTOBuilder categoria(Categoria categoria) {
+            this.categoria = categoria;
+            return this;
+        }
+
+        public ProdutoDTOBuilder preco(BigDecimal preco) {
+            this.preco = preco;
+            return this;
+        }
+
+        public ProdutoDTOBuilder quantidadeEstoque(Integer quantidadeEstoque) {
+            this.quantidadeEstoque = quantidadeEstoque;
+            return this;
+        }
+
+        public ProdutoDTO build() {
+            if (nomeProduto == null || categoria == null || preco == null || quantidadeEstoque == null) {
+                throw new IllegalStateException("Campos obrigatórios não podem ser nulos");
+            }
+            return new ProdutoDTO(idProduto, nomeProduto, categoria, preco, quantidadeEstoque);
+        }
+    }
 }

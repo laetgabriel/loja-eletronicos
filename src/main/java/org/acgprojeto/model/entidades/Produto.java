@@ -14,7 +14,7 @@ public class Produto {
     private BigDecimal preco;
     private Integer quantidadeEstoque;
 
-    public Produto() {}
+    private Produto() {}
 
     public Produto(ProdutoDTO produtoDTO) {
         idProduto = produtoDTO.getIdProduto();
@@ -24,11 +24,11 @@ public class Produto {
         quantidadeEstoque = produtoDTO.getQuantidadeEstoque();
     }
 
-    public int getIdProduto() {
+    public Integer getIdProduto() {
         return idProduto;
     }
 
-    public void setIdProduto(int idProduto) {
+    public void setIdProduto(Integer idProduto) {
         this.idProduto = idProduto;
     }
 
@@ -80,11 +80,68 @@ public class Produto {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Produto produto = (Produto) o;
-        return Objects.equals(idProduto, produto.idProduto) && Objects.equals(nomeProduto, produto.nomeProduto) && categoria == produto.categoria && Objects.equals(preco, produto.preco) && Objects.equals(quantidadeEstoque, produto.quantidadeEstoque);
+        return Objects.equals(idProduto, produto.idProduto) &&
+                Objects.equals(nomeProduto, produto.nomeProduto) &&
+                categoria == produto.categoria &&
+                Objects.equals(preco, produto.preco) &&
+                Objects.equals(quantidadeEstoque, produto.quantidadeEstoque);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(idProduto, nomeProduto, categoria, preco, quantidadeEstoque);
+    }
+
+    public static final class ProdutoBuilder {
+        private Integer idProduto;
+        private String nomeProduto;
+        private Categoria categoria;
+        private BigDecimal preco;
+        private Integer quantidadeEstoque;
+
+        private ProdutoBuilder() {
+        }
+
+        public static ProdutoBuilder aProduto() {
+            return new ProdutoBuilder();
+        }
+
+        public ProdutoBuilder idProduto(Integer idProduto) {
+            this.idProduto = idProduto;
+            return this;
+        }
+
+        public ProdutoBuilder nomeProduto(String nomeProduto) {
+            this.nomeProduto = nomeProduto;
+            return this;
+        }
+
+        public ProdutoBuilder categoria(Categoria categoria) {
+            this.categoria = categoria;
+            return this;
+        }
+
+        public ProdutoBuilder preco(BigDecimal preco) {
+            this.preco = preco;
+            return this;
+        }
+
+        public ProdutoBuilder quantidadeEstoque(Integer quantidadeEstoque) {
+            this.quantidadeEstoque = quantidadeEstoque;
+            return this;
+        }
+
+        public Produto build() {
+            if (nomeProduto == null || categoria == null || preco == null || quantidadeEstoque == null) {
+                throw new IllegalStateException("Todos os campos devem ser fornecidos para construir um Produto");
+            }
+            Produto produto = new Produto();
+            produto.setIdProduto(this.idProduto);
+            produto.setNomeProduto(this.nomeProduto);
+            produto.setCategoria(this.categoria);
+            produto.setPreco(this.preco);
+            produto.setQuantidadeEstoque(this.quantidadeEstoque);
+            return produto;
+        }
     }
 }
