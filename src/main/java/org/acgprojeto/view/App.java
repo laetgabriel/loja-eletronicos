@@ -15,11 +15,20 @@ public class App extends Application {
 
         try {
 
-            Parent parent = FXMLLoader.load(getClass().getResource("/org/acgprojeto/view/Main.fxml"));
+            Parent parent = FXMLLoader.load(getClass().getResource("/org/acgprojeto/view/Login.fxml"));
             Scene scene = new Scene(parent);
             stage.setScene(scene);
-            stage.setTitle("App Cyber Tigre");
+            stage.setTitle("Cyber Tigre Inforcel");
+            stage.setResizable(false);
             stage.show();
+
+            Stage stage2 = new Stage();
+            Parent parent2 = FXMLLoader.load(getClass().getResource("/org/acgprojeto/view/CadastroAdmin.fxml"));
+            Scene scene2 = new Scene(parent2);
+            stage2.setScene(scene2);
+            stage2.setTitle("Cyber Tigre Inforcel");
+            stage2.setResizable(false);
+            stage2.show();
         }
         catch (IOException e) {
             e.printStackTrace();
