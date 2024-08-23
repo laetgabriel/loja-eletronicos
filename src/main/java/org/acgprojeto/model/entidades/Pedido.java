@@ -1,33 +1,80 @@
-
 package org.acgprojeto.model.entidades;
 
 import org.acgprojeto.dto.PedidoDTO;
+import org.acgprojeto.model.entidades.estate.EstadoPedido;
+import org.acgprojeto.model.entidades.estate.impl.EstadoAndamento;
+import org.acgprojeto.model.entidades.estate.impl.EstadoCancelado;
+import org.acgprojeto.model.entidades.estate.impl.EstadoFinalizado;
+import org.acgprojeto.model.entidades.estate.impl.EstadoPronto;
 import org.acgprojeto.model.enums.Estado;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 public class Pedido {
 
     private Integer idPedido;
     private Cliente cliente;
-    private Estado estado;
+    private EstadoPedido estado ;
     private LocalDate data;
 
-    public Pedido() {}
+    public Pedido(Integer idPedido, Cliente cliente, LocalDate data) {
+        this.idPedido = idPedido;
+        this.cliente = cliente;
+        this.data = data;
+        this.estado = new EstadoAndamento();// Inicialmente, o estado é 'Andamento'
+        estado.setPedidoDTO(this.toDTO());
+    }
 
     public Pedido(PedidoDTO pedidoDTO) {
+        this.estado = createEstado(pedidoDTO.getEstado());
         this.idPedido = pedidoDTO.getIdPedido();
-        this.cliente = new Cliente(pedidoDTO.getCliente());
-        this.estado = pedidoDTO.getEstado();
         this.data = pedidoDTO.getData();
+        this.cliente = new Cliente(pedidoDTO.getCliente());
+        estado.setPedidoDTO(this.toDTO());
+    }
+
+    public Pedido() {
+
+    }
+
+    private EstadoPedido createEstado(Estado estadoEnum) {
+        switch (estadoEnum) {
+            case ANDAMENTO:
+                return new EstadoAndamento();
+            case PRONTO:
+                return new EstadoPronto();
+            case CANCELADO:
+                return new EstadoCancelado();
+            case FINALIZADO:
+                return new EstadoFinalizado();
+            default:
+                throw new IllegalArgumentException("Estado inválido");
+        }
+    }
+
+    public void concluir() {
+        estado.concluir();
+    }
+
+    public void finalizar() {
+        estado.finalizar();
+    }
+
+    public void cancelar() {
+        estado.cancelar();
+    }
+
+    public void gerarRelatorio() {
+        estado.gerarRelatorio();
     }
 
     public Integer getIdPedido() {
         return idPedido;
     }
 
-    public void setIdPedido(Integer idPedido) {this.idPedido = idPedido;}
+    public void setIdPedido(Integer idPedido) {
+        this.idPedido = idPedido;
+    }
 
     public Cliente getCliente() {
         return cliente;
@@ -37,11 +84,11 @@ public class Pedido {
         this.cliente = cliente;
     }
 
-    public Estado getEstado() {
+    public EstadoPedido getEstado() {
         return estado;
     }
 
-    public void setEstado(Estado estado) {
+    public void setEstado(EstadoPedido estado) {
         this.estado = estado;
     }
 
@@ -53,14 +100,16 @@ public class Pedido {
         this.data = data;
     }
 
+    public PedidoDTO toDTO() {
+        return new PedidoDTO(this);
+    }
+
     @Override
     public String toString() {
         return "Pedido{" +
                 "idPedido=" + idPedido +
                 ", cliente=" + cliente +
-                ", estado=" + estado +
                 ", data=" + data +
                 '}';
     }
-
 }

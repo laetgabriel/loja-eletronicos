@@ -30,4 +30,5 @@ public class ClienteController {
     public List<ClienteDTO> listarTodosOsClientes() {
         return clienteDAO.listarTodosOsClientes();
     }
+
 }

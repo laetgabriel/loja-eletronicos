@@ -1,12 +1,9 @@
-
 package org.acgprojeto.dto;
 
 import org.acgprojeto.model.entidades.Pedido;
 import org.acgprojeto.model.enums.Estado;
 
 import java.time.LocalDate;
-import java.util.Date;
-
 
 public class PedidoDTO {
 
@@ -23,12 +20,17 @@ public class PedidoDTO {
     }
 
     public PedidoDTO(Pedido pedido) {
-        idPedido = pedido.getIdPedido();
-        cliente = new ClienteDTO(pedido.getCliente());
-        estado = pedido.getEstado();
-        data = pedido.getData();
+        this.idPedido = pedido.getIdPedido();
+        this.cliente = new ClienteDTO(pedido.getCliente());
+        this.estado = Estado.valueOf(pedido.getEstado().getNomeEstado());// Se estado for uma instância de EstadoPedido
+        this.data = pedido.getData();
     }
 
+    public PedidoDTO() {
+
+    }
+
+    // Getters e Setters
     public Integer getIdPedido() {
         return idPedido;
     }
@@ -63,12 +65,11 @@ public class PedidoDTO {
 
     @Override
     public String toString() {
-        return "Pedido{" +
+        return "PedidoDTO{" +
                 "idPedido=" + idPedido +
                 ", cliente=" + cliente +
                 ", estado=" + estado +
                 ", data=" + data +
                 '}';
     }
-
 }

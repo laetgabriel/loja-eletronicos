@@ -3,6 +3,7 @@ package org.acgprojeto.dao.impl;
 import org.acgprojeto.dao.ServicoDAO;
 import org.acgprojeto.db.DB;
 import org.acgprojeto.db.exceptions.DBException;
+import org.acgprojeto.dto.PedidoDTO;
 import org.acgprojeto.dto.ServicoDTO;
 import org.acgprojeto.model.entidades.Pedido;
 import org.acgprojeto.model.entidades.Servico;
@@ -108,6 +109,28 @@ public class ServicoDAOImpl implements ServicoDAO {
         } catch (SQLException e) {
             throw new DBException("Erro ao listar Serviços: ");
         }
+        return servicos;
+    }
+
+    @Override
+    public List<ServicoDTO> listarServicosPorPedido(PedidoDTO pedido) {
+        String sql = "select * from servico where Id_Pedido = ?";
+        List<ServicoDTO> servicos = new ArrayList<>();
+
+        try (PreparedStatement stmt = conexao.prepareStatement(sql)) {
+            stmt.setInt(1, pedido.getIdPedido());
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    servicos.add(instanciarServico(rs));
+                }
+            } catch (SQLException e) {
+                throw new DBException("Erro ao processar o ResultSet: ");
+            }
+        } catch (SQLException e) {
+            throw new DBException("Erro ao listar serviços: ");
+        }
+
         return servicos;
     }
 

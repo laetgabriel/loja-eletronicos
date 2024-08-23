@@ -19,6 +19,10 @@ public class PedidoController {
         pedidoDAO.atualizarPedido(pedidoDTO);
     }
 
+    public void atualizarEstadoPedido(PedidoDTO pedidoDTO) {
+        pedidoDAO.atualizarEstadoPedido(pedidoDTO);
+    }
+
     public void excluirPedido(Integer id) {
         pedidoDAO.excluirPedido(id);
     }

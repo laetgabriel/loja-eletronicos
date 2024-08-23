@@ -1,15 +1,18 @@
 package org.acgprojeto.dao.impl;
 
 import org.acgprojeto.dao.PedidoDAO;
-import org.acgprojeto.db.DB;
 import org.acgprojeto.db.exceptions.DBException;
 import org.acgprojeto.dto.PedidoDTO;
 import org.acgprojeto.model.entidades.Cliente;
 import org.acgprojeto.model.entidades.Pedido;
+import org.acgprojeto.model.entidades.estate.EstadoPedido;
+import org.acgprojeto.model.entidades.estate.impl.EstadoAndamento;
+import org.acgprojeto.model.entidades.estate.impl.EstadoCancelado;
+import org.acgprojeto.model.entidades.estate.impl.EstadoFinalizado;
+import org.acgprojeto.model.entidades.estate.impl.EstadoPronto;
 import org.acgprojeto.model.enums.Estado;
 
 import java.sql.*;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -58,6 +61,22 @@ public class PedidoDAOImpl implements PedidoDAO {
             stmt.setString(2, pedido.getEstado().toString());
             stmt.setDate(3, Date.valueOf(pedido.getData()));
             stmt.setInt(4, pedido.getIdPedido());
+
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new DBException("Erro ao atualizar Pedido: ");
+        }
+    }
+
+    @Override
+    public void atualizarEstadoPedido(PedidoDTO pedidoDTO) {
+        Pedido pedido = new Pedido(pedidoDTO);
+
+        String sql = "UPDATE pedido SET Estado = ? WHERE Id_Pedido = ?";
+
+        try (PreparedStatement stmt = conexao.prepareStatement(sql)) {
+            stmt.setString(1, pedido.getEstado().getNomeEstado());
+            stmt.setInt(2, pedido.getIdPedido());
 
             stmt.executeUpdate();
         } catch (SQLException e) {
@@ -116,8 +135,36 @@ public class PedidoDAOImpl implements PedidoDAO {
         Pedido pedido = new Pedido();
         pedido.setIdPedido(rs.getInt("Id_Pedido"));
         pedido.setCliente(new Cliente(new ClienteDAOImpl(conexao).buscarClientePorId(rs.getInt("Id_Cliente"))));
-        pedido.setEstado(Estado.valueOf(rs.getString("Estado")));
-        pedido.setData(rs.getDate("Data").toLocalDate()); // LocalDate já é um método conveniente para conversão
+        pedido.setData(rs.getDate("Data").toLocalDate());
+
+        // Lê o valor do estado e garante que ele esteja em maiúsculas
+        String estadoString = rs.getString("Estado");
+        System.out.println("Está retornando do banco: " + estadoString);
+        Estado estadoEnum;
+        try {
+            estadoEnum = Estado.valueOf(estadoString.toUpperCase()); // Converte o valor para maiúsculas
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("Valor inválido para o estado: " + estadoString, e);
+        }
+
+        EstadoPedido estadoPedido = createEstado(estadoEnum);
+        pedido.setEstado(estadoPedido);
         return new PedidoDTO(pedido);
+    }
+
+
+    private EstadoPedido createEstado(Estado estadoEnum) {
+        switch (estadoEnum) {
+                case ANDAMENTO:
+                    return new EstadoAndamento();
+                case PRONTO:
+                    return new EstadoPronto();
+                case CANCELADO:
+                    return new EstadoCancelado();
+                case FINALIZADO:
+                    return new EstadoFinalizado();
+                default:
+                    throw new IllegalArgumentException("Estado inválido: " + estadoEnum);
+            }
     }
 }
