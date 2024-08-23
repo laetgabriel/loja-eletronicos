@@ -15,34 +15,43 @@
             <Image url="@../icones/planoFundo.png" />
          </image>
       </ImageView>
-      <Label contentDisplay="CENTER" layoutX="382.0" layoutY="65.0" prefHeight="88.0" prefWidth="166.0" text="Login" textAlignment="CENTER" AnchorPane.leftAnchor="382.0" AnchorPane.rightAnchor="353.20000000000005">
+
+      <Label alignment="CENTER" contentDisplay="CENTER" layoutY="70.0" prefHeight="88.0" prefWidth="900.0" text="Login" textAlignment="CENTER">
          <font>
             <Font name="System Bold" size="60.0" />
          </font>
       </Label>
-      <Label layoutX="243.0" layoutY="211.0" prefHeight="30.0" prefWidth="70.0" text="Usuário">
+
+      <Label layoutX="240.0" layoutY="215.0" prefHeight="30.0" prefWidth="70.0" text="Usuário">
          <font>
             <Font size="20.0" />
          </font>
       </Label>
-      <Label layoutX="243.0" layoutY="311.0" prefHeight="30.0" prefWidth="62.0" text="Senha">
+
+      <Label layoutX="242.0" layoutY="313.0" prefHeight="30.0" prefWidth="62.0" text="Senha">
          <font>
             <Font size="20.0" />
          </font>
       </Label>
+
       <Button layoutX="525.0" layoutY="476.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="158.0" style="-fx-background-color: green;" text="Login" textFill="WHITE" />
-      <Button layoutX="243.0" layoutY="476.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="158.0" style="-fx-background-color: green;" text="Esqueceu a senha" textFill="WHITE" />
-      <ImageView fitHeight="32.0" fitWidth="32.0" layoutX="243.0" layoutY="245.0">
+
+      <Button layoutX="237.0" layoutY="476.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="158.0" style="-fx-background-color: green;" text="Esqueceu a senha" textFill="WHITE" />
+
+      <ImageView fitHeight="32.0" fitWidth="38.0" layoutX="237.0" layoutY="246.0">
          <image>
             <Image url="@../icones/login.png" />
          </image>
       </ImageView>
-      <ImageView fitHeight="32.0" fitWidth="32.0" layoutX="243.0" layoutY="343.0">
+
+      <ImageView fitHeight="32.0" fitWidth="38.0" layoutX="237.0" layoutY="343.0">
          <image>
             <Image url="@../icones/senha.png" />
          </image>
       </ImageView>
-      <TextField layoutX="275.0" layoutY="246.0" prefHeight="30.0" prefWidth="410.0" promptText="Digite seu usuário" />
+
+      <TextField layoutX="274.0" layoutY="247.0" prefHeight="30.0" prefWidth="410.0" promptText="Digite seu usuário" />
+
       <TextField accessibleRole="PASSWORD_FIELD" layoutX="274.0" layoutY="344.0" prefHeight="30.0" prefWidth="410.0" promptText="Digite sua senha" />
    </children>
 </AnchorPane>

@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<ScrollPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1">
+    <content>
+        <AnchorPane prefHeight="582.0" prefWidth="884.0">
+            <children>
+
+                <Label alignment="CENTER" contentDisplay="CENTER" text="Sistema de Gerenciamento Cyber Tigre Inforcell" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="26.0">
+                    <font>
+                        <Font name="System Bold" size="35.0" />
+                    </font>
+                </Label>
+
+                <Label alignment="CENTER" contentDisplay="CENTER" layoutX="69.0" layoutY="125.0" prefHeight="119.0" prefWidth="746.0" text="      Projeto desenvolvido para a disciplina de Padrões de Projeto cujo objetivo foi desenvolver um sistema para gerenciar pedidos de conserto de eletrônicos, vendas de periféricos e serviços no geral. Permitindo processar pedidos, gerenciar serviços e aplicar suporte para todo o processo que manualmente se torna chato e repetitivo. Visando, ainda, a criação de relatórios para facilitar o processo de contabilização de contas, produtos e clientes." wrapText="true" AnchorPane.leftAnchor="69.0" AnchorPane.rightAnchor="69.0" AnchorPane.topAnchor="125.0">
+                    <font>
+                        <Font size="15.0" />
+                    </font>
+                </Label>
+
+                <Label alignment="CENTER" contentDisplay="CENTER" layoutX="47.0" layoutY="291.0" prefHeight="51.0" prefWidth="318.0" text="Desenvolvido por:" AnchorPane.leftAnchor="47.0" AnchorPane.topAnchor="291.0">
+                    <font>
+                        <Font name="System Bold" size="35.0" />
+                    </font>
+                </Label>
+
+                <Label layoutX="59.0" layoutY="284.0" prefHeight="131.0" prefWidth="10.0" text="." AnchorPane.leftAnchor="59.0" AnchorPane.topAnchor="284.0">
+                    <font>
+                        <Font size="90.0" />
+                    </font>
+                </Label>
+
+                <Label layoutX="59.0" layoutY="389.0" prefHeight="131.0" prefWidth="10.0" text="." AnchorPane.leftAnchor="59.0" AnchorPane.topAnchor="389.0">
+                    <font>
+                        <Font size="90.0" />
+                    </font>
+                </Label>
+
+                <Label layoutX="59.0" layoutY="331.0" prefHeight="131.0" prefWidth="10.0" text="." AnchorPane.leftAnchor="59.0" AnchorPane.topAnchor="331.0">
+                    <font>
+                        <Font size="90.0" />
+                    </font>
+                </Label>
+
+                <Label layoutX="79.0" layoutY="367.0" prefHeight="22.0" prefWidth="218.0" text="Anderson da Silva Santos" AnchorPane.leftAnchor="79.0" AnchorPane.topAnchor="367.0">
+                    <font>
+                        <Font size="15.0" />
+                    </font>
+                </Label>
+
+                <Label layoutX="79.0" layoutY="415.0" prefHeight="22.0" prefWidth="218.0" text="Cicero Brunno das Neves Pereira" AnchorPane.leftAnchor="79.0" AnchorPane.topAnchor="415.0">
+                    <font>
+                        <Font size="15.0" />
+                    </font>
+                </Label>
+
+                <Label layoutX="79.0" layoutY="471.0" prefHeight="22.0" prefWidth="218.0" text="Gabriel Laet Freire Moreno" AnchorPane.leftAnchor="79.0" AnchorPane.topAnchor="471.0">
+                    <font>
+                        <Font size="15.0" />
+                    </font>
+                </Label>
+
+                <ImageView fitHeight="40.0" fitWidth="40.0" layoutX="254.0" layoutY="357.0" AnchorPane.leftAnchor="254.0" AnchorPane.topAnchor="357.0">
+                    <image>
+                        <Image url="@../icones/instagram.png" />
+                    </image>
+                </ImageView>
+
+                <Label layoutX="302.0" layoutY="365.0" prefHeight="22.0" prefWidth="127.0" text="\@anderson.ss.dog" AnchorPane.leftAnchor="302.0" AnchorPane.topAnchor="365.0">
+                    <font>
+                        <Font size="15.0" />
+                    </font>
+                </Label>
+
+                <ImageView fitHeight="40.0" fitWidth="40.0" layoutX="301.0" layoutY="405.0" AnchorPane.leftAnchor="301.0" AnchorPane.topAnchor="405.0">
+                    <image>
+                        <Image url="@../icones/instagram.png" />
+                    </image>
+                </ImageView>
+
+                <Label layoutX="345.0" layoutY="414.0" text="\@c.brunno.p" AnchorPane.leftAnchor="345.0" AnchorPane.topAnchor="414.0">
+                    <font>
+                        <Font size="15.0" />
+                    </font>
+                </Label>
+
+                <ImageView fitHeight="40.0" fitWidth="40.0" layoutX="265.0" layoutY="461.0" AnchorPane.leftAnchor="265.0" AnchorPane.topAnchor="461.0">
+                    <image>
+                        <Image url="@../icones/instagram.png" />
+                    </image>
+                </ImageView>
+
+                <Label layoutX="309.0" layoutY="470.0" text="\@gabriel.laet_" AnchorPane.leftAnchor="309.0" AnchorPane.topAnchor="470.0">
+                    <font>
+                        <Font size="15.0" />
+                    </font>
+                </Label>
+
+            </children>
+        </AnchorPane>
+    </content>
+</ScrollPane>
