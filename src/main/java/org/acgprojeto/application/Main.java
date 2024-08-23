@@ -29,8 +29,9 @@ public class Main  {
 
         //clienteDAO.inserirCliente(clienteDTO);
 
-        produtoDAO.inserirProduto(produtoDTO);
+        //produtoDAO.inserirProduto(produtoDTO);
 
+        produtoDAO.excluirProduto(4);
         DB.fecharConexao();
     }
 
