@@ -7,5 +7,6 @@ public interface EstadoPedido {
     void cancelar();
     void concluir();
     String getNomeEstado();
+    void gerarRelatorio();
     void setPedidoDTO(PedidoDTO pedidoDTO);
 }

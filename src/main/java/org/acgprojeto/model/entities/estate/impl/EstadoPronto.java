@@ -15,10 +15,11 @@ public class EstadoPronto extends AbstractEstadoPedido {
 
     }
 
-//    @Override
-//    public void gerarRelatorio() {
-//        super.gerarRelatorio();
-//    }
+    @Override
+    public void gerarRelatorio() {
+        super.gerarRelatorio();
+    }
+
     @Override
     public String getNomeEstado() {
         return "PRONTO";

@@ -10,8 +10,8 @@ public class EstadoFinalizado extends AbstractEstadoPedido {
         return "FINALIZADO";
     }
 
-//    @Override
-//    public void gerarRelatorio() {
-//        super.gerarRelatorio();
-//    }
+    @Override
+    public void gerarRelatorio() {
+        super.gerarRelatorio();
+    }
 }
