@@ -1,10 +1,9 @@
 package org.acgprojeto.dao.impl;
 
 import org.acgprojeto.dao.ClienteDAO;
-import org.acgprojeto.db.DB;
 import org.acgprojeto.db.exceptions.DBException;
 import org.acgprojeto.dto.ClienteDTO;
-import org.acgprojeto.model.entidades.Cliente;
+import org.acgprojeto.model.entities.Cliente;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -107,11 +106,11 @@ public class ClienteDAOImpl implements ClienteDAO {
     }
 
     private ClienteDTO instanciarClienteDTO(ResultSet rs) throws SQLException {
-        Cliente cliente = new Cliente();
-        cliente.setIdCliente(rs.getInt("Id_Cliente"));
-        cliente.setNome(rs.getString("Nome"));
-        cliente.setEmail(rs.getString("Email"));
-        cliente.setTelefone(rs.getString("Telefone"));
-        return new ClienteDTO(cliente);
+        return new ClienteDTO(
+                rs.getInt("Id_Cliente"),
+                rs.getString("Nome"),
+                rs.getString("Email"),
+                rs.getString("Telefone")
+        );
     }
 }

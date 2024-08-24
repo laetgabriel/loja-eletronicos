@@ -24,4 +24,8 @@ public class DAOFactory {
     public static ServicoDAO criarServicoDAO() {
         return new ServicoDAOImpl(DB.getConexao());
     }
+
+    public static AdminDAO criarAdminDAO() {
+        return new AdminDAOImpl(DB.getConexao());
+    }
 }

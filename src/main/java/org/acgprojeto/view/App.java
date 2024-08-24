@@ -16,12 +16,7 @@ public class App extends Application {
 
         try {
 
-            FXMLLoader parent =  new FXMLLoader(getClass().getResource("/org/acgprojeto/view/Sobre.fxml"));
 
-            ScrollPane scrollPane = parent.load();
-
-            scrollPane.setFitToHeight(true);
-            scrollPane.setFitToWidth(true);
 /*
             Scene scene = new Scene(scrollPane);
             stage.setScene(scene);
@@ -30,7 +25,7 @@ public class App extends Application {
             stage.show();
 */
 
-            Parent p = FXMLLoader.load(getClass().getResource("/org/acgprojeto/view/CadastroPedido.fxml"));
+            Parent p = FXMLLoader.load(getClass().getResource("/org/acgprojeto/view/CadastroAdmin.fxml"));
             stage.setScene(new Scene(p));
             stage.setTitle("Cyber Tigre Inforcell");
             stage.setResizable(true);

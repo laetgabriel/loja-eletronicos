@@ -1,7 +1,6 @@
 package org.acgprojeto.dto;
 
-import org.acgprojeto.model.entidades.Pedido;
-import org.acgprojeto.model.entidades.Servico;
+import org.acgprojeto.model.entities.Servico;
 import org.acgprojeto.model.enums.Tipo;
 
 import java.math.BigDecimal;

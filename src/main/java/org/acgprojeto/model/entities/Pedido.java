@@ -1,11 +1,11 @@
-package org.acgprojeto.model.entidades;
+package org.acgprojeto.model.entities;
 
 import org.acgprojeto.dto.PedidoDTO;
-import org.acgprojeto.model.entidades.estate.EstadoPedido;
-import org.acgprojeto.model.entidades.estate.impl.EstadoAndamento;
-import org.acgprojeto.model.entidades.estate.impl.EstadoCancelado;
-import org.acgprojeto.model.entidades.estate.impl.EstadoFinalizado;
-import org.acgprojeto.model.entidades.estate.impl.EstadoPronto;
+import org.acgprojeto.model.entities.estate.EstadoPedido;
+import org.acgprojeto.model.entities.estate.impl.EstadoAndamento;
+import org.acgprojeto.model.entities.estate.impl.EstadoCancelado;
+import org.acgprojeto.model.entities.estate.impl.EstadoFinalizado;
+import org.acgprojeto.model.entities.estate.impl.EstadoPronto;
 import org.acgprojeto.model.enums.Estado;
 
 import java.time.LocalDate;

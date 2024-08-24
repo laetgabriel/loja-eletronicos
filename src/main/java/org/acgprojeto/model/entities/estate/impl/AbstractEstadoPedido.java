@@ -1,8 +1,8 @@
-package org.acgprojeto.model.entidades.estate.impl;
+package org.acgprojeto.model.entities.estate.impl;
 
 import org.acgprojeto.controller.PedidoController;
 import org.acgprojeto.dto.PedidoDTO;
-import org.acgprojeto.model.entidades.estate.EstadoPedido;
+import org.acgprojeto.model.entities.estate.EstadoPedido;
 
 public abstract class AbstractEstadoPedido implements EstadoPedido {
 

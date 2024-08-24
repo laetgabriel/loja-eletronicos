@@ -1,10 +1,9 @@
 package org.acgprojeto.dao.impl;
 
 import org.acgprojeto.dao.ProdutoDAO;
-import org.acgprojeto.db.DB;
 import org.acgprojeto.db.exceptions.DBException;
 import org.acgprojeto.dto.ProdutoDTO;
-import org.acgprojeto.model.entidades.Produto;
+import org.acgprojeto.model.entities.Produto;
 import org.acgprojeto.model.enums.Categoria;
 
 import java.sql.*;

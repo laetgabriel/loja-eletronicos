@@ -1,6 +1,4 @@
-package org.acgprojeto.model.entidades.estate.impl;
-
-import org.acgprojeto.dto.PedidoDTO;
+package org.acgprojeto.model.entities.estate.impl;
 
 public class EstadoCancelado extends AbstractEstadoPedido {
 

@@ -1,7 +1,6 @@
 package org.acgprojeto.dao;
 
 import org.acgprojeto.dto.ProdutoDTO;
-import org.acgprojeto.model.entidades.Produto;
 
 import java.util.List;
 

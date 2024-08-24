@@ -1,22 +1,15 @@
 package org.acgprojeto.application;
 
-import org.acgprojeto.controller.PedidoController;
-import org.acgprojeto.dao.ClienteDAO;
-import org.acgprojeto.dao.ProdutoDAO;
-import org.acgprojeto.dao.impl.ClienteDAOImpl;
-import org.acgprojeto.dao.impl.ProdutoDAOImpl;
+import org.acgprojeto.dao.*;
 import org.acgprojeto.db.DB;
-import org.acgprojeto.dto.ClienteDTO;
-import org.acgprojeto.dto.ProdutoDTO;
-import org.acgprojeto.model.enums.Categoria;
+import org.acgprojeto.dto.AdminDTO;
 
-import java.math.BigDecimal;
-import java.sql.Connection;
 
 public class Main  {
 
     public static void main(String[] args) {
-        Connection connection = DB.getConexao();
+
+        AdminDAO adminDAO = DAOFactory.criarAdminDAO();
 
 //        ClienteDAO clienteDAO = new ClienteDAOImpl(connection);
 //        ProdutoDAO produtoDAO = new ProdutoDAOImpl(connection);
@@ -34,9 +27,13 @@ public class Main  {
 
 //        produtoDAO.excluirProduto(4);
 //        DB.fecharConexao();
-        PedidoController controller = new PedidoController();
 
-        controller.gerarRelatorioPedido();
+        //AdminDTO adminDTO = new AdminDTO(null, "Gabriel", "gabriellaetfm12@gmail.com", "senha123");
+
+        AdminDTO admin = adminDAO.buscarAdminPorId(4);
+        admin.setNome("Gagael");
+        adminDAO.atualizarAdmin(admin);
+        DB.fecharConexao();
     }
 
 

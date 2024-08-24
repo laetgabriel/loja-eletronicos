@@ -1,9 +1,7 @@
 package org.acgprojeto.dao;
 
-import org.acgprojeto.dto.ClienteDTO;
 import org.acgprojeto.dto.PedidoDTO;
 import org.acgprojeto.dto.ServicoDTO;
-import org.acgprojeto.model.entidades.Cliente;
 
 import java.util.List;
 

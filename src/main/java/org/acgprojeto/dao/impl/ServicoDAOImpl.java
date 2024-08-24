@@ -1,12 +1,11 @@
 package org.acgprojeto.dao.impl;
 
 import org.acgprojeto.dao.ServicoDAO;
-import org.acgprojeto.db.DB;
 import org.acgprojeto.db.exceptions.DBException;
 import org.acgprojeto.dto.PedidoDTO;
 import org.acgprojeto.dto.ServicoDTO;
-import org.acgprojeto.model.entidades.Pedido;
-import org.acgprojeto.model.entidades.Servico;
+import org.acgprojeto.model.entities.Pedido;
+import org.acgprojeto.model.entities.Servico;
 import org.acgprojeto.model.enums.Tipo;
 
 import java.sql.*;

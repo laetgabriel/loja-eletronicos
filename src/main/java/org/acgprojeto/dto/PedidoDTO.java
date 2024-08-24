@@ -1,6 +1,6 @@
 package org.acgprojeto.dto;
 
-import org.acgprojeto.model.entidades.Pedido;
+import org.acgprojeto.model.entities.Pedido;
 import org.acgprojeto.model.enums.Estado;
 
 import java.time.LocalDate;
