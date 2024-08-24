@@ -4,6 +4,5 @@ public enum Estado {
     ANDAMENTO,
     PRONTO,
     CANCELADO,
-    FINALIZADO,
-    Andamento,
+    FINALIZADO
 }

@@ -1,4 +1,4 @@
-package org.acgprojeto.model.entities.estate.impl;
+package org.acgprojeto.model.state.impl;
 
 import org.acgprojeto.model.enums.Estado;
 

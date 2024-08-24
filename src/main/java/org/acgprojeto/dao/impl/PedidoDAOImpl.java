@@ -5,11 +5,11 @@ import org.acgprojeto.db.exceptions.DBException;
 import org.acgprojeto.dto.PedidoDTO;
 import org.acgprojeto.model.entities.Cliente;
 import org.acgprojeto.model.entities.Pedido;
-import org.acgprojeto.model.entities.estate.EstadoPedido;
-import org.acgprojeto.model.entities.estate.impl.EstadoAndamento;
-import org.acgprojeto.model.entities.estate.impl.EstadoCancelado;
-import org.acgprojeto.model.entities.estate.impl.EstadoFinalizado;
-import org.acgprojeto.model.entities.estate.impl.EstadoPronto;
+import org.acgprojeto.model.state.EstadoPedido;
+import org.acgprojeto.model.state.impl.EstadoAndamento;
+import org.acgprojeto.model.state.impl.EstadoCancelado;
+import org.acgprojeto.model.state.impl.EstadoFinalizado;
+import org.acgprojeto.model.state.impl.EstadoPronto;
 import org.acgprojeto.model.enums.Estado;
 
 import java.sql.*;
@@ -141,7 +141,7 @@ public class PedidoDAOImpl implements PedidoDAO {
         String estadoString = rs.getString("Estado");
         Estado estadoEnum;
         try {
-            estadoEnum = Estado.valueOf(estadoString.toUpperCase()); // Converte o valor para maiúsculas
+            estadoEnum = Estado.valueOf(estadoString.toUpperCase());
         } catch (IllegalArgumentException e) {
             throw new IllegalArgumentException("Valor inválido para o estado: " + estadoString, e);
         }

@@ -40,17 +40,4 @@ public class PedidoController {
     public PedidoDTO buscarPedidoPorId(Integer id) {
         return pedidoDAO.buscarPedidoPorId(id);
     }
-    public void gerarRelatorioPedido(){
-        String path = System.getProperty("user.dir") + "\\teste.pdf";
-        try (PdfWriter writer = new PdfWriter(path);
-             PdfDocument pdfDoc = new PdfDocument(writer);
-             Document document = new Document(pdfDoc, PageSize.A4)) {
-            pdfDoc.addNewPage();
-            document.add(new Paragraph("Testando criar paragrafo"));
-            document.close();
-
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
 }

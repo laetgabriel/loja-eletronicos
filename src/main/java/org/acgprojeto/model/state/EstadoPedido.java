@@ -1,4 +1,4 @@
-package org.acgprojeto.model.entities.estate;
+package org.acgprojeto.model.state;
 
 import org.acgprojeto.dto.PedidoDTO;
 

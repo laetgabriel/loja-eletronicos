@@ -4,8 +4,8 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.ScrollPane;
 import javafx.stage.Stage;
+import org.acgprojeto.controller.AdminController;
 
 import java.io.IOException;
 
@@ -16,7 +16,7 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) {
-
+        AdminController adminController = new AdminController();
 
         try {
             Parent login = FXMLLoader.load(getClass().getResource("/org/acgprojeto/view/Login.fxml"));
@@ -27,7 +27,7 @@ public class App extends Application {
             stage.centerOnScreen();
             stage.show();
 
-            if(1 == 1){
+            if(adminController.buscarAdminPorId(1) == null){
                 Parent cadastroAdmin = FXMLLoader.load(getClass().getResource("/org/acgprojeto/view/CadastroAdmin.fxml"));
                 Stage palco = new Stage();
                 Scene scene = new Scene(cadastroAdmin);

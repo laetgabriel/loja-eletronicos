@@ -1,9 +1,10 @@
 package org.acgprojeto.application;
 
 import org.acgprojeto.dao.*;
+import org.acgprojeto.dao.impl.PedidoDAOImpl;
 import org.acgprojeto.db.DB;
-import org.acgprojeto.dto.AdminDTO;
-
+import org.acgprojeto.dto.PedidoDTO;
+import org.acgprojeto.model.entities.Pedido;
 
 public class Main  {
 
@@ -28,11 +29,12 @@ public class Main  {
 //        produtoDAO.excluirProduto(4);
 //        DB.fecharConexao();
 
-        //AdminDTO adminDTO = new AdminDTO(null, "Gabriel", "gabriellaetfm12@gmail.com", "senha123");
+        PedidoDAO pedidoDAO = new PedidoDAOImpl(DB.getConexao());
+        PedidoDTO pedidoDTO = pedidoDAO.buscarPedidoPorId(1);
+        pedidoDAO.atualizarEstadoPedido(pedidoDTO);
+        Pedido pedido = new Pedido(pedidoDTO);
+        pedido.gerarRelatorio();
 
-        AdminDTO admin = adminDAO.buscarAdminPorId(4);
-        admin.setNome("Gagael");
-        adminDAO.atualizarAdmin(admin);
         DB.fecharConexao();
     }
 
