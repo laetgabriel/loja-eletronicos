@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.acgprojeto.view.controller.LoginController">
    <children>
       <ImageView fitHeight="600.0" fitWidth="900.0">
          <image>
@@ -34,9 +34,9 @@
          </font>
       </Label>
 
-      <Button layoutX="525.0" layoutY="476.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="158.0" style="-fx-background-color: green;" text="Login" textFill="WHITE" />
+      <Button fx:id="btnLogin" layoutX="525.0" layoutY="476.0" mnemonicParsing="false" onAction="#onBtnLogin" prefHeight="44.0" prefWidth="158.0" style="-fx-background-color: green;" text="Login" textFill="WHITE" />
 
-      <Button layoutX="237.0" layoutY="476.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="158.0" style="-fx-background-color: green;" text="Esqueceu a senha" textFill="WHITE" />
+      <Button fx:id="btnEsqueceuSenha" layoutX="237.0" layoutY="476.0" mnemonicParsing="false" onAction="#onBtnEsqueceuSenha" prefHeight="44.0" prefWidth="158.0" style="-fx-background-color: green;" text="Esqueceu a senha" textFill="WHITE" />
 
       <ImageView fitHeight="32.0" fitWidth="38.0" layoutX="237.0" layoutY="246.0">
          <image>
@@ -50,8 +50,8 @@
          </image>
       </ImageView>
 
-      <TextField layoutX="274.0" layoutY="247.0" prefHeight="30.0" prefWidth="410.0" promptText="Digite seu usuário" />
+      <TextField fx:id="txtUsername" layoutX="274.0" layoutY="247.0" prefHeight="30.0" prefWidth="410.0" promptText="Digite seu usuário" />
 
-      <TextField accessibleRole="PASSWORD_FIELD" layoutX="274.0" layoutY="344.0" prefHeight="30.0" prefWidth="410.0" promptText="Digite sua senha" />
+      <TextField fx:id="txtPassword" accessibleRole="PASSWORD_FIELD" layoutX="274.0" layoutY="344.0" prefHeight="30.0" prefWidth="410.0" promptText="Digite sua senha" />
    </children>
 </AnchorPane>

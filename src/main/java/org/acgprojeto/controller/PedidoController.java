@@ -41,8 +41,10 @@ public class PedidoController {
     public PedidoDTO buscarPedidoPorId(Integer id) {
         return pedidoDAO.buscarPedidoPorId(id);
     }
+
     public void gerarRelatorioPedido(){
-        String path = "C:\\Users\\Dogba\\Downloads\\loja-eletronicos\\pdfTeste.pdf";
+             String path = System.getProperty("user.dir") + "\\teste.pdf";
+
         try (PdfWriter writer = new PdfWriter(path);
              PdfDocument pdfDoc = new PdfDocument(writer);
              Document document = new Document(pdfDoc, PageSize.A4)) {
