@@ -1,11 +1,8 @@
 package org.acgprojeto.controller;
 
-import org.acgprojeto.dao.ProdutoDAO;
 import org.acgprojeto.dao.ServicoDAO;
-import org.acgprojeto.dao.impl.ProdutoDAOImpl;
 import org.acgprojeto.dao.impl.ServicoDAOImpl;
 import org.acgprojeto.db.DB;
-import org.acgprojeto.dto.ProdutoDTO;
 import org.acgprojeto.dto.ServicoDTO;
 
 import java.util.List;

@@ -1,7 +1,7 @@
 package org.acgprojeto.dto;
 
 
-import org.acgprojeto.model.entidades.Cliente;
+import org.acgprojeto.model.entities.Cliente;
 
 public class ClienteDTO {
 

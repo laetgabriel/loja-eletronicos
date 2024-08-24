@@ -1,6 +1,5 @@
-package org.acgprojeto.model.entidades.estate.impl;
+package org.acgprojeto.model.entities.estate.impl;
 
-import org.acgprojeto.dto.PedidoDTO;
 import org.acgprojeto.model.enums.Estado;
 
 public class EstadoPronto extends AbstractEstadoPedido {
@@ -16,10 +15,11 @@ public class EstadoPronto extends AbstractEstadoPedido {
 
     }
 
-//    @Override
-//    public void gerarRelatorio() {
-//        super.gerarRelatorio();
-//    }
+    @Override
+    public void gerarRelatorio() {
+        super.gerarRelatorio();
+    }
+
     @Override
     public String getNomeEstado() {
         return "PRONTO";

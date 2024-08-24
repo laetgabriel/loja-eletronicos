@@ -1,9 +1,7 @@
 
 package org.acgprojeto.dto;
 
-import org.acgprojeto.model.entidades.Pedido;
-import org.acgprojeto.model.entidades.PedidoProduto;
-import org.acgprojeto.model.entidades.Produto;
+import org.acgprojeto.model.entities.PedidoProduto;
 
 import java.math.BigDecimal;
 

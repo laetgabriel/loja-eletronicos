@@ -1,7 +1,7 @@
 
 package org.acgprojeto.dto;
 
-import org.acgprojeto.model.entidades.Produto;
+import org.acgprojeto.model.entities.Produto;
 import org.acgprojeto.model.enums.Categoria;
 
 import java.math.BigDecimal;

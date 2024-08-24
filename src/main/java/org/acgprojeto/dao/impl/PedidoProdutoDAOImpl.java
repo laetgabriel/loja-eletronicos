@@ -3,14 +3,12 @@ package org.acgprojeto.dao.impl;
 import org.acgprojeto.dao.PedidoDAO;
 import org.acgprojeto.dao.PedidoProdutoDAO;
 import org.acgprojeto.dao.ProdutoDAO;
-import org.acgprojeto.db.DB;
 import org.acgprojeto.db.exceptions.DBException;
 import org.acgprojeto.dto.PedidoProdutoDTO;
-import org.acgprojeto.model.entidades.Pedido;
-import org.acgprojeto.model.entidades.PedidoProduto;
-import org.acgprojeto.model.entidades.Produto;
+import org.acgprojeto.model.entities.Pedido;
+import org.acgprojeto.model.entities.PedidoProduto;
+import org.acgprojeto.model.entities.Produto;
 
-import java.math.BigDecimal;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;

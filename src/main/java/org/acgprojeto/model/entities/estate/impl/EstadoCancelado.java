@@ -1,6 +1,4 @@
-package org.acgprojeto.model.entidades.estate.impl;
-
-import org.acgprojeto.dto.PedidoDTO;
+package org.acgprojeto.model.entities.estate.impl;
 
 public class EstadoCancelado extends AbstractEstadoPedido {
 
@@ -12,8 +10,8 @@ public class EstadoCancelado extends AbstractEstadoPedido {
         return "CANCELADO";
     }
 
-//    @Override
-//    public void gerarRelatorio() {
-//        super.gerarRelatorio();
-//    }
+    @Override
+    public void gerarRelatorio() {
+        super.gerarRelatorio();
+    }
 }

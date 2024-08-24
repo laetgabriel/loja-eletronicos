@@ -1,5 +1,5 @@
 
-package org.acgprojeto.model.entidades;
+package org.acgprojeto.model.entities;
 
 import org.acgprojeto.dto.PedidoProdutoDTO;
 
