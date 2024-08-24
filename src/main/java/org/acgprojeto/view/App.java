@@ -22,20 +22,20 @@ public class App extends Application {
 
             scrollPane.setFitToHeight(true);
             scrollPane.setFitToWidth(true);
-
+/*
             Scene scene = new Scene(scrollPane);
             stage.setScene(scene);
             stage.setTitle("Cyber Tigre Inforcell");
             stage.setResizable(true);
             stage.show();
+*/
 
-/*
             Parent p = FXMLLoader.load(getClass().getResource("/org/acgprojeto/view/CadastroPedido.fxml"));
             stage.setScene(new Scene(p));
             stage.setTitle("Cyber Tigre Inforcell");
             stage.setResizable(true);
-            stage.show()
- */
+            stage.show();
+
         }
         catch (IOException e) {
             e.printStackTrace();

@@ -1,5 +1,6 @@
 package org.acgprojeto.application;
 
+import org.acgprojeto.controller.PedidoController;
 import org.acgprojeto.dao.ClienteDAO;
 import org.acgprojeto.dao.ProdutoDAO;
 import org.acgprojeto.dao.impl.ClienteDAOImpl;
@@ -17,22 +18,25 @@ public class Main  {
     public static void main(String[] args) {
         Connection connection = DB.getConexao();
 
-        ClienteDAO clienteDAO = new ClienteDAOImpl(connection);
-        ProdutoDAO produtoDAO = new ProdutoDAOImpl(connection);
-        //ClienteDTO clienteDTO = new ClienteDTO(null, "opa", "gaag", "321321");
-        ProdutoDTO produtoDTO = ProdutoDTO.ProdutoDTOBuilder.aProdutoDTO()
-                .nomeProduto("algo")
-                .categoria(Categoria.PECA)
-                .quantidadeEstoque(3)
-                .preco(new BigDecimal(199.99))
-                .build();
+//        ClienteDAO clienteDAO = new ClienteDAOImpl(connection);
+//        ProdutoDAO produtoDAO = new ProdutoDAOImpl(connection);
+//        //ClienteDTO clienteDTO = new ClienteDTO(null, "opa", "gaag", "321321");
+//        ProdutoDTO produtoDTO = ProdutoDTO.ProdutoDTOBuilder.aProdutoDTO()
+//                .nomeProduto("algo")
+//                .categoria(Categoria.PECA)
+//                .quantidadeEstoque(3)
+//                .preco(new BigDecimal(199.99))
+//                .build();
 
         //clienteDAO.inserirCliente(clienteDTO);
 
         //produtoDAO.inserirProduto(produtoDTO);
 
-        produtoDAO.excluirProduto(4);
-        DB.fecharConexao();
+//        produtoDAO.excluirProduto(4);
+//        DB.fecharConexao();
+        PedidoController controller = new PedidoController();
+
+        controller.gerarRelatorioPedido();
     }
 
 

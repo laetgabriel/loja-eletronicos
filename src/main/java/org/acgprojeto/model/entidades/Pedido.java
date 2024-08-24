@@ -64,9 +64,9 @@ public class Pedido {
         estado.cancelar();
     }
 
-    public void gerarRelatorio() {
-        estado.gerarRelatorio();
-    }
+//    public void gerarRelatorio() {
+//        estado.gerarRelatorio();
+//    }
 
     public Integer getIdPedido() {
         return idPedido;
