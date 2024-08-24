@@ -139,7 +139,6 @@ public class PedidoDAOImpl implements PedidoDAO {
 
         // Lê o valor do estado e garante que ele esteja em maiúsculas
         String estadoString = rs.getString("Estado");
-        System.out.println("Está retornando do banco: " + estadoString);
         Estado estadoEnum;
         try {
             estadoEnum = Estado.valueOf(estadoString.toUpperCase()); // Converte o valor para maiúsculas

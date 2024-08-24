@@ -12,8 +12,8 @@ public class EstadoCancelado extends AbstractEstadoPedido {
         return "CANCELADO";
     }
 
-//    @Override
-//    public void gerarRelatorio() {
-//        super.gerarRelatorio();
-//    }
+    @Override
+    public void gerarRelatorio() {
+        super.gerarRelatorio();
+    }
 }

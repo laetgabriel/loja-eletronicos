@@ -2,12 +2,16 @@ package org.acgprojeto.application;
 
 import org.acgprojeto.controller.PedidoController;
 import org.acgprojeto.dao.ClienteDAO;
+import org.acgprojeto.dao.PedidoDAO;
 import org.acgprojeto.dao.ProdutoDAO;
 import org.acgprojeto.dao.impl.ClienteDAOImpl;
+import org.acgprojeto.dao.impl.PedidoDAOImpl;
 import org.acgprojeto.dao.impl.ProdutoDAOImpl;
 import org.acgprojeto.db.DB;
 import org.acgprojeto.dto.ClienteDTO;
+import org.acgprojeto.dto.PedidoDTO;
 import org.acgprojeto.dto.ProdutoDTO;
+import org.acgprojeto.model.entidades.Pedido;
 import org.acgprojeto.model.enums.Categoria;
 
 import java.math.BigDecimal;
@@ -34,9 +38,12 @@ public class Main  {
 
 //        produtoDAO.excluirProduto(4);
 //        DB.fecharConexao();
-        PedidoController controller = new PedidoController();
+        PedidoDAO pedidoDAO = new PedidoDAOImpl(connection);
+        PedidoDTO pedidoDTO = pedidoDAO.buscarPedidoPorId(1);
+        Pedido pedido = new Pedido(pedidoDTO);
+        pedido.gerarRelatorio();
 
-        controller.gerarRelatorioPedido();
+
     }
 
 
