@@ -13,10 +13,8 @@ import com.itextpdf.layout.element.Table;
 import com.itextpdf.layout.properties.TextAlignment;
 import com.itextpdf.layout.properties.UnitValue;
 import org.acgprojeto.controller.PedidoController;
-import org.acgprojeto.dao.impl.PedidoProdutoDAOImpl;
-import org.acgprojeto.dao.impl.ServicoDAOImpl;
-import org.acgprojeto.db.DB;
-import org.acgprojeto.dto.PedidoDTO;
+import org.acgprojeto.controller.PedidoProdutoController;
+import org.acgprojeto.controller.ServicoController;import org.acgprojeto.dto.PedidoDTO;
 import org.acgprojeto.dto.PedidoProdutoDTO;
 import org.acgprojeto.dto.ServicoDTO;
 import org.acgprojeto.model.entities.Produto;
@@ -71,8 +69,8 @@ public abstract class AbstractEstadoPedido implements EstadoPedido {
             document.add(new Paragraph("\n"));
 
             // Adiciona a tabela de produtos
-            PedidoProdutoDAOImpl pedidoProdutoDAO = new PedidoProdutoDAOImpl(DB.getConexao());
-            List<PedidoProdutoDTO> pedidoProdutos = pedidoProdutoDAO.listarPedidoProduto();
+            PedidoProdutoController pedidoProdutoController = new PedidoProdutoController();
+            List<PedidoProdutoDTO> pedidoProdutos = pedidoProdutoController.listarPedidoProduto();
 
             Table tableProdutos = new Table(UnitValue.createPercentArray(new float[]{1, 1, 1, 1, 1}))
                     .setWidth(UnitValue.createPercentValue(100));
@@ -101,8 +99,8 @@ public abstract class AbstractEstadoPedido implements EstadoPedido {
             document.add(new Paragraph("\n"));
 
             // Adiciona a tabela de serviços
-            ServicoDAOImpl servicoDAO = new ServicoDAOImpl(DB.getConexao());
-            List<ServicoDTO> servicos = servicoDAO.listarServicosPorPedido(pedidoDTO);
+            ServicoController servicoController = new ServicoController();
+            List<ServicoDTO> servicos = servicoController.listarServicosPorPedido(pedidoDTO);
 
             Table tableServicos = new Table(UnitValue.createPercentArray(new float[]{2, 4, 2}))
                     .setWidth(UnitValue.createPercentValue(100));

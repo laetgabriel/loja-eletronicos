@@ -3,6 +3,7 @@ package org.acgprojeto.controller;
 import org.acgprojeto.dao.ServicoDAO;
 import org.acgprojeto.dao.impl.ServicoDAOImpl;
 import org.acgprojeto.db.DB;
+import org.acgprojeto.dto.PedidoDTO;
 import org.acgprojeto.dto.ServicoDTO;
 
 import java.util.List;
@@ -29,5 +30,9 @@ public class ServicoController {
 
     public ServicoDTO buscarServicoPorId(Integer id) {
         return servicoDAO.buscarServicoPorId(id);
+    }
+
+    public List<ServicoDTO> listarServicosPorPedido(PedidoDTO pedidoDTO) {
+        return servicoDAO.listarServicosPorPedido(pedidoDTO);
     }
 }

@@ -83,7 +83,7 @@ public class AdminDAOImpl implements AdminDAO {
                 if (resultSet.next()) {
                     admin = instaciarAdmin(resultSet);
                 }else
-                    throw new DBException("Admin não encontrado");
+                    admin = null;
             }
         }catch (SQLException e){
             throw new DBException("Erro ao buscar admin com ID = " + idAdmin);

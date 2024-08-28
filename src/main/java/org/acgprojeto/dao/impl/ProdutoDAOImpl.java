@@ -115,6 +115,25 @@ public class ProdutoDAOImpl implements ProdutoDAO {
         return produtos;
     }
 
+    @Override
+    public List<String> listarTodasAsCategorias() {
+        List<String> categorias = new ArrayList<>();
+
+        String sql = "SELECT DISTINCT categoria FROM Produto";
+
+        try(PreparedStatement stmt = conexao.prepareStatement(sql)){
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                categorias.add(rs.getString("categoria"));
+            }
+
+        }catch (DBException | SQLException e) {
+            throw new DBException("Erro ao listar Categorias: ");
+        }
+        return categorias;
+    }
+
     private ProdutoDTO instanciarProduto(ResultSet rs) throws SQLException {
         String categoriaStr = rs.getString("Categoria");
         Categoria categoria = Categoria.valueOf(categoriaStr.toUpperCase());

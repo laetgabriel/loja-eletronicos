@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<ScrollPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1">
+<ScrollPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.acgprojeto.view.controller.PedidoController">
     <content>
         <AnchorPane prefHeight="582.0" prefWidth="884.0">
             <children>
@@ -20,51 +20,51 @@
                     <menus>
                         <Menu mnemonicParsing="false" text="Cadastro">
                             <items>
-                                <MenuItem mnemonicParsing="false" text="Pedido" />
-                                <MenuItem mnemonicParsing="false" text="Produto" />
+                                <MenuItem fx:id="menuItemPedido" mnemonicParsing="false" onAction="#onMenuItemPedido" text="Pedido" />
+                                <MenuItem fx:id="menuItemProduto" mnemonicParsing="false" onAction="#onMenuItemProduto" text="Produto" />
                             </items>
                         </Menu>
                         <Menu mnemonicParsing="false" text="Relatório">
                             <items>
-                                <MenuItem mnemonicParsing="false" text="Cliente" />
-                                <MenuItem mnemonicParsing="false" text="Produto" />
-                                <MenuItem mnemonicParsing="false" text="Pedido" />
-                                <MenuItem mnemonicParsing="false" text="Serviço" />
+                                <MenuItem fx:id="menuItemRelCliente" mnemonicParsing="false" onAction="#onMenuItemRelCliente" text="Cliente" />
+                                <MenuItem fx:id="menuItemRelProduto" mnemonicParsing="false" onAction="#onMenuItemRelProduto" text="Produto" />
+                                <MenuItem fx:id="menuItemRelPedido" mnemonicParsing="false" onAction="#onMenuItemRelPedido" text="Pedido" />
+                                <MenuItem fx:id="menuItemRelServico" mnemonicParsing="false" onAction="#onMenuItemRelServico" text="Serviço" />
                             </items>
                         </Menu>
                         <Menu mnemonicParsing="false" text="Editar">
                             <items>
-                                <MenuItem mnemonicParsing="false" text="Login" />
+                                <MenuItem fx:id="menuItemLogin" mnemonicParsing="false" onAction="#onMenuItemLogin" text="Login" />
                             </items>
                         </Menu>
                         <Menu mnemonicParsing="false" text="Desenvolvimento">
                             <items>
-                                <MenuItem mnemonicParsing="false" text="Sobre" />
+                                <MenuItem fx:id="menuItemSobre" mnemonicParsing="false" onAction="#onMenuItemSobre" text="Sobre" />
                             </items>
                         </Menu>
                     </menus>
                 </MenuBar>
 
-                <Label alignment="CENTER" contentDisplay="CENTER" text="Pedidos" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="26.0">
+                            <Label alignment="CENTER" contentDisplay="CENTER" text="Pedidos" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="26.0">
                     <font>
                         <Font name="System Bold" size="40.0" />
                     </font>
                 </Label>
 
-                <Button alignment="CENTER" contentDisplay="CENTER" layoutY="126.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="105.0" style="-fx-background-color: green;" text="Novo" textFill="WHITE" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="126.0">
+                            <Button fx:id="btnNovo" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#onBtnNovo" prefHeight="26.0" prefWidth="105.0" style="-fx-background-color: green;" text="Novo" textFill="WHITE" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="126.0">
                     <font>
                         <Font name="System Bold" size="12.0" />
                     </font>
                 </Button>
 
-                <Label layoutX="118.0" layoutY="129.0" text="Filtro:" AnchorPane.leftAnchor="118.0" AnchorPane.topAnchor="129.0">
+                            <Label layoutX="118.0" layoutY="129.0" text="Filtro:" AnchorPane.leftAnchor="118.0" AnchorPane.topAnchor="129.0">
                     <font>
                         <Font name="System Bold" size="15.0" />
                     </font>
                 </Label>
-            <ComboBox layoutX="166.0" layoutY="127.0" prefWidth="150.0" />
+            <ComboBox fx:id="comboBoxFiltro" layoutX="168.0" layoutY="127.0" prefWidth="150.0" />
 
-                <TableView prefHeight="421.0" prefWidth="884.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="167.0">
+                            <TableView prefHeight="421.0" prefWidth="884.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="167.0">
                     <columns>
                         <TableColumn prefWidth="104.0" text="Cliente" />
                         <TableColumn prefWidth="126.0" text="Descrição" />

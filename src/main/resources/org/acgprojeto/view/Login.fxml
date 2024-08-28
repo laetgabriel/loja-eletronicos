@@ -8,9 +8,10 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.acgprojeto.view.controller.LoginController">
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="601.0" prefWidth="901.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.acgprojeto.view.controller.LoginController">
    <children>
-      <ImageView fitHeight="600.0" fitWidth="900.0">
+      <ImageView fitHeight="601.0" fitWidth="900.0">
          <image>
             <Image url="@../icones/planoFundo.png" />
          </image>

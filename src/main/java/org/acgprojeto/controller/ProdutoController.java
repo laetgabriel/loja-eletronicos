@@ -4,6 +4,7 @@ import org.acgprojeto.dao.ProdutoDAO;
 import org.acgprojeto.dao.impl.ProdutoDAOImpl;
 import org.acgprojeto.db.DB;
 import org.acgprojeto.dto.ProdutoDTO;
+import org.acgprojeto.model.enums.Categoria;
 
 import java.util.List;
 
@@ -25,6 +26,9 @@ public class ProdutoController {
 
     public List<ProdutoDTO> listarTodosOsProdutos() {
         return produtoDAO.listarTodosOsProdutos();
+    }
+
+    public List<String> listarTodasAsCategorias() {return produtoDAO.listarTodasAsCategorias();
     }
 
     public ProdutoDTO buscarProdutoPorId(Integer id) {

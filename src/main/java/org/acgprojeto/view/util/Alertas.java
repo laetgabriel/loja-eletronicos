@@ -1,7 +1,6 @@
 package org.acgprojeto.view.util;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
-import javafx.stage.Stage;
 
 public class Alertas {
 
