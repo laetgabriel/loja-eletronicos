@@ -21,15 +21,15 @@ import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class ProdutoController implements Initializable {
+public class RelatorioProdutoController implements Initializable {
 
     private org.acgprojeto.controller.ProdutoController controller;
 
     @FXML
-    private Button btnNovo;
+    private Button btnGerarRelatorio;
 
     @FXML
-    private TableView<ProdutoDTO> tableProduto;
+    private TableView<ProdutoDTO> tableRelProduto;
 
     @FXML
     private TableColumn<ProdutoDTO, Integer> colIdProduto;
@@ -54,24 +54,7 @@ public class ProdutoController implements Initializable {
     private ObservableList<String> listaOpcoes;
 
     @FXML
-    public void onBtnNovo( ) {
-        loadCadastroView("/org/acgprojeto/view/CadastroProduto.fxml");
-    }
-    
-    private void loadCadastroView(String caminho){
-        Parent novaTela = null;
-        try {
-            novaTela = FXMLLoader.load(getClass().getResource(caminho));
-            Stage palco = new Stage();
-            Scene scene = new Scene(novaTela);
-            palco.setScene(scene);
-            palco.setTitle("Cyber Tigre Inforcell");
-            palco.setResizable(true);
-            palco.centerOnScreen();
-            palco.show();
-        } catch (IOException e) {
-            Alertas.mostrarAlerta("Erro", null, "Erro ao carregar tela de cadastro produto", Alert.AlertType.ERROR);
-        }
+    public void onBtnGerarRelatorioOnAction( ) {
     }
 
     @FXML
@@ -81,15 +64,15 @@ public class ProdutoController implements Initializable {
     }
 
 
-    public void atualizarTabelaProduto(){
+    public void atualizarTabelaRelProduto() {
         List<ProdutoDTO> listaProdutos = controller.listarTodosOsProdutos();
         produtos = FXCollections.observableList(listaProdutos);
-        tableProduto.setItems(produtos);
+        tableRelProduto.setItems(produtos);
 
     }
 
     private void tabelaFiltrada(String filtro) {
-        AtualizarVisaoTabelas.tabelaFiltradaProduto(filtro, produtos, tableProduto);
+        AtualizarVisaoTabelas.tabelaFiltradaProduto(filtro, produtos, tableRelProduto);
     }
 
 
@@ -108,6 +91,6 @@ public class ProdutoController implements Initializable {
         colPreco.setCellValueFactory(new PropertyValueFactory<>("preco"));
         colQuantidadeEstoque.setCellValueFactory(new PropertyValueFactory<>("quantidadeEstoque"));
 
-        atualizarTabelaProduto();
+        atualizarTabelaRelProduto();
     }
 }

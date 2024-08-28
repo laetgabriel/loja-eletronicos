@@ -1,16 +1,25 @@
 package org.acgprojeto.application;
 
-import org.acgprojeto.dao.*;
+import org.acgprojeto.dao.AdminDAO;
+import org.acgprojeto.dao.PedidoDAO;
+import org.acgprojeto.dao.ServicoDAO;
+import org.acgprojeto.dao.impl.AdminDAOImpl;
 import org.acgprojeto.dao.impl.PedidoDAOImpl;
+import org.acgprojeto.dao.impl.ServicoDAOImpl;
 import org.acgprojeto.db.DB;
 import org.acgprojeto.dto.PedidoDTO;
+import org.acgprojeto.dto.ServicoDTO;
 import org.acgprojeto.model.entities.Pedido;
+import org.acgprojeto.model.enums.Tipo;
+import org.acgprojeto.service.MensageiroService;
+
+import java.math.BigDecimal;
+import java.util.List;
 
 public class Main  {
 
     public static void main(String[] args) {
 
-        AdminDAO adminDAO = DAOFactory.criarAdminDAO();
 
 //        ClienteDAO clienteDAO = new ClienteDAOImpl(connection);
 //        ProdutoDAO produtoDAO = new ProdutoDAOImpl(connection);
@@ -29,16 +38,11 @@ public class Main  {
 //        produtoDAO.excluirProduto(4);
 //        DB.fecharConexao();
 
-        PedidoDAO pedidoDAO = new PedidoDAOImpl(DB.getConexao());
-        PedidoDTO pedidoDTO = pedidoDAO.buscarPedidoPorId(1);
-        pedidoDAO.atualizarEstadoPedido(pedidoDTO);
-        Pedido pedido = new Pedido(pedidoDTO);
-        pedido.gerarRelatorio();
+        PedidoDTO pedido = new PedidoDAOImpl(DB.getConexao()).buscarPedidoPorId(1);
 
-        DB.fecharConexao();
+        ServicoDTO servico = new ServicoDTO(1,pedido, "Venda Capinha", new BigDecimal(80), Tipo.VENDA);
+        ServicoDAO servicoDAO = new ServicoDAOImpl(DB.getConexao());
+        servicoDAO.atualizarServico(servico);
+
     }
-
-
-
-
 }

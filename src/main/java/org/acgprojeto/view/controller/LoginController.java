@@ -3,25 +3,33 @@ package org.acgprojeto.view.controller;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextField;
-import javafx.scene.layout.AnchorPane;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
+import org.acgprojeto.controller.AdminController;
+import org.acgprojeto.controller.MensageiroController;
+import org.acgprojeto.dto.AdminDTO;
 import org.acgprojeto.view.App;
 import org.acgprojeto.view.util.Alertas;
+import org.apache.commons.mail.EmailException;
 
-import javax.swing.plaf.nimbus.State;
 import java.io.IOException;
 
 public class LoginController {
+    private AdminController adminController;
+    private AdminDTO adminDTO;
+    private MensageiroController mensageiro;
 
     @FXML
     private TextField txtUsername;
 
     @FXML
     private TextField txtPassword;
+
+    @FXML
+    private Label txtErroUsername;
+
+    @FXML
+    private Label txtErroSenha;
 
     @FXML
     private Button btnLogin;
@@ -31,13 +39,44 @@ public class LoginController {
 
     @FXML
     public void onBtnLogin() {
+        /*
+        adminController = new AdminController();
+        adminDTO = adminController.buscarAdminPorId(1);
+
+        if (!adminDTO.getNome().equals(txtUsername.getText())) {
+            txtErroUsername.setText("Erro no nome do usuário!");
+            txtErroSenha.setText(null);
+
+        }else if (!adminDTO.getSenha().equals(txtPassword.getText())) {
+            txtErroUsername.setText(null);
+            txtErroSenha.setText("Erro na senha!");
+        }else {
+            loadView("/org/acgprojeto/view/Pedido.fxml");
+        }*/
         loadView("/org/acgprojeto/view/Pedido.fxml");
     }
 
     @FXML
     public void onBtnEsqueceuSenha() {
-        Alertas.mostrarAlerta("Envio senha", null, "Senha de login enviada para o email!", Alert.AlertType.INFORMATION);
+        try {
 
+            adminController = new AdminController();
+            adminDTO = adminController.buscarAdminPorId(1);
+            mensageiro = new MensageiroController();
+
+            Alert alertaSenha = Alertas.retornaAlerta("ENVIANDO SENHA PARA O EMAIL!","Senha de login sendo enviada para o email!", Alert.AlertType.INFORMATION);
+            alertaSenha.show();
+
+            mensageiro.enviarEmail(adminDTO.getEmail(), "Senha de login", "Sua senha é: " + adminDTO.getSenha());
+
+            alertaSenha.close();
+
+            Alertas.mostrarAlerta("Envio senha", null, "Senha de login enviada para o email!", Alert.AlertType.INFORMATION);
+
+        }
+        catch (EmailException e){
+            Alertas.mostrarAlerta("Erro envio de senha", null, "Erro no envio da senha de login!", Alert.AlertType.ERROR);
+        }
     }
 
     private void loadView(String caminho) {

@@ -16,7 +16,7 @@ public class ServicoDAOImpl implements ServicoDAO {
 
     private final Connection conexao;
 
-    public ServicoDAOImpl(Connection conexao) {
+    public  ServicoDAOImpl(Connection conexao) {
         this.conexao = conexao;
     }
 

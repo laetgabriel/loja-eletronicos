@@ -12,4 +12,6 @@ public interface PedidoDAO {
     void excluirPedido(Integer id);
     PedidoDTO buscarPedidoPorId(Integer id);
     List<PedidoDTO> buscarPedidos();
+    List<PedidoDTO> buscarPedidosParaTabelaPedidos();
+    List<PedidoDTO> buscarPedidosParaTabelaRelPedidos();
 }

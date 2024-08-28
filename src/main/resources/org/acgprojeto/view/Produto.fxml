@@ -25,19 +25,19 @@
                   <Font name="System Bold" size="12.0" />
                </font></Button>
 
-                <Label layoutX="114.0" layoutY="129.0" text="Filtro:" AnchorPane.leftAnchor="114.0" AnchorPane.topAnchor="129.0">
+                <Label layoutX="114.0" layoutY="129.0" text="Filtro por data:" AnchorPane.leftAnchor="114.0" AnchorPane.topAnchor="129.0">
                <font>
                   <Font name="System Bold" size="15.0" />
                </font></Label>
-            <ComboBox fx:id="comboBoxFiltro" layoutX="165.0" layoutY="127.0" prefWidth="150.0" />
+            <ComboBox fx:id="comboBoxFiltro" layoutX="227.0" layoutY="127.0" onAction="#onComboBoxFiltroChanged" prefWidth="150.0" />
 
-                <TableView layoutY="167.0" prefHeight="421.0" prefWidth="884.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="167.0">
+                <TableView fx:id="tableProduto" layoutY="167.0" prefHeight="421.0" prefWidth="884.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="167.0">
                     <columns>
-                  <TableColumn prefWidth="75.0" text="Id" />
-                        <TableColumn prefWidth="104.0" text="Nome" />
-                        <TableColumn prefWidth="126.0" text="Categoria" />
-                        <TableColumn prefWidth="73.0" text="Preço" />
-                        <TableColumn minWidth="8.0" prefWidth="108.0" text="Quant_Estoque" />
+                  <TableColumn fx:id="colIdProduto" prefWidth="75.0" text="Id" />
+                        <TableColumn fx:id="colNomeProduto" prefWidth="104.0" text="Nome" />
+                        <TableColumn fx:id="colCategoria" prefWidth="126.0" text="Categoria" />
+                        <TableColumn fx:id="colPreco" prefWidth="73.0" text="Preço" />
+                        <TableColumn fx:id="colQuantidadeEstoque" minWidth="8.0" prefWidth="108.0" text="Quant_Estoque" />
                         <TableColumn prefWidth="59.20001220703125" text="Detalhe" />
                         <TableColumn prefWidth="75.0" text="Atualizar" />
                         <TableColumn prefWidth="75.0" text="Excluir" />

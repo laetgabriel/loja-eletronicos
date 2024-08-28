@@ -57,21 +57,21 @@
                     </font>
                 </Button>
 
-                            <Label layoutX="118.0" layoutY="129.0" text="Filtro:" AnchorPane.leftAnchor="118.0" AnchorPane.topAnchor="129.0">
+                            <Label layoutX="118.0" layoutY="129.0" text="Filtro por categoria:" AnchorPane.leftAnchor="118.0" AnchorPane.topAnchor="129.0">
                     <font>
                         <Font name="System Bold" size="15.0" />
                     </font>
                 </Label>
-            <ComboBox fx:id="comboBoxFiltro" layoutX="168.0" layoutY="127.0" prefWidth="150.0" />
+            <ComboBox fx:id="comboBoxFiltro" layoutX="267.0" layoutY="127.0" onAction="#onComboBoxFiltroChanged" prefWidth="150.0" />
 
-                            <TableView prefHeight="421.0" prefWidth="884.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="167.0">
+                            <TableView fx:id="tableViewPedido" prefHeight="421.0" prefWidth="884.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="167.0">
                     <columns>
-                        <TableColumn prefWidth="104.0" text="Cliente" />
-                        <TableColumn prefWidth="126.0" text="Descrição" />
-                        <TableColumn prefWidth="73.0" text="Valor" />
-                        <TableColumn minWidth="8.0" prefWidth="92.0" text="Tipo" />
-                        <TableColumn prefWidth="75.0" text="Estado" />
-                        <TableColumn minWidth="0.0" prefWidth="70.4" text="Data" />
+                        <TableColumn fx:id="colNomeCliente" prefWidth="104.0" text="Cliente" />
+                        <TableColumn fx:id="colDescricao" prefWidth="126.0" text="Descrição" />
+                        <TableColumn fx:id="colValor" prefWidth="73.0" text="Valor" />
+                        <TableColumn fx:id="colTipo" minWidth="8.0" prefWidth="92.0" text="Tipo" />
+                        <TableColumn fx:id="colEstado" prefWidth="75.0" text="Estado" />
+                        <TableColumn fx:id="colData" minWidth="0.0" prefWidth="70.4" text="Data" />
                         <TableColumn prefWidth="75.0" text="Detalhe" />
                         <TableColumn prefWidth="75.0" text="Atualizar" />
                         <TableColumn prefWidth="75.0" text="Excluir" />

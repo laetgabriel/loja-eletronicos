@@ -33,11 +33,13 @@ public class PedidoController {
         pedidoDAO.excluirPedido(id);
     }
 
-    public List<PedidoDTO> buscarPedidos() {
-        return pedidoDAO.buscarPedidos();
-    }
+    public List<PedidoDTO> buscarPedidos() { return pedidoDAO.buscarPedidos(); }
 
     public PedidoDTO buscarPedidoPorId(Integer id) {
         return pedidoDAO.buscarPedidoPorId(id);
     }
+
+    public List<PedidoDTO> buscarPedidosParaTabelaPedidos(){return pedidoDAO.buscarPedidosParaTabelaPedidos(); }
+
+    public List<PedidoDTO> buscarPedidosParaTabelaRelPedidos(){return pedidoDAO.buscarPedidosParaTabelaRelPedidos(); };
 }

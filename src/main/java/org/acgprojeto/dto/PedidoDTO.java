@@ -2,7 +2,9 @@ package org.acgprojeto.dto;
 
 import org.acgprojeto.model.entities.Pedido;
 import org.acgprojeto.model.enums.Estado;
+import org.acgprojeto.model.enums.Tipo;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 public class PedidoDTO {
@@ -11,6 +13,12 @@ public class PedidoDTO {
     private ClienteDTO cliente;
     private Estado estado;
     private LocalDate data;
+    private Tipo tipoServico;
+    private BigDecimal valorServico;
+    private String descricaoServico;
+    private String nomeProduto;
+    private BigDecimal precoPedidoProduto;
+    private Integer quantidadePedidoProduto;
 
     public PedidoDTO(Integer idPedido, ClienteDTO cliente, Estado estado, LocalDate data) {
         this.idPedido = idPedido;
@@ -43,6 +51,10 @@ public class PedidoDTO {
         return cliente;
     }
 
+    public String getNomeCliente(){
+        return cliente.getNome();
+    }
+
     public void setCliente(ClienteDTO cliente) {
         this.cliente = cliente;
     }
@@ -61,6 +73,56 @@ public class PedidoDTO {
 
     public void setData(LocalDate data) {
         this.data = data;
+    }
+
+    //Preencher tabelas de pedidos na view
+
+    public void setTipoServico(Tipo tipoServico) {
+        this.tipoServico = tipoServico;
+    }
+
+    public void setValorServico(BigDecimal valorServico) {
+        this.valorServico = valorServico;
+    }
+
+    public void setDescricaoServico(String descricaoServico) {
+        this.descricaoServico = descricaoServico;
+    }
+
+    public BigDecimal getValorServico(){
+        return valorServico;
+    }
+
+    public Tipo getTipoServico(){
+        return tipoServico;
+    }
+
+    public String getDescricaoServico(){
+        return descricaoServico;
+    }
+
+    public String getNomeProduto(){
+        return nomeProduto;
+    }
+
+    public BigDecimal getPrecoPedidoProduto(){
+        return precoPedidoProduto;
+    }
+
+    public Integer getQuantidadePedidoProduto(){
+        return quantidadePedidoProduto;
+    }
+
+    public void setNomeProduto(String nomeProduto) {
+        this.nomeProduto = nomeProduto;
+    }
+
+    public void setPrecoPedidoProduto(BigDecimal precoPedidoProduto) {
+        this.precoPedidoProduto = precoPedidoProduto;
+    }
+
+    public void setQuantidadePedidoProduto(Integer quantidadePedidoProduto) {
+        this.quantidadePedidoProduto = quantidadePedidoProduto;
     }
 
     @Override

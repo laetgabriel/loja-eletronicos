@@ -30,6 +30,8 @@ public class ServicoDTO {
         this.tipo = servico.getTipo();
     }
 
+
+
     public Integer getIdServico() {
         return idServico;
     }

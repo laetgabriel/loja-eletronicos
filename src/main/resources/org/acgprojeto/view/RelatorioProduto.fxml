@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TableColumn?>
@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<ScrollPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1">
+<ScrollPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.acgprojeto.view.controller.RelatorioProdutoController">
     <content>
         <AnchorPane prefHeight="582.0" prefWidth="884.0">
             <children>
@@ -20,7 +20,7 @@
                     </font>
                 </Label>
 
-                <Button alignment="CENTER" contentDisplay="CENTER" layoutX="14.0" layoutY="127.2" mnemonicParsing="false" prefHeight="26.0" prefWidth="147.0" style="-fx-background-color: green;" text="Gerar Relatório" textFill="WHITE" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="127.0">
+                <Button fx:id="btnGerarRelatorio" alignment="CENTER" contentDisplay="CENTER" layoutX="14.0" layoutY="127.2" mnemonicParsing="false" onAction="#onBtnGerarRelatorioOnAction" prefHeight="26.0" prefWidth="147.0" style="-fx-background-color: green;" text="Gerar Relatório" textFill="WHITE" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="127.0">
                <font>
                   <Font name="System Bold" size="12.0" />
                </font></Button>
@@ -29,16 +29,15 @@
                <font>
                   <Font name="System Bold" size="15.0" />
                </font></Label>
+            <ComboBox fx:id="comboBoxFiltro" layoutX="205.0" layoutY="127.0" onAction="#onComboBoxFiltroChanged" prefWidth="150.0" />
 
-                            <ChoiceBox layoutX="204.0" layoutY="127.0" prefWidth="150.0" AnchorPane.leftAnchor="204.0" AnchorPane.topAnchor="127.0" />
-
-                <TableView layoutY="167.0" prefHeight="421.0" prefWidth="884.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="167.0">
+                <TableView fx:id="tableRelProduto" layoutX="14.0" layoutY="166.0" prefHeight="421.0" prefWidth="884.0" AnchorPane.bottomAnchor="1.1999999999999318" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="166.0">
                     <columns>
-                  <TableColumn prefWidth="75.0" text="Id" />
-                        <TableColumn prefWidth="115.20000457763672" text="Nome" />
-                        <TableColumn prefWidth="116.80003356933594" text="Categoria" />
-                        <TableColumn prefWidth="113.5999755859375" text="Preço" />
-                  <TableColumn prefWidth="98.40005493164062" text="Quant_Estoque" />
+                  <TableColumn fx:id="colIdProduto" prefWidth="75.0" text="Id" />
+                        <TableColumn fx:id="colNomeProduto" prefWidth="115.20000457763672" text="Nome" />
+                        <TableColumn fx:id="colCategoria" prefWidth="116.80003356933594" text="Categoria" />
+                        <TableColumn fx:id="colPreco" prefWidth="113.5999755859375" text="Preço" />
+                  <TableColumn fx:id="colQuantidadeEstoque" prefWidth="98.40005493164062" text="Quant_Estoque" />
                         <TableColumn prefWidth="87.20001220703125" text="Atualizar" />
                         <TableColumn prefWidth="95.2000732421875" text="Excluir" />
                     </columns>

@@ -3,8 +3,12 @@ package org.acgprojeto.dao.impl;
 import org.acgprojeto.dao.PedidoDAO;
 import org.acgprojeto.db.exceptions.DBException;
 import org.acgprojeto.dto.PedidoDTO;
+import org.acgprojeto.dto.PedidoProdutoDTO;
+import org.acgprojeto.dto.ProdutoDTO;
+import org.acgprojeto.dto.ServicoDTO;
 import org.acgprojeto.model.entities.Cliente;
 import org.acgprojeto.model.entities.Pedido;
+import org.acgprojeto.model.entities.Servico;
 import org.acgprojeto.model.state.EstadoPedido;
 import org.acgprojeto.model.state.impl.EstadoAndamento;
 import org.acgprojeto.model.state.impl.EstadoCancelado;
@@ -131,6 +135,52 @@ public class PedidoDAOImpl implements PedidoDAO {
         return pedidos;
     }
 
+    @Override
+    public List<PedidoDTO> buscarPedidosParaTabelaPedidos() {
+        String sql = "SELECT p.Id_Pedido, c.Id_Cliente, s.Id_Servico, c.Nome, s.Descricao, s.Preco, s.Tipo, p.Estado," +
+                " p.`Data` " +
+                "FROM pedido p " +
+                "INNER JOIN cliente c ON p.Id_Cliente = c.Id_Cliente " +
+                "INNER JOIN servico s ON s.Id_Pedido = p.Id_Pedido ";
+
+        List<PedidoDTO> pedidos = new ArrayList<>();
+
+        try (PreparedStatement stmt = conexao.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                pedidos.add(instanciarPedidoServico(rs));
+            }
+        } catch (SQLException e) {
+            throw new DBException("Erro ao listar PedidosServicos: ");
+        }
+        return pedidos;
+    }
+
+    @Override
+    public List<PedidoDTO> buscarPedidosParaTabelaRelPedidos() {
+        String sql = "SELECT p.Id_Pedido, c.Id_Cliente, ppp.Id_Produto, s.Id_Servico, C.Nome as Cliente,P2.Nome as Produto, PPP.Preco, PPP.Quant,P.Estado,s.Tipo,s.Preco as Total,p.`Data` " +
+                    "FROM pedido_possui_produto ppp " +
+                    "INNER JOIN pedido p ON ppp.Id_Pedido = p.Id_Pedido " +
+                    "INNER JOIN produto p2 ON ppp.Id_Produto = p2.Id_Produto " +
+                    "INNER JOIN cliente c ON p.Id_Cliente = c.Id_Cliente " +
+                    "INNER JOIN servico s ON s.Id_Pedido = p.Id_Pedido ";
+
+        List<PedidoDTO> pedidos = new ArrayList<>();
+
+        try (PreparedStatement stmt = conexao.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                pedidos.add(instanciarPedidoAll(rs));
+            }
+        } catch (SQLException e) {
+            throw new DBException("Erro ao listar PedidosAll: ");
+        }
+        return pedidos;
+    }
+
+
     private PedidoDTO instanciarPedido(ResultSet rs) throws SQLException {
         Pedido pedido = new Pedido();
         pedido.setIdPedido(rs.getInt("Id_Pedido"));
@@ -151,6 +201,29 @@ public class PedidoDAOImpl implements PedidoDAO {
         return new PedidoDTO(pedido);
     }
 
+    private PedidoDTO instanciarPedidoServico(ResultSet rs) throws SQLException {
+        PedidoDTO pedidoDTO = instanciarPedido(rs);
+        ServicoDTO servicoDTO = new ServicoDAOImpl(conexao).buscarServicoPorId(rs.getInt("Id_Servico"));
+        pedidoDTO.setDescricaoServico(servicoDTO.getDescricao());
+        pedidoDTO.setValorServico(servicoDTO.getPreco());
+        pedidoDTO.setTipoServico(servicoDTO.getTipo());
+
+        return pedidoDTO;
+    }
+
+    private PedidoDTO instanciarPedidoAll(ResultSet rs) throws SQLException{
+        PedidoDTO pedidoDTO = instanciarPedidoServico(rs);
+        ProdutoDTO produtoDTO = new ProdutoDAOImpl(conexao).buscarProdutoPorId(rs.getInt("Id_Produto"));
+
+        PedidoProdutoDTO pedidoProdutoDTO = new PedidoProdutoDAOImpl(conexao).buscarPedidoProduto(rs.getInt("Id_Pedido"),
+                rs.getInt("Id_Produto"));
+
+        pedidoDTO.setNomeProduto(produtoDTO.getNomeProduto());
+        pedidoDTO.setPrecoPedidoProduto(pedidoProdutoDTO.getPreco());
+        pedidoDTO.setQuantidadePedidoProduto(pedidoProdutoDTO.getQuantidade());
+
+        return pedidoDTO;
+    }
 
     private EstadoPedido createEstado(Estado estadoEnum) {
         switch (estadoEnum) {

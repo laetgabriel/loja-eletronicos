@@ -9,18 +9,27 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import org.acgprojeto.dto.PedidoDTO;
+import org.acgprojeto.model.enums.Estado;
+import org.acgprojeto.model.enums.Tipo;
 import org.acgprojeto.view.App;
 import org.acgprojeto.view.util.Alertas;
+import org.acgprojeto.view.util.AtualizarVisaoTabelas;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.net.URL;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
 public class PedidoController implements Initializable {
+
+    private org.acgprojeto.controller.PedidoController controller;
 
     @FXML
     private MenuItem menuItemPedido;
@@ -53,6 +62,29 @@ public class PedidoController implements Initializable {
     private ComboBox<String> comboBoxFiltro;
 
     private ObservableList<String> listaOpcoes;
+
+    @FXML
+    private TableView<PedidoDTO> tableViewPedido;
+
+    @FXML
+    private TableColumn<PedidoDTO, String> colNomeCliente;
+
+    @FXML
+    private TableColumn<PedidoDTO, String> colDescricao;
+
+    @FXML
+    private TableColumn<PedidoDTO, BigDecimal> colValor;
+
+    @FXML
+    private TableColumn<PedidoDTO, Tipo> colTipo;
+
+    @FXML
+    private TableColumn<PedidoDTO, Estado> colEstado;
+
+    @FXML
+    private TableColumn<PedidoDTO, LocalDate> colData;
+
+    private ObservableList<PedidoDTO> pedidos;
 
     @FXML
     public void onMenuItemPedido() {
@@ -99,6 +131,24 @@ public class PedidoController implements Initializable {
         loadCadastroView("/org/acgprojeto/view/CadastroPedido.fxml");
     }
 
+    @FXML
+    public void onComboBoxFiltroChanged() {
+        String filtroSelecionado = comboBoxFiltro.getValue();
+        tabelaFiltrada(filtroSelecionado);
+    }
+
+
+    public void atualizarTabelaPedidos(){
+        List<PedidoDTO> listaPedidos = controller.buscarPedidosParaTabelaPedidos();
+        pedidos = FXCollections.observableList(listaPedidos);
+        tableViewPedido.setItems(pedidos);
+
+    }
+
+    private void tabelaFiltrada(String filtro) {
+        AtualizarVisaoTabelas.tabelaFiltradaPedido(filtro, pedidos, tableViewPedido);
+    }
+
 
     private void loadView(String caminho) {
         try {
@@ -137,13 +187,27 @@ public class PedidoController implements Initializable {
         }
     }
 
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        controller = new org.acgprojeto.controller.PedidoController();
+
         List<String> opcoes = new ArrayList<>();
         opcoes.add("Hoje");
         opcoes.add("Semanal");
+        opcoes.add("Mês");
         opcoes.add("Todos");
         listaOpcoes = FXCollections.observableList(opcoes);
         comboBoxFiltro.setItems(listaOpcoes);
+
+        colNomeCliente.setCellValueFactory(new PropertyValueFactory<>("NomeCliente"));
+        colDescricao.setCellValueFactory(new PropertyValueFactory<>("DescricaoServico"));
+        colValor.setCellValueFactory(new PropertyValueFactory<>("ValorServico"));
+        colTipo.setCellValueFactory(new PropertyValueFactory<>("TipoServico"));
+        colEstado.setCellValueFactory(new PropertyValueFactory<>("Estado"));
+        colData.setCellValueFactory(new PropertyValueFactory<>("Data"));
+
+        atualizarTabelaPedidos();
+
     }
 }
