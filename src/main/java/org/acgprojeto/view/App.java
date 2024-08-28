@@ -27,7 +27,7 @@ public class App extends Application {
             stage.centerOnScreen();
             stage.show();
 
-            if(adminController.buscarAdminPorId(1) == null){
+            if(adminController.buscarAdminPorId(4) == null){
                 Parent cadastroAdmin = FXMLLoader.load(getClass().getResource("/org/acgprojeto/view/CadastroAdmin.fxml"));
                 Stage palco = new Stage();
                 Scene scene = new Scene(cadastroAdmin);
