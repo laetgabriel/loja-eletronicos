@@ -16,8 +16,8 @@ import org.acgprojeto.dto.PedidoDTO;
 import org.acgprojeto.model.enums.Estado;
 import org.acgprojeto.model.enums.Tipo;
 import org.acgprojeto.view.App;
-import org.acgprojeto.view.util.Alertas;
-import org.acgprojeto.view.util.AtualizarVisaoTabelas;
+import org.acgprojeto.util.Alertas;
+import org.acgprojeto.util.AtualizarVisaoTabelas;
 
 import java.io.IOException;
 import java.math.BigDecimal;

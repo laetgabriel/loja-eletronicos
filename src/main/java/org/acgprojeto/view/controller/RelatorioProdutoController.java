@@ -3,19 +3,14 @@ package org.acgprojeto.view.controller;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import org.acgprojeto.dto.ProdutoDTO;
 import org.acgprojeto.model.enums.Categoria;
-import org.acgprojeto.view.util.Alertas;
-import org.acgprojeto.view.util.AtualizarVisaoTabelas;
+import org.acgprojeto.util.AtualizarVisaoTabelas;
 
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.net.URL;
 import java.util.List;
@@ -53,8 +48,12 @@ public class RelatorioProdutoController implements Initializable {
 
     private ObservableList<String> listaOpcoes;
 
+    private final org.acgprojeto.controller.ProdutoController produtoController = new org.acgprojeto.controller.ProdutoController();
+
     @FXML
-    public void onBtnGerarRelatorioOnAction( ) {
+    public void onBtnGerarRelatorioOnAction() {
+        Stage stage = (Stage) btnGerarRelatorio.getScene().getWindow();
+        produtoController.gerarRelatorioProduto(stage);
     }
 
     @FXML

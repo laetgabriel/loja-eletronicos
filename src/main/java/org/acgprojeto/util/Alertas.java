@@ -1,4 +1,4 @@
-package org.acgprojeto.view.util;
+package org.acgprojeto.util;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 

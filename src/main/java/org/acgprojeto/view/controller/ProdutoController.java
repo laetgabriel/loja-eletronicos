@@ -12,8 +12,8 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import org.acgprojeto.dto.ProdutoDTO;
 import org.acgprojeto.model.enums.Categoria;
-import org.acgprojeto.view.util.Alertas;
-import org.acgprojeto.view.util.AtualizarVisaoTabelas;
+import org.acgprojeto.util.Alertas;
+import org.acgprojeto.util.AtualizarVisaoTabelas;
 
 import java.io.IOException;
 import java.math.BigDecimal;

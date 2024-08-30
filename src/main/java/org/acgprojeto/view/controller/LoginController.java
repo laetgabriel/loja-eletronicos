@@ -8,13 +8,15 @@ import javafx.stage.Stage;
 import org.acgprojeto.controller.AdminController;
 import org.acgprojeto.controller.MensageiroController;
 import org.acgprojeto.dto.AdminDTO;
+import org.acgprojeto.dto.MensagemDTO;
 import org.acgprojeto.view.App;
-import org.acgprojeto.view.util.Alertas;
+import org.acgprojeto.util.Alertas;
 import org.apache.commons.mail.EmailException;
 
 import java.io.IOException;
 
 public class LoginController {
+
     private AdminController adminController;
     private AdminDTO adminDTO;
     private MensageiroController mensageiro;
@@ -67,7 +69,7 @@ public class LoginController {
             Alert alertaSenha = Alertas.retornaAlerta("ENVIANDO SENHA PARA O EMAIL!","Senha de login sendo enviada para o email!", Alert.AlertType.INFORMATION);
             alertaSenha.show();
 
-            mensageiro.enviarEmail(adminDTO.getEmail(), "Senha de login", "Sua senha é: " + adminDTO.getSenha());
+            mensageiro.enviarEmail(new MensagemDTO(adminDTO.getEmail(), "Senha de login", "Sua senha é: " + adminDTO.getSenha()));
 
             alertaSenha.close();
 

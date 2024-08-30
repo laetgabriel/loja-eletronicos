@@ -1,20 +1,14 @@
 package org.acgprojeto.application;
 
-import org.acgprojeto.dao.AdminDAO;
-import org.acgprojeto.dao.PedidoDAO;
 import org.acgprojeto.dao.ServicoDAO;
-import org.acgprojeto.dao.impl.AdminDAOImpl;
 import org.acgprojeto.dao.impl.PedidoDAOImpl;
 import org.acgprojeto.dao.impl.ServicoDAOImpl;
 import org.acgprojeto.db.DB;
 import org.acgprojeto.dto.PedidoDTO;
 import org.acgprojeto.dto.ServicoDTO;
-import org.acgprojeto.model.entities.Pedido;
 import org.acgprojeto.model.enums.Tipo;
-import org.acgprojeto.service.MensageiroService;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 public class Main  {
 
