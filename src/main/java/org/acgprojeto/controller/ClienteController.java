@@ -12,7 +12,11 @@ public class ClienteController {
     ClienteDAO clienteDAO = new ClienteDAOImpl(DB.getConexao());
 
     public void inserirCliente(ClienteDTO clienteDTO) {
-        clienteDAO.inserirCliente(clienteDTO);
+        if (isEmailOrTelefoneCadastrado(clienteDTO.getEmail(), clienteDTO.getTelefone())) {
+            System.out.println("Email ou telefone já cadastrado.");
+        } else {
+            clienteDAO.inserirCliente(clienteDTO);
+        }
     }
 
     public void atualizarCliente(ClienteDTO clienteDTO) {
@@ -31,4 +35,13 @@ public class ClienteController {
         return clienteDAO.listarTodosOsClientes();
     }
 
+    private boolean isEmailOrTelefoneCadastrado(String email, String telefone) {
+        List<ClienteDTO> clientes = listarTodosOsClientes();
+        for (ClienteDTO cliente : clientes) {
+            if (cliente.getEmail().equalsIgnoreCase(email) || cliente.getTelefone().equals(telefone)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }
