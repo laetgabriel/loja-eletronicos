@@ -12,12 +12,15 @@ import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.element.Table;
 import com.itextpdf.layout.properties.TextAlignment;
 import com.itextpdf.layout.properties.UnitValue;
+import javafx.collections.ObservableList;
+import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 import org.acgprojeto.dao.ProdutoDAO;
 import org.acgprojeto.dao.impl.ProdutoDAOImpl;
 import org.acgprojeto.db.DB;
 import org.acgprojeto.dto.ProdutoDTO;
 import org.acgprojeto.model.enums.Categoria;
+import org.acgprojeto.util.Alertas;
 import org.acgprojeto.util.FileChooserUtil;
 
 import java.io.File;
@@ -30,7 +33,7 @@ public class ProdutoController {
 
     public void inserirProduto(ProdutoDTO produtoDTO) {
         if (isProdutoCadastrado(produtoDTO.getNomeProduto(), produtoDTO.getCategoria())) {
-            System.out.println("Produto com o mesmo nome e tipo já cadastrado.");
+            Alertas.mostrarAlerta("Erro na inserção", "Produto com o mesmo nome e tipo já cadastrado", Alert.AlertType.ERROR);
         } else {
             produtoDAO.inserirProduto(produtoDTO);
         }
@@ -65,7 +68,7 @@ public class ProdutoController {
         return false;
     }
 
-    public void gerarRelatorioProduto(Stage stage) {
+    public void gerarRelatorioProduto(Stage stage, ObservableList<ProdutoDTO> produtos) {
         File file = FileChooserUtil.gerarFileChooser("Relatório_Produto").showSaveDialog(stage);
 
         if (file != null) {
@@ -79,7 +82,6 @@ public class ProdutoController {
                         .setFontSize(20)
                         .setTextAlignment(TextAlignment.CENTER));
 
-                List<ProdutoDTO> produtos = listarTodosOsProdutos();
 
                 Table tableProdutos = new Table(UnitValue.createPercentArray(new float[]{1, 3, 2, 2, 2}))
                         .setWidth(UnitValue.createPercentValue(100));

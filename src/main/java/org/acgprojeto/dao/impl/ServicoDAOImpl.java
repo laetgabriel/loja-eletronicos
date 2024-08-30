@@ -133,6 +133,23 @@ public class ServicoDAOImpl implements ServicoDAO {
         return servicos;
     }
 
+    @Override
+    public List<Tipo> listarTodosOsTiposDeServicos() {
+        String sql = "SELECT DISTINCT tipo FROM servico s ";
+        List<Tipo> tipoServicos = new ArrayList<>();
+
+        try (PreparedStatement stmt = conexao.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                tipoServicos.add(Tipo.valueOf(rs.getString("tipo")));
+            }
+        } catch (SQLException e) {
+            throw new DBException("Erro ao listar tipos de Serviços: ");
+        }
+        return tipoServicos;
+    }
+
     private ServicoDTO instanciarServico(ResultSet rs) throws SQLException {
         Servico servico = new Servico();
         servico.setIdServico(rs.getInt("Id_Servico"));

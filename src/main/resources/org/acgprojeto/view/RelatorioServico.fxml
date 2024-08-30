@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TableColumn?>
@@ -25,19 +25,18 @@
                   <Font name="System Bold" size="12.0" />
                </font></Button>
 
-                <Label layoutX="157.0" layoutY="129.0" text="Filtro:" AnchorPane.leftAnchor="157.0" AnchorPane.topAnchor="129.0">
+                <Label layoutX="157.0" layoutY="129.0" text="Filtro por tipo:" AnchorPane.leftAnchor="157.0" AnchorPane.topAnchor="129.0">
                <font>
                   <Font name="System Bold" size="15.0" />
                </font></Label>
+            <ComboBox fx:id="comboBoxFiltro" layoutX="266.0" layoutY="127.0" onAction="#onComboBoxFiltroChanged" prefWidth="150.0" promptText="selecione o tipo" />
 
-                            <ChoiceBox layoutX="204.0" layoutY="127.0" prefWidth="150.0" AnchorPane.leftAnchor="204.0" AnchorPane.topAnchor="127.0" />
-
-                <TableView layoutY="167.0" prefHeight="421.0" prefWidth="884.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="167.0">
+                <TableView fx:id="tblRelServicos" layoutY="167.0" prefHeight="421.0" prefWidth="884.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="167.0">
                     <columns>
-                  <TableColumn prefWidth="75.0" text="Id" />
-                        <TableColumn prefWidth="116.80003356933594" text="Descrição" />
-                        <TableColumn prefWidth="113.5999755859375" text="Preço" />
-                  <TableColumn prefWidth="98.40005493164062" text="Tipo" />
+                  <TableColumn fx:id="colIdServico" prefWidth="75.0" text="Id" />
+                        <TableColumn fx:id="colDescricao" prefWidth="116.80003356933594" text="Descrição" />
+                        <TableColumn fx:id="colPreco" prefWidth="113.5999755859375" text="Preço" />
+                  <TableColumn fx:id="colTipo" prefWidth="98.40005493164062" text="Tipo" />
                   <TableColumn prefWidth="75.0" text="Detalhes" />
                         <TableColumn prefWidth="87.20001220703125" text="Atualizar" />
                         <TableColumn prefWidth="95.2000732421875" text="Excluir" />

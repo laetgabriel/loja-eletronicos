@@ -25,11 +25,11 @@
                   <Font name="System Bold" size="12.0" />
                </font></Button>
 
-                <Label layoutX="157.0" layoutY="129.0" text="Filtro:" AnchorPane.leftAnchor="157.0" AnchorPane.topAnchor="129.0">
+                <Label layoutX="157.0" layoutY="129.0" text="Filtro por categoria:" AnchorPane.leftAnchor="157.0" AnchorPane.topAnchor="129.0">
                <font>
                   <Font name="System Bold" size="15.0" />
                </font></Label>
-            <ComboBox fx:id="comboBoxFiltro" layoutX="205.0" layoutY="127.0" onAction="#onComboBoxFiltroChanged" prefWidth="150.0" />
+            <ComboBox fx:id="comboBoxFiltro" layoutX="305.0" layoutY="127.0" onAction="#onComboBoxFiltroChanged" prefHeight="26.0" prefWidth="156.0" promptText="selecione a categoria" />
 
                 <TableView fx:id="tableRelProduto" layoutX="14.0" layoutY="166.0" prefHeight="421.0" prefWidth="884.0" AnchorPane.bottomAnchor="1.1999999999999318" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="166.0">
                     <columns>

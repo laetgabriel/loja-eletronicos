@@ -70,7 +70,7 @@ public class ProdutoController implements Initializable {
             palco.centerOnScreen();
             palco.show();
         } catch (IOException e) {
-            Alertas.mostrarAlerta("Erro", null, "Erro ao carregar tela de cadastro produto", Alert.AlertType.ERROR);
+            Alertas.mostrarAlerta("Erro", "Erro ao carregar tela de cadastro produto", Alert.AlertType.ERROR);
         }
     }
 
@@ -79,7 +79,6 @@ public class ProdutoController implements Initializable {
         String filtroSelecionado = comboBoxFiltro.getValue();
         tabelaFiltrada(filtroSelecionado);
     }
-
 
     public void atualizarTabelaProduto(){
         List<ProdutoDTO> listaProdutos = controller.listarTodosOsProdutos();
@@ -97,7 +96,7 @@ public class ProdutoController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         controller = new org.acgprojeto.controller.ProdutoController();
         List<String> opcoes = controller.listarTodasAsCategorias();
-        opcoes.add("SEM FILTRO");
+        opcoes.add("SEM CATEGORIA");
 
         listaOpcoes = FXCollections.observableList(opcoes);
         comboBoxFiltro.setItems(listaOpcoes);

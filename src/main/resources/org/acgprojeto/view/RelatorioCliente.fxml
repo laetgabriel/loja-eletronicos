@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TableColumn?>
@@ -25,21 +25,20 @@
                   <Font name="System Bold" size="12.0" />
                </font></Button>
 
-                <Label layoutX="157.0" layoutY="129.0" text="Filtro:" AnchorPane.leftAnchor="157.0" AnchorPane.topAnchor="129.0">
+                <Label layoutX="157.0" layoutY="129.0" text="Filtro por nome:" AnchorPane.leftAnchor="157.0" AnchorPane.topAnchor="129.0">
                <font>
                   <Font name="System Bold" size="15.0" />
                </font></Label>
+            <ComboBox fx:id="comboBoxFiltro" layoutX="279.0" layoutY="126.0" onAction="#onComboBoxFiltroChanged" prefHeight="26.0" prefWidth="176.0" promptText="digite o nome do cliente" />
 
-                            <ChoiceBox layoutX="204.0" layoutY="127.0" prefWidth="150.0" AnchorPane.leftAnchor="204.0" AnchorPane.topAnchor="127.0" />
-
-                <TableView layoutY="167.0" prefHeight="421.0" prefWidth="884.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="167.0">
+                <TableView fx:id="tblRelatorioCliente" layoutY="167.0" prefHeight="421.0" prefWidth="884.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="167.0">
                     <columns>
-                  <TableColumn prefWidth="75.0" text="Id" />
-                        <TableColumn prefWidth="132.80001068115234" text="Nome" />
-                        <TableColumn prefWidth="121.59999084472656" text="Email" />
-                        <TableColumn prefWidth="89.60003662109375" text="Telefone" />
-                        <TableColumn prefWidth="78.40005493164062" text="Atualizar" />
-                        <TableColumn prefWidth="83.99993896484375" text="Excluir" />
+                  <TableColumn fx:id="colIdCliente" prefWidth="75.99996799230576" text="Id" />
+                        <TableColumn fx:id="colNome" prefWidth="139.19994354248047" text="Nome" />
+                        <TableColumn fx:id="colEmail" prefWidth="164.8000030517578" text="Email" />
+                        <TableColumn fx:id="colTelefone" prefWidth="129.60000610351562" text="Telefone" />
+                        <TableColumn prefWidth="71.20001220703125" text="Atualizar" />
+                        <TableColumn prefWidth="85.5999755859375" text="Excluir" />
                     </columns>
                 </TableView>
             </children>

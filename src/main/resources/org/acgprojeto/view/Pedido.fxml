@@ -57,12 +57,12 @@
                     </font>
                 </Button>
 
-                            <Label layoutX="118.0" layoutY="129.0" text="Filtro por categoria:" AnchorPane.leftAnchor="118.0" AnchorPane.topAnchor="129.0">
+                            <Label layoutX="118.0" layoutY="129.0" text="Filtro por data:" AnchorPane.leftAnchor="118.0" AnchorPane.topAnchor="129.0">
                     <font>
                         <Font name="System Bold" size="15.0" />
                     </font>
                 </Label>
-            <ComboBox fx:id="comboBoxFiltro" layoutX="267.0" layoutY="127.0" onAction="#onComboBoxFiltroChanged" prefWidth="150.0" />
+            <ComboBox fx:id="comboBoxFiltro" layoutX="238.0" layoutY="127.0" onAction="#onComboBoxFiltroChanged" prefWidth="150.0" promptText="selecione o período" />
 
                             <TableView fx:id="tableViewPedido" prefHeight="421.0" prefWidth="884.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="167.0">
                     <columns>

@@ -12,11 +12,14 @@ import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.element.Table;
 import com.itextpdf.layout.properties.TextAlignment;
 import com.itextpdf.layout.properties.UnitValue;
+import javafx.collections.ObservableList;
+import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 import org.acgprojeto.dao.ClienteDAO;
 import org.acgprojeto.dao.impl.ClienteDAOImpl;
 import org.acgprojeto.db.DB;
 import org.acgprojeto.dto.ClienteDTO;
+import org.acgprojeto.util.Alertas;
 import org.acgprojeto.util.FileChooserUtil;
 
 import java.io.File;
@@ -29,7 +32,7 @@ public class ClienteController {
 
     public void inserirCliente(ClienteDTO clienteDTO) {
         if (isEmailOrTelefoneCadastrado(clienteDTO.getEmail(), clienteDTO.getTelefone())) {
-            System.out.println("Email ou telefone já cadastrado.");
+            Alertas.mostrarAlerta("Erro na inserção", "Email ou telefone já cadastrado", Alert.AlertType.ERROR);
         } else {
             clienteDAO.inserirCliente(clienteDTO);
         }
@@ -61,7 +64,7 @@ public class ClienteController {
         return false;
     }
 
-    public void gerarRelatorioCliente(Stage stage) {
+    public void gerarRelatorioCliente(Stage stage, ObservableList<ClienteDTO> clientesTable) {
         File file = FileChooserUtil.gerarFileChooser("Relatório_Cliente").showSaveDialog(stage);
         if(file != null) {
             try (PdfWriter writer = new PdfWriter(file);
@@ -74,8 +77,6 @@ public class ClienteController {
                         .setFontSize(20)
                         .setTextAlignment(TextAlignment.CENTER));
 
-                List<ClienteDTO> clientes = listarTodosOsClientes();
-
                 Table tableClientes = new Table(UnitValue.createPercentArray(new float[]{1, 3, 3, 3}))
                         .setWidth(UnitValue.createPercentValue(100));
                 tableClientes.addHeaderCell(new Cell()
@@ -86,7 +87,7 @@ public class ClienteController {
                 tableClientes.addHeaderCell(new Cell().add(new Paragraph("Email")));
                 tableClientes.addHeaderCell(new Cell().add(new Paragraph("Telefone")));
 
-                for (ClienteDTO clienteDTO : clientes) {
+                for (ClienteDTO clienteDTO : clientesTable) {
                     tableClientes.addCell(new Paragraph(
                             clienteDTO.getIdCliente() != null ? clienteDTO.getIdCliente().toString() : "N/A"
                     ));

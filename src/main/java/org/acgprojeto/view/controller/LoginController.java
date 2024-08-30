@@ -73,11 +73,11 @@ public class LoginController {
 
             alertaSenha.close();
 
-            Alertas.mostrarAlerta("Envio senha", null, "Senha de login enviada para o email!", Alert.AlertType.INFORMATION);
+            Alertas.mostrarAlerta("Envio senha", "Senha de login enviada para o email!", Alert.AlertType.INFORMATION);
 
         }
         catch (EmailException e){
-            Alertas.mostrarAlerta("Erro envio de senha", null, "Erro no envio da senha de login!", Alert.AlertType.ERROR);
+            Alertas.mostrarAlerta("Erro envio de senha","Erro no envio da senha de login!", Alert.AlertType.ERROR);
         }
     }
 
@@ -98,7 +98,7 @@ public class LoginController {
             loginStage.centerOnScreen();
 
         } catch (IOException e) {
-            Alertas.mostrarAlerta("Erro", null, "Erro ao carregar tela de pedido", Alert.AlertType.ERROR);
+            Alertas.mostrarAlerta("Erro", "Erro ao carregar tela de pedido", Alert.AlertType.ERROR);
         }
     }
 }

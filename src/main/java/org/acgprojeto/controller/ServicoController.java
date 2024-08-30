@@ -12,16 +12,19 @@ import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.element.Table;
 import com.itextpdf.layout.properties.TextAlignment;
 import com.itextpdf.layout.properties.UnitValue;
+import javafx.collections.ObservableList;
 import javafx.stage.Stage;
 import org.acgprojeto.dao.ServicoDAO;
 import org.acgprojeto.dao.impl.ServicoDAOImpl;
 import org.acgprojeto.db.DB;
 import org.acgprojeto.dto.PedidoDTO;
 import org.acgprojeto.dto.ServicoDTO;
+import org.acgprojeto.model.enums.Tipo;
 import org.acgprojeto.util.FileChooserUtil;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ServicoController {
@@ -52,7 +55,17 @@ public class ServicoController {
         return servicoDAO.listarServicosPorPedido(pedidoDTO);
     }
 
-    public void gerarRelatorioServico(Stage stage) {
+    public List<String> listarTodosOsTiposDeServico() {
+        List<Tipo> tipos = servicoDAO.listarTodosOsTiposDeServicos();
+        List<String> tiposDeServicos = new ArrayList<>();
+
+        for (Tipo tipo : tipos) {
+            tiposDeServicos.add(tipo.toString());
+        }
+        return tiposDeServicos;
+    }
+
+    public void gerarRelatorioServico(Stage stage, ObservableList<ServicoDTO> servicos) {
         File file = FileChooserUtil.gerarFileChooser("Relatório_Servico").showSaveDialog(stage);
         if (file != null) {
 
@@ -65,8 +78,6 @@ public class ServicoController {
                         .setFont(font)
                         .setFontSize(20)
                         .setTextAlignment(TextAlignment.CENTER));
-
-                List<ServicoDTO> servicos = listarTodosOsServicos();
 
                 Table tableServicos = new Table(UnitValue.createPercentArray(new float[]{1, 3, 3, 2, 2}))
                         .setWidth(UnitValue.createPercentValue(100));

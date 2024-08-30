@@ -29,7 +29,7 @@
                <font>
                   <Font name="System Bold" size="15.0" />
                </font></Label>
-            <ComboBox fx:id="comboBoxFiltro" layoutX="269.0" layoutY="127.0" onAction="#onComboBoxFiltroChanged" prefWidth="150.0" />
+            <ComboBox fx:id="comboBoxFiltro" layoutX="269.0" layoutY="127.0" onAction="#onComboBoxFiltroChanged" prefWidth="150.0" promptText="selecione o período" />
 
                 <TableView fx:id="tableRelPedido" layoutY="167.0" prefHeight="421.0" prefWidth="884.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="167.0">
                     <columns>

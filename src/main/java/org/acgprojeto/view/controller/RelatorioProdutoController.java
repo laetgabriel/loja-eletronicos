@@ -43,6 +43,8 @@ public class RelatorioProdutoController implements Initializable {
 
     private ObservableList<ProdutoDTO> produtos;
 
+    private ObservableList<ProdutoDTO> produtosFiltro;
+
     @FXML
     private ComboBox<String> comboBoxFiltro;
 
@@ -53,7 +55,7 @@ public class RelatorioProdutoController implements Initializable {
     @FXML
     public void onBtnGerarRelatorioOnAction() {
         Stage stage = (Stage) btnGerarRelatorio.getScene().getWindow();
-        produtoController.gerarRelatorioProduto(stage);
+        produtoController.gerarRelatorioProduto(stage, produtosFiltro);
     }
 
     @FXML
@@ -66,12 +68,13 @@ public class RelatorioProdutoController implements Initializable {
     public void atualizarTabelaRelProduto() {
         List<ProdutoDTO> listaProdutos = controller.listarTodosOsProdutos();
         produtos = FXCollections.observableList(listaProdutos);
+        produtosFiltro = FXCollections.observableList(listaProdutos);
         tableRelProduto.setItems(produtos);
 
     }
 
     private void tabelaFiltrada(String filtro) {
-        AtualizarVisaoTabelas.tabelaFiltradaProduto(filtro, produtos, tableRelProduto);
+        produtosFiltro = AtualizarVisaoTabelas.tabelaFiltradaProduto(filtro, produtos, tableRelProduto);
     }
 
 
@@ -79,7 +82,7 @@ public class RelatorioProdutoController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         controller = new org.acgprojeto.controller.ProdutoController();
         List<String> opcoes = controller.listarTodasAsCategorias();
-        opcoes.add("SEM FILTRO");
+        opcoes.add("SEM CATEGORIA");
 
         listaOpcoes = FXCollections.observableList(opcoes);
         comboBoxFiltro.setItems(listaOpcoes);

@@ -4,10 +4,10 @@ import javafx.scene.control.Alert.AlertType;
 
 public class Alertas {
 
-    public static void mostrarAlerta(String title, String header, String content, AlertType type) {
+    public static void mostrarAlerta(String title,   String content, AlertType type) {
         Alert alert = new Alert(type);
         alert.setTitle(title);
-        alert.setHeaderText(header);
+        alert.setHeaderText(null);
         alert.setContentText(content);
         alert.show();
     }

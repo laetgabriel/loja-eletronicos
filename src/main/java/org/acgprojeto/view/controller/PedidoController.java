@@ -167,7 +167,7 @@ public class PedidoController implements Initializable {
             telaAtualContent.getChildren().addAll(telaProdutoContent.getChildren());
 
         } catch (IOException e) {
-            Alertas.mostrarAlerta("Erro", null, "Erro ao carregar tela de pedido", Alert.AlertType.ERROR);
+            Alertas.mostrarAlerta("Erro", "Erro ao carregar tela de pedido", Alert.AlertType.ERROR);
         }
     }
 
@@ -183,7 +183,7 @@ public class PedidoController implements Initializable {
             palco.centerOnScreen();
             palco.show();
         } catch (IOException e) {
-            Alertas.mostrarAlerta("Erro", null, "Erro ao carregar tela de cadastro admin", Alert.AlertType.ERROR);
+            Alertas.mostrarAlerta("Erro", "Erro ao carregar tela de cadastro admin", Alert.AlertType.ERROR);
         }
     }
 
