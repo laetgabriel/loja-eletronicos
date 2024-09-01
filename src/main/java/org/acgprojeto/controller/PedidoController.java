@@ -1,16 +1,31 @@
 package org.acgprojeto.controller;
 
-import com.itextpdf.kernel.geom.PageSize;
+import com.itextpdf.kernel.colors.ColorConstants;
+import com.itextpdf.kernel.colors.DeviceRgb;
+import com.itextpdf.kernel.font.PdfFont;
+import com.itextpdf.kernel.font.PdfFontFactory;
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.layout.Document;
+import com.itextpdf.layout.element.Cell;
 import com.itextpdf.layout.element.Paragraph;
+import com.itextpdf.layout.element.Table;
+import com.itextpdf.layout.properties.TextAlignment;
+import com.itextpdf.layout.properties.UnitValue;
+import javafx.collections.ObservableList;
+import javafx.stage.Stage;
 import org.acgprojeto.dao.PedidoDAO;
 import org.acgprojeto.dao.impl.PedidoDAOImpl;
 import org.acgprojeto.db.DB;
 import org.acgprojeto.dto.PedidoDTO;
+import org.acgprojeto.dto.PedidoProdutoDTO;
+import org.acgprojeto.dto.ServicoDTO;
+import org.acgprojeto.model.entities.Produto;
+import org.acgprojeto.util.FileChooserUtil;
 
+import java.io.File;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.List;
 
 public class PedidoController {
@@ -41,5 +56,118 @@ public class PedidoController {
 
     public List<PedidoDTO> buscarPedidosParaTabelaPedidos(){return pedidoDAO.buscarPedidosParaTabelaPedidos(); }
 
-    public List<PedidoDTO> buscarPedidosParaTabelaRelPedidos(){return pedidoDAO.buscarPedidosParaTabelaRelPedidos(); };
+    public List<PedidoDTO> buscarPedidosParaTabelaRelPedidos(){return pedidoDAO.buscarPedidosParaTabelaRelPedidos(); }
+
+    public void gerarRelatorioPedido(Stage stage, ObservableList<PedidoDTO> pedidos) {
+        File file = FileChooserUtil.gerarFileChooser("Relatório_Pedido").showSaveDialog(stage);
+
+        if (file != null) {
+            try (PdfWriter writer = new PdfWriter(file);
+                 PdfDocument pdfDoc = new PdfDocument(writer);
+                 Document document = new Document(pdfDoc)) {
+
+                BigDecimal valorTotalGeral = BigDecimal.ZERO;  // Valor total de todos os pedidos
+                PdfFont font = PdfFontFactory.createRegisteredFont("Helvetica-Bold");
+                document.add(new Paragraph("Relatório de Pedido")
+                        .setFont(font)
+                        .setFontSize(20)
+                        .setTextAlignment(TextAlignment.CENTER));
+
+                for (PedidoDTO pedidoDTO : pedidos) {
+                    BigDecimal valorTotalPedido = BigDecimal.ZERO;  // Valor total do pedido atual
+
+                    gerarDetalhesPedido(document, pedidoDTO, font);
+                    valorTotalPedido = gerarTabelaProdutos(document, pedidoDTO, font, valorTotalPedido);
+                    valorTotalPedido = gerarTabelaServicos(document, pedidoDTO, font, valorTotalPedido);
+
+                    // Adiciona o valor total do pedido ao relatório
+                    document.add(new Paragraph("Valor total do Pedido: R$" + valorTotalPedido)
+                            .setFont(font)
+                            .setFontSize(14));
+                    document.add(new Paragraph("\n"));
+
+                    // Acumula o valor total de todos os pedidos
+                    valorTotalGeral = valorTotalGeral.add(valorTotalPedido);
+                }
+
+                // Adiciona o valor total geral ao final do relatório
+                document.add(new Paragraph("Valor total das vendas: R$" + valorTotalGeral)
+                        .setFont(font)
+                        .setFontSize(16));
+
+            } catch (IOException e) {
+                throw new RuntimeException("Erro ao gerar relatório de pedido", e);
+            }
+        }
+    }
+
+    private void gerarDetalhesPedido(Document document, PedidoDTO pedidoDTO, PdfFont font) {
+        document.add(new Paragraph("ID do Pedido: " + pedidoDTO.getIdPedido()));
+        document.add(new Paragraph("Cliente: " + pedidoDTO.getCliente().getNome()));
+        document.add(new Paragraph("Data: " + pedidoDTO.getData().toString()));
+        document.add(new Paragraph("Estado: " + pedidoDTO.getEstado()));
+        document.add(new Paragraph("\n"));
+    }
+
+    private BigDecimal gerarTabelaProdutos(Document document, PedidoDTO pedidoDTO, PdfFont font, BigDecimal valorTotalPedido) {
+        PedidoProdutoController pedidoProdutoController = new PedidoProdutoController();
+        List<PedidoProdutoDTO> pedidoProdutos = pedidoProdutoController.listarPedidoProduto();
+
+        Table tableProdutos = new Table(UnitValue.createPercentArray(new float[]{1, 1, 1, 1, 1}))
+                .setWidth(UnitValue.createPercentValue(100));
+
+        tableProdutos.addHeaderCell(new Cell().add(new Paragraph("Produto ID"))
+                .setBackgroundColor(new DeviceRgb(0, 0, 255)).setFontColor(ColorConstants.WHITE));
+        tableProdutos.addHeaderCell(new Cell().add(new Paragraph("Nome")));
+        tableProdutos.addHeaderCell(new Cell().add(new Paragraph("Categoria")));
+        tableProdutos.addHeaderCell(new Cell().add(new Paragraph("Preço")));
+        tableProdutos.addHeaderCell(new Cell().add(new Paragraph("Quantidade")));
+
+        for (PedidoProdutoDTO pp : pedidoProdutos) {
+            if (pp.getPedido().getIdPedido().equals(pedidoDTO.getIdPedido())) {
+                Produto produto = new Produto(pp.getProduto());
+                tableProdutos.addCell(new Paragraph(produto.getIdProduto().toString()));
+                tableProdutos.addCell(new Paragraph(produto.getNomeProduto()));
+                tableProdutos.addCell(new Paragraph(String.valueOf(produto.getCategoria())));
+                tableProdutos.addCell(new Paragraph(String.valueOf(produto.getPreco())));
+                tableProdutos.addCell(new Paragraph(pp.getQuantidade().toString()));
+                valorTotalPedido = valorTotalPedido.add(pp.getPreco().multiply(new BigDecimal(pp.getQuantidade())));
+            }
+        }
+
+        document.add(new Paragraph("Produtos:").setFont(font).setFontSize(14));
+        document.add(tableProdutos);
+        document.add(new Paragraph("\n"));
+
+        return valorTotalPedido;
+    }
+
+    private BigDecimal gerarTabelaServicos(Document document, PedidoDTO pedidoDTO, PdfFont font, BigDecimal valorTotalPedido) {
+        ServicoController servicoController = new ServicoController();
+        List<ServicoDTO> servicos = servicoController.listarServicosPorPedido(pedidoDTO);
+
+        Table tableServicos = new Table(UnitValue.createPercentArray(new float[]{2, 4, 2}))
+                .setWidth(UnitValue.createPercentValue(100));
+
+        tableServicos.addHeaderCell(new Cell().add(new Paragraph("Serviço ID"))
+                .setBackgroundColor(new DeviceRgb(0, 128, 0)).setFontColor(ColorConstants.WHITE));
+        tableServicos.addHeaderCell(new Cell().add(new Paragraph("Descrição")));
+        tableServicos.addHeaderCell(new Cell().add(new Paragraph("Preço")));
+
+        for (ServicoDTO servico : servicos) {
+            tableServicos.addCell(new Paragraph(servico.getIdServico().toString()));
+            tableServicos.addCell(new Paragraph(servico.getDescricao()));
+            tableServicos.addCell(new Paragraph(servico.getPreco().toString()));
+            valorTotalPedido = valorTotalPedido.add(servico.getPreco());
+        }
+
+        document.add(new Paragraph("Serviços:").setFont(font).setFontSize(14));
+        document.add(tableServicos);
+        document.add(new Paragraph("\n"));
+
+        return valorTotalPedido;
+    }
 }
+
+
+

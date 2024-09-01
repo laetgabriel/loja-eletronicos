@@ -29,10 +29,6 @@ public class EstadoAndamento extends AbstractEstadoPedido {
         pedidoController.atualizarEstadoPedido(pedidoDTO);
     }
     @Override
-    public void gerarRelatorio() {
-        super.gerarRelatorio();
-    }
-    @Override
     public String getNomeEstado() {
         return "ANDAMENTO";
     }

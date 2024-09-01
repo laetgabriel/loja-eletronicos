@@ -9,6 +9,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Stage;
 import org.acgprojeto.controller.PedidoController;
 import org.acgprojeto.dto.PedidoDTO;
 import org.acgprojeto.model.enums.Estado;
@@ -23,7 +24,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 public class RelatorioPedidoController implements Initializable {
-    private PedidoController controller;
+    private PedidoController pedidoController;
 
     @FXML
     private Button btnGerarRelatorio;
@@ -60,6 +61,8 @@ public class RelatorioPedidoController implements Initializable {
 
     private ObservableList<PedidoDTO> pedidos;
 
+    private ObservableList<PedidoDTO> pedidosFiltro;
+
     @FXML
     private ComboBox<String> comboBoxFiltro;
 
@@ -67,6 +70,8 @@ public class RelatorioPedidoController implements Initializable {
 
     @FXML
     public void onBtnGerarRelatorio() {
+        Stage stage = (Stage) btnGerarRelatorio.getScene().getWindow();
+        pedidoController.gerarRelatorioPedido(stage, pedidosFiltro);
     }
 
     @FXML
@@ -76,20 +81,21 @@ public class RelatorioPedidoController implements Initializable {
     }
 
 
-    public void atualizarTabelaPedidos(){
-        List<PedidoDTO> listaPedidos = controller.buscarPedidosParaTabelaRelPedidos();
+    public void atualizarTabelaRelPedidos(){
+        List<PedidoDTO> listaPedidos = pedidoController.buscarPedidosParaTabelaRelPedidos();
         pedidos = FXCollections.observableList(listaPedidos);
+        pedidosFiltro = FXCollections.observableList(listaPedidos);
         tableRelPedido.setItems(pedidos);
 
     }
 
     private void tabelaFiltrada(String filtro) {
-        AtualizarVisaoTabelas.tabelaFiltradaPedido(filtro, pedidos, tableRelPedido);
+        pedidosFiltro = AtualizarVisaoTabelas.tabelaFiltradaPedido(filtro, pedidos, tableRelPedido);
     }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        controller = new org.acgprojeto.controller.PedidoController();
+        pedidoController = new org.acgprojeto.controller.PedidoController();
 
         List<String> opcoes = new ArrayList<>();
         opcoes.add("Hoje");
@@ -109,7 +115,7 @@ public class RelatorioPedidoController implements Initializable {
         colTotalServico.setCellValueFactory(new PropertyValueFactory<>("ValorServico"));
         colData.setCellValueFactory(new PropertyValueFactory<>("Data"));
 
-        atualizarTabelaPedidos();
+        atualizarTabelaRelPedidos();
 
     }
 }
