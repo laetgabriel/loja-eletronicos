@@ -1,6 +1,7 @@
 package org.acgprojeto.dao;
 
 import org.acgprojeto.dto.PedidoDTO;
+import org.acgprojeto.dto.TabelaPedidoDTO;
 
 import java.util.List;
 
@@ -13,5 +14,6 @@ public interface PedidoDAO {
     PedidoDTO buscarPedidoPorId(Integer id);
     List<PedidoDTO> buscarPedidos();
     List<PedidoDTO> buscarPedidosParaTabelaPedidos();
-    List<PedidoDTO> buscarPedidosParaTabelaRelPedidos();
+    List<TabelaPedidoDTO> buscarPedidosParaTabelaRelPedidos();
+
 }
