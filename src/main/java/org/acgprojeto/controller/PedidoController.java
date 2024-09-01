@@ -26,7 +26,9 @@ import org.acgprojeto.util.FileChooserUtil;
 import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class PedidoController {
 
@@ -73,22 +75,28 @@ public class PedidoController {
                         .setFontSize(20)
                         .setTextAlignment(TextAlignment.CENTER));
 
+                Set<Integer> pedidosAdicionados = new HashSet<>();
+
                 for (PedidoDTO pedidoDTO : pedidos) {
-                    BigDecimal valorTotalPedido = BigDecimal.ZERO;  // Valor total do pedido atual
+                    if (!pedidosAdicionados.contains(pedidoDTO.getIdPedido())) {
+                        pedidosAdicionados.add(pedidoDTO.getIdPedido());  // Marca o pedido como incluído
+                        BigDecimal valorTotalPedido = BigDecimal.ZERO;  // Valor total do pedido atual
 
-                    gerarDetalhesPedido(document, pedidoDTO, font);
-                    valorTotalPedido = gerarTabelaProdutos(document, pedidoDTO, font, valorTotalPedido);
-                    valorTotalPedido = gerarTabelaServicos(document, pedidoDTO, font, valorTotalPedido);
+                        gerarDetalhesPedido(document, pedidoDTO, font);
+                        valorTotalPedido = gerarTabelaProdutos(document, pedidoDTO, font, valorTotalPedido);
+                        valorTotalPedido = gerarTabelaServicos(document, pedidoDTO, font, valorTotalPedido);
 
-                    // Adiciona o valor total do pedido ao relatório
-                    document.add(new Paragraph("Valor total do Pedido: R$" + valorTotalPedido)
-                            .setFont(font)
-                            .setFontSize(14));
-                    document.add(new Paragraph("\n"));
+                        // Adiciona o valor total do pedido ao relatório
+                        document.add(new Paragraph("Valor total do Pedido: R$" + valorTotalPedido)
+                                .setFont(font)
+                                .setFontSize(14));
+                        document.add(new Paragraph("\n"));
 
-                    // Acumula o valor total de todos os pedidos
-                    valorTotalGeral = valorTotalGeral.add(valorTotalPedido);
+                        // Acumula o valor total de todos os pedidos
+                        valorTotalGeral = valorTotalGeral.add(valorTotalPedido);
+                    }
                 }
+
 
                 // Adiciona o valor total geral ao final do relatório
                 document.add(new Paragraph("Valor total das vendas: R$" + valorTotalGeral)
