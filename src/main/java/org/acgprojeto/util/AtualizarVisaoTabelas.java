@@ -13,7 +13,7 @@ import java.util.List;
 
 public class AtualizarVisaoTabelas {
 
-    public static void tabelaFiltradaPedido(String filtro, List<PedidoDTO> pedidos, TableView<PedidoDTO> table) {
+    public static ObservableList<PedidoDTO> tabelaFiltradaPedido(String filtro, List<PedidoDTO> pedidos, TableView<PedidoDTO> table) {
         ObservableList<PedidoDTO> listaFiltrada = FXCollections.observableArrayList();
         for (PedidoDTO pedido : pedidos) {
             if (filtroPedido(pedido, filtro)) {
@@ -21,7 +21,7 @@ public class AtualizarVisaoTabelas {
             }
         }
         table.setItems(listaFiltrada);
-
+        return listaFiltrada;
     }
 
     private static boolean filtroPedido(PedidoDTO pedidoDTO, String filtro) {
