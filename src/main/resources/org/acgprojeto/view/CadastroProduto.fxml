@@ -9,14 +9,14 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="529.0" prefWidth="642.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="529.0" prefWidth="642.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.acgprojeto.view.controller.CadastroProdutoController">
    <children>
       <Label layoutX="189.0" layoutY="14.0" text="Cadastro Produto">
          <font>
             <Font name="System Bold" size="35.0" />
          </font>
       </Label>
-      <TextField layoutX="167.0" layoutY="133.0" prefHeight="30.0" prefWidth="338.0" promptText="Digite o nome do produto" />
+      <TextField fx:id="txtNome" layoutX="167.0" layoutY="133.0" prefHeight="30.0" prefWidth="338.0" promptText="Digite o nome do produto" />
       <Label layoutX="133.0" layoutY="100.0" text="Nome">
          <font>
             <Font size="20.0" />
@@ -27,22 +27,22 @@
             <Font size="20.0" />
          </font>
       </Label>
-      <TextField layoutX="170.0" layoutY="292.0" prefHeight="30.0" prefWidth="338.0" promptText="Digite o preço do produto" />
+      <TextField fx:id="txtPreco" layoutX="170.0" layoutY="292.0" prefHeight="30.0" prefWidth="338.0" promptText="Digite o preço do produto" />
       <Label layoutX="136.0" layoutY="258.0" text="Preço">
          <font>
             <Font size="20.0" />
          </font>
       </Label>
-      <TextField layoutX="170.0" layoutY="380.0" prefHeight="30.0" prefWidth="338.0" promptText="Digite a quantidade de estoque do produto" />
+      <TextField fx:id="txtQtdEstoque" layoutX="170.0" layoutY="380.0" prefHeight="30.0" prefWidth="338.0" promptText="Digite a quantidade de estoque do produto" />
       <Label layoutX="133.0" layoutY="347.0" text="Quantidade estoque">
          <font>
             <Font size="20.0" />
          </font>
       </Label>
-      <Button layoutX="133.0" layoutY="477.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="159.0" style="-fx-background-color: green;" text="Salvar" textFill="WHITE" />
-      <Label layoutX="167.0" layoutY="164.0" prefHeight="18.0" prefWidth="247.0" text="Erro nome produto" textFill="RED" />
-      <Label layoutX="172.0" layoutY="322.0" prefHeight="18.0" prefWidth="247.0" text="Erro preço produto" textFill="RED" />
-      <Label layoutX="171.0" layoutY="410.0" prefHeight="18.0" prefWidth="247.0" text="Erro quantidade produto" textFill="RED" />
+      <Button fx:id="btnSalvar" layoutX="133.0" layoutY="477.0" mnemonicParsing="false" onAction="#onBtnSalvar" prefHeight="32.0" prefWidth="159.0" style="-fx-background-color: green;" text="Salvar" textFill="WHITE" />
+      <Label fx:id="lblErroNome" layoutX="167.0" layoutY="164.0" prefHeight="18.0" prefWidth="338.0" textFill="RED" />
+      <Label fx:id="lblErroPreco" layoutX="172.0" layoutY="322.0" prefHeight="18.0" prefWidth="338.0" textFill="RED" />
+      <Label fx:id="lblErroQtdEstoque" layoutX="171.0" layoutY="410.0" prefHeight="18.0" prefWidth="338.0" textFill="RED" />
       <ImageView fitHeight="32.0" fitWidth="32.0" layoutX="133.0" layoutY="132.0">
          <image>
             <Image url="@../icones/produto.png" />
@@ -53,7 +53,7 @@
             <Image url="@../icones/categoria.png" />
          </image>
       </ImageView>
-      <ComboBox layoutX="169.0" layoutY="218.0" prefHeight="26.0" prefWidth="338.0" />
+      <ComboBox fx:id="comboBoxCategoria" layoutX="169.0" layoutY="218.0" prefHeight="26.0" prefWidth="338.0" promptText="selecione uma categoria" />
       <ImageView layoutX="134.0" layoutY="291.0">
          <image>
             <Image url="@../icones/preco.png" />
@@ -64,6 +64,7 @@
             <Image url="@../icones/quantidade.png" />
          </image>
       </ImageView>
-      <Button layoutX="348.0" layoutY="477.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="159.0" style="-fx-background-color: green;" text="Cancelar" textFill="WHITE" />
+      <Button fx:id="btnCancelar" layoutX="348.0" layoutY="477.0" mnemonicParsing="false" onAction="#onBtnCancelar" prefHeight="32.0" prefWidth="159.0" style="-fx-background-color: green;" text="Cancelar" textFill="WHITE" />
+      <Label fx:id="lblErroCategoria" layoutX="172.0" layoutY="249.0" prefHeight="18.0" prefWidth="338.0" textFill="RED" />
    </children>
 </AnchorPane>

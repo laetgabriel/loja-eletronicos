@@ -44,12 +44,13 @@ public class AdminDAOImpl implements AdminDAO {
 
     @Override
     public void atualizarAdmin(AdminDTO adminDTO) {
-        String sql = "update admin set nome = ?, email = ? where Id_Admin = ?";
+        String sql = "update admin set nome = ?, email = ?, senha = ? where Id_Admin = ?";
         try(PreparedStatement st = conexao.prepareStatement(sql)){
 
             st.setString(1, adminDTO.getNome());
             st.setString(2, adminDTO.getEmail());
-            st.setInt(3, adminDTO.getId());
+            st.setString(3, adminDTO.getSenha());
+            st.setInt(4, adminDTO.getId());
             st.executeUpdate();
 
         }catch (SQLException e){

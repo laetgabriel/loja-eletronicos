@@ -11,6 +11,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.acgprojeto.dto.PedidoDTO;
 import org.acgprojeto.dto.TabelaPedidoDTO;
@@ -153,19 +154,19 @@ public class PedidoController implements Initializable {
 
     private void loadView(String caminho) {
         try {
-            Stage loginStage = App.getMainState();
+            Stage loginStage = App.getMainStage();
             ScrollPane telaAtual = (ScrollPane) loginStage.getScene().getRoot();
             AnchorPane telaAtualContent = (AnchorPane) telaAtual.getContent();
 
             Node menuBar = telaAtualContent.getChildren().get(0);
 
             FXMLLoader loader = new FXMLLoader(getClass().getResource(caminho));
-            ScrollPane telaProduto = loader.load();
-            AnchorPane telaProdutoContent = (AnchorPane) telaProduto.getContent();
+            ScrollPane telaNova = loader.load();
+            AnchorPane telaNovaContent = (AnchorPane) telaNova.getContent();
 
             telaAtualContent.getChildren().clear();
             telaAtualContent.getChildren().add(menuBar);
-            telaAtualContent.getChildren().addAll(telaProdutoContent.getChildren());
+            telaAtualContent.getChildren().addAll(telaNovaContent.getChildren());
 
         } catch (IOException e) {
             Alertas.mostrarAlerta("Erro", "Erro ao carregar tela de pedido", Alert.AlertType.ERROR);
@@ -174,17 +175,21 @@ public class PedidoController implements Initializable {
 
     private void loadCadastroView(String caminho){
         Parent novaTela = null;
+        Stage telaBase = App.getMainStage();
         try {
             novaTela = FXMLLoader.load(getClass().getResource(caminho));
             Stage palco = new Stage();
             Scene scene = new Scene(novaTela);
             palco.setScene(scene);
             palco.setTitle("Cyber Tigre Inforcell");
-            palco.setResizable(true);
+            palco.setResizable(false);
             palco.centerOnScreen();
-            palco.show();
+            palco.initOwner(telaBase);
+            palco.initModality(Modality.WINDOW_MODAL);
+            palco.showAndWait();
+
         } catch (IOException e) {
-            Alertas.mostrarAlerta("Erro", "Erro ao carregar tela de cadastro admin", Alert.AlertType.ERROR);
+            Alertas.mostrarAlerta("Erro", "Erro ao carregar tela de cadastro", Alert.AlertType.ERROR);
         }
     }
 

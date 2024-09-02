@@ -2,6 +2,9 @@ package org.acgprojeto.util;
 
 import javafx.scene.control.TextField;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class Restricoes {
     public static void setTextFieldInteger(TextField txt) {
         txt.textProperty().addListener((obs, oldValue, newValue) -> {
@@ -25,5 +28,12 @@ public class Restricoes {
                 txt.setText(oldValue);
             }
         });
+    }
+
+    public static Boolean validarEmail(String email) {
+        String padraoEmail = "^[\\w._%+-]+@[\\w.-]+\\.[a-zA-Z]{2,}$";
+        Pattern pattern = Pattern.compile(padraoEmail);
+        Matcher matcher = pattern.matcher(email);
+        return matcher.matches();
     }
 }

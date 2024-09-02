@@ -9,11 +9,14 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.acgprojeto.dto.ProdutoDTO;
 import org.acgprojeto.model.enums.Categoria;
 import org.acgprojeto.util.Alertas;
 import org.acgprojeto.util.AtualizarVisaoTabelas;
+import org.acgprojeto.view.App;
+import org.acgprojeto.view.observer.ProdutoObserver;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -21,7 +24,7 @@ import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class ProdutoController implements Initializable {
+public class ProdutoController implements Initializable, ProdutoObserver {
 
     private org.acgprojeto.controller.ProdutoController controller;
 
@@ -59,16 +62,23 @@ public class ProdutoController implements Initializable {
     }
     
     private void loadCadastroView(String caminho){
-        Parent novaTela = null;
+        Stage telaBase = App.getMainStage();
         try {
-            novaTela = FXMLLoader.load(getClass().getResource(caminho));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(caminho));
+            Parent novaTela = loader.load();
+
+            CadastroProdutoController cadastroProdutoController = loader.getController();
+            cadastroProdutoController.adicionarObserver(this);
+
             Stage palco = new Stage();
             Scene scene = new Scene(novaTela);
             palco.setScene(scene);
             palco.setTitle("Cyber Tigre Inforcell");
-            palco.setResizable(true);
+            palco.setResizable(false);
             palco.centerOnScreen();
-            palco.show();
+            palco.initOwner(telaBase);
+            palco.initModality(Modality.WINDOW_MODAL);
+            palco.showAndWait();
         } catch (IOException e) {
             Alertas.mostrarAlerta("Erro", "Erro ao carregar tela de cadastro produto", Alert.AlertType.ERROR);
         }
@@ -91,6 +101,10 @@ public class ProdutoController implements Initializable {
         AtualizarVisaoTabelas.tabelaFiltradaProduto(filtro, produtos, tableProduto);
     }
 
+    @Override
+    public void atualizarProdutos() {
+        atualizarTabelaProduto();
+    }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -109,4 +123,5 @@ public class ProdutoController implements Initializable {
 
         atualizarTabelaProduto();
     }
+
 }
