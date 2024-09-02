@@ -32,11 +32,7 @@ public class ProdutoController {
     ProdutoDAO produtoDAO = new ProdutoDAOImpl(DB.getConexao());
 
     public void inserirProduto(ProdutoDTO produtoDTO) {
-        if (isProdutoCadastrado(produtoDTO.getNomeProduto(), produtoDTO.getCategoria())) {
-            Alertas.mostrarAlerta("Erro na inserção", "Produto com o mesmo nome e tipo já cadastrado", Alert.AlertType.ERROR);
-        } else {
-            produtoDAO.inserirProduto(produtoDTO);
-        }
+        produtoDAO.inserirProduto(produtoDTO);
     }
 
     public void atualizarProduto(ProdutoDTO produtoDTO) {
@@ -58,7 +54,7 @@ public class ProdutoController {
         return produtoDAO.buscarProdutoPorId(id);
     }
 
-    private boolean isProdutoCadastrado(String nome, Categoria tipo) {
+    public boolean isProdutoCadastrado(String nome, Categoria tipo) {
         List<ProdutoDTO> produtos = listarTodosOsProdutos();
         for (ProdutoDTO produto : produtos) {
             if (produto.getNomeProduto().equalsIgnoreCase(nome) && produto.getCategoria().equals(tipo)) {

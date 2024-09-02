@@ -2,51 +2,49 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="529.0" prefWidth="642.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="529.0" prefWidth="642.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.acgprojeto.view.controller.CadastroAdminController">
    <children>
       <Label layoutX="188.0" text="Cadastro Admin">
          <font>
             <Font name="System Bold" size="35.0" />
          </font>
       </Label>
-      <TextField layoutX="167.0" layoutY="84.0" prefHeight="30.0" prefWidth="338.0" promptText="Digite seu nome de usuário" />
+      <TextField fx:id="txtUsuario" layoutX="167.0" layoutY="84.0" prefHeight="30.0" prefWidth="338.0" promptText="Digite seu nome de usuário" />
       <Label layoutX="133.0" layoutY="51.0" text="Usuário">
          <font>
             <Font size="20.0" />
          </font>
       </Label>
-      <TextField layoutX="167.0" layoutY="166.0" prefHeight="30.0" prefWidth="338.0" promptText="Digite seu email" />
+      <TextField fx:id="txtEmail" layoutX="167.0" layoutY="166.0" prefHeight="30.0" prefWidth="338.0" promptText="Digite seu email" />
       <Label layoutX="133.0" layoutY="133.0" text="Email">
          <font>
             <Font size="20.0" />
          </font>
       </Label>
-      <TextField layoutX="169.0" layoutY="250.0" prefHeight="30.0" prefWidth="338.0" promptText="Digite seu email novamente" />
+      <TextField fx:id="txtConfirmacaoEmail" layoutX="169.0" layoutY="250.0" prefHeight="30.0" prefWidth="338.0" promptText="Digite seu email novamente" />
       <Label layoutX="133.0" layoutY="217.0" text="Confirmação email">
          <font>
             <Font size="20.0" />
          </font>
       </Label>
-      <TextField layoutX="170.0" layoutY="331.0" prefHeight="30.0" prefWidth="338.0" promptText="Digite sua senha" />
       <Label layoutX="133.0" layoutY="298.0" text="Senha">
          <font>
             <Font size="20.0" />
          </font>
       </Label>
-      <TextField layoutX="173.0" layoutY="412.0" prefHeight="30.0" prefWidth="338.0" promptText="Digite sua senha novamente" />
       <Label layoutX="136.0" layoutY="379.0" text="Confirmação senha">
          <font>
             <Font size="20.0" />
          </font>
       </Label>
-      <Button layoutX="255.0" layoutY="483.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="159.0" style="-fx-background-color: green;" text="Salvar" textFill="WHITE" />
-      <Label layoutX="167.0" layoutY="115.0" prefHeight="18.0" prefWidth="247.0" text="Erro user" textFill="RED" />
+      <Label fx:id="lblErroUsuario" layoutX="167.0" layoutY="115.0" prefHeight="18.0" prefWidth="338.0" textFill="RED" />
       <ImageView fitHeight="32.0" fitWidth="32.0" layoutX="133.0" layoutY="164.0">
          <image>
             <Image url="@../icones/email.png" />
@@ -72,9 +70,13 @@
             <Image url="@../icones/senha.png" />
          </image>
       </ImageView>
-      <Label layoutX="169.0" layoutY="199.0" prefHeight="18.0" prefWidth="247.0" text="Erro email" textFill="RED" />
-      <Label layoutX="167.0" layoutY="280.0" prefHeight="18.0" prefWidth="247.0" text="Erro confirmacao email" textFill="RED" />
-      <Label layoutX="171.0" layoutY="361.0" prefHeight="18.0" prefWidth="247.0" text="Erro senha" textFill="RED" />
-      <Label layoutX="171.0" layoutY="449.0" prefHeight="18.0" prefWidth="247.0" text="Erro confirmacao senha" textFill="RED" />
+      <Label fx:id="lblErroEmail" layoutX="169.0" layoutY="199.0" prefHeight="18.0" prefWidth="338.0" textFill="RED" />
+      <Label fx:id="lblErroConfirmacaoEmail" layoutX="171.0" layoutY="280.0" prefHeight="18.0" prefWidth="338.0" textFill="RED" />
+      <Label fx:id="lblErroSenha" layoutX="171.0" layoutY="361.0" prefHeight="18.0" prefWidth="338.0" textFill="RED" />
+      <PasswordField fx:id="txtSenha" layoutX="171.0" layoutY="331.0" prefHeight="30.0" prefWidth="338.0" promptText="Digite sua senha" />
+      <Label fx:id="lblErroConfirmacaoSenha" layoutX="171.0" layoutY="449.0" prefHeight="18.0" prefWidth="338.0" textFill="RED" />
+      <PasswordField fx:id="txtConfirmacaoSenha" layoutX="169.0" layoutY="418.0" prefHeight="30.0" prefWidth="338.0" promptText="Digite sua senha novamente" />
+      <Button fx:id="btnSalvar" layoutX="133.0" layoutY="477.0" mnemonicParsing="false" onAction="#onBtnSalvar" prefHeight="32.0" prefWidth="159.0" style="-fx-background-color: green;" text="Salvar" textFill="WHITE" />
+      <Button fx:id="btnCancelar" layoutX="351.0" layoutY="477.0" mnemonicParsing="false" onAction="#onBtnCancelar" prefHeight="32.0" prefWidth="159.0" style="-fx-background-color: green;" text="Cancelar" textFill="WHITE" />
    </children>
 </AnchorPane>

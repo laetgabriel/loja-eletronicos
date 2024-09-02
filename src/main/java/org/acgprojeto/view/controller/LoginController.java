@@ -83,7 +83,7 @@ public class LoginController {
 
     private void loadView(String caminho) {
         try {
-            Stage loginStage = App.getMainState();
+            Stage loginStage = App.getMainStage();
 
             FXMLLoader loader = new FXMLLoader(getClass().getResource(caminho));
             ScrollPane telaPedido = loader.load();
