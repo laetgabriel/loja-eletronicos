@@ -18,7 +18,7 @@ public class ClienteDAOImpl implements ClienteDAO {
     }
 
     @Override
-    public void inserirCliente(ClienteDTO clienteDTO) {
+    public ClienteDTO inserirCliente(ClienteDTO clienteDTO) {
         Cliente cliente = new Cliente(clienteDTO);
 
         try (PreparedStatement stmt = conexao.prepareStatement(
@@ -42,6 +42,7 @@ public class ClienteDAOImpl implements ClienteDAO {
         } catch (SQLException e) {
             throw new DBException("Erro ao inserir cliente: ");
         }
+        return clienteDTO;
     }
 
     @Override
@@ -103,6 +104,23 @@ public class ClienteDAOImpl implements ClienteDAO {
             throw new DBException("Erro ao listar clientes: ");
         }
         return clientes;
+    }
+
+    public ClienteDTO obterUltimoCliente() {
+        String sql = "SELECT * FROM Cliente ORDER BY Id_Cliente DESC LIMIT 1";
+        ClienteDTO ultimoCliente = null;
+
+        try (PreparedStatement stmt = conexao.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            if (rs.next()) {
+                ultimoCliente = instanciarClienteDTO(rs);
+            }
+        } catch (SQLException e) {
+            throw new DBException("Erro ao obter o último pedido: " + e.getMessage());
+        }
+
+        return ultimoCliente;
     }
 
     private ClienteDTO instanciarClienteDTO(ResultSet rs) throws SQLException {

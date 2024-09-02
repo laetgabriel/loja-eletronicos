@@ -31,10 +31,10 @@ public class PedidoDAOImpl implements PedidoDAO {
 
         try (PreparedStatement stmt = conexao.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             stmt.setInt(1, pedido.getCliente().getIdCliente());
-            stmt.setString(2, pedido.getEstado().toString());
+            stmt.setString(2, pedido.getEstado().getNomeEstado());
             stmt.setDate(3, Date.valueOf(pedido.getData()));
-
             int linhasAfetadas = stmt.executeUpdate();
+
             if (linhasAfetadas > 0) {
                 try (ResultSet rs = stmt.getGeneratedKeys()) {
                     if (rs.next()) {
@@ -46,7 +46,7 @@ public class PedidoDAOImpl implements PedidoDAO {
                 throw new DBException("Erro ao inserir linha");
             }
         } catch (SQLException e) {
-            throw new DBException("Erro ao inserir Pedido: ");
+            throw new DBException("Erro ao inserir Pedido: " + e.getMessage()   );
         }
     }
 
@@ -216,6 +216,23 @@ public class PedidoDAOImpl implements PedidoDAO {
         tabelaPedidoDTO.setPedidoProdutoDTO(pedidoProdutoDTO);
 
         return tabelaPedidoDTO;
+    }
+
+    public PedidoDTO obterUltimoPedido() {
+        String sql = "SELECT * FROM Pedido ORDER BY Id_Pedido DESC LIMIT 1";
+        PedidoDTO ultimoPedido = null;
+
+        try (PreparedStatement stmt = conexao.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            if (rs.next()) {
+                ultimoPedido = instanciarPedido(rs);
+            }
+        } catch (SQLException e) {
+            throw new DBException("Erro ao obter o último pedido: " + e.getMessage());
+        }
+
+        return ultimoPedido;
     }
 
     private PedidoDTO instanciarPedido(ResultSet rs) throws SQLException {

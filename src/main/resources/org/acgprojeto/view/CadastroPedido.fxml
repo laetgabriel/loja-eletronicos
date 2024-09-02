@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="498.0" prefWidth="674.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="498.0" prefWidth="674.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.acgprojeto.view.controller.CadastroPedidoController">
    <children>
       <Label contentDisplay="CENTER" layoutX="201.0" text="Cadastro Pedido">
          <font>
@@ -22,26 +22,26 @@
             <Font size="15.0" />
          </font>
       </Label>
-      <TextField layoutX="84.0" layoutY="89.0" prefHeight="30.0" prefWidth="226.0" promptText="Digite o nome do cliente" />
+      <TextField fx:id="txtNomeCliente" layoutX="84.0" layoutY="89.0" prefHeight="30.0" prefWidth="226.0" promptText="Digite o nome do cliente" />
       <Label layoutX="52.0" layoutY="141.0" text="Email do cliente">
          <font>
             <Font size="15.0" />
          </font>
       </Label>
-      <TextField layoutX="87.0" layoutY="164.0" prefHeight="30.0" prefWidth="226.0" promptText="Digite o email do cliente (opcional)" />
+      <TextField fx:id="txtEmailCliente" layoutX="87.0" layoutY="164.0" prefHeight="30.0" prefWidth="226.0" promptText="Digite o email do cliente (opcional)" />
       <Label layoutX="360.0" layoutY="138.0" text="Telefone do Cliente">
          <font>
             <Font size="15.0" />
          </font>
       </Label>
-      <TextField layoutX="392.0" layoutY="162.0" prefHeight="30.0" prefWidth="226.0" promptText="Digite o telefone do cliente (opcional)" />
-      <TextField layoutX="82.0" layoutY="242.0" prefHeight="30.0" prefWidth="225.0" promptText="Descreva o serviço" />
+      <TextField fx:id="txtTelefoneCliente" layoutX="392.0" layoutY="162.0" prefHeight="30.0" prefWidth="226.0" promptText="Digite o telefone do cliente (opcional)" />
+      <TextField fx:id="txtDescricaoServico" layoutX="82.0" layoutY="242.0" prefHeight="30.0" prefWidth="225.0" promptText="Descreva o serviço" />
       <Label layoutX="51.0" layoutY="219.0" text="Descrição do serviço">
          <font>
             <Font size="15.0" />
          </font>
       </Label>
-      <Button alignment="CENTER" contentDisplay="CENTER" layoutX="54.0" layoutY="459.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="258.0" style="-fx-background-color: green;" text="Salvar" textFill="WHITE" />
+      <Button fx:id="btnSalvar" alignment="CENTER" contentDisplay="CENTER" layoutX="54.0" layoutY="459.0" mnemonicParsing="false" onAction="#salvarPedido" prefHeight="32.0" prefWidth="258.0" style="-fx-background-color: green;" text="Salvar" textFill="WHITE" />
       <ImageView fitHeight="32.0" fitWidth="32.0" layoutX="51.0" layoutY="163.0">
          <image>
             <Image url="@../icones/email.png" />
@@ -62,9 +62,9 @@
             <Image url="@../icones/documento.png" />
          </image>
       </ImageView>
-      <Label layoutX="86.0" layoutY="120.0" prefHeight="18.0" prefWidth="210.0" text="Erro nome cliente" textFill="RED" />
-      <Label layoutX="87.0" layoutY="196.0" prefHeight="18.0" prefWidth="210.0" text="Erro email cliente" textFill="RED" />
-      <Label layoutX="392.0" layoutY="192.0" prefHeight="18.0" prefWidth="210.0" text="Erro telefone cliente" textFill="RED" />
+      <Label fx:id="lblErroNomeCliente" layoutX="86.0" layoutY="120.0" prefHeight="18.0" prefWidth="210.0" text="Erro nome cliente" textFill="RED" />
+      <Label fx:id="lblErroEmailCliente" layoutX="87.0" layoutY="196.0" prefHeight="18.0" prefWidth="210.0" text="Erro email cliente" textFill="RED" />
+      <Label fx:id="lblErroTelefoneCliente" layoutX="392.0" layoutY="192.0" prefHeight="18.0" prefWidth="210.0" text="Erro telefone cliente" textFill="RED" />
       <Label layoutX="361.0" layoutY="219.0" text="Tipo do serviço">
          <font>
             <Font size="15.0" />
@@ -75,44 +75,44 @@
             <Image url="@../icones/documento.png" />
          </image>
       </ImageView>
-      <ChoiceBox layoutX="398.0" layoutY="244.0" prefHeight="26.0" prefWidth="226.0" />
-      <Label layoutX="82.0" layoutY="273.0" prefHeight="18.0" prefWidth="210.0" text="Erro descrição servico" textFill="RED" />
+      <ChoiceBox fx:id="choiceBoxTipoServico" layoutX="398.0" layoutY="244.0" prefHeight="26.0" prefWidth="226.0" />
+      <Label fx:id="lblErroDescricaoServico" layoutX="82.0" layoutY="273.0" prefHeight="18.0" prefWidth="210.0" text="Erro descrição servico" textFill="RED" />
       <ImageView fitHeight="32.0" fitWidth="26.0" layoutX="54.0" layoutY="329.0">
          <image>
             <Image url="@../icones/preco.png" />
          </image>
       </ImageView>
-      <TextField layoutX="83.0" layoutY="330.0" prefHeight="30.0" prefWidth="225.0" promptText="Descreva todo o valor do serviço" />
+      <TextField fx:id="txtPrecoServico" layoutX="83.0" layoutY="330.0" prefHeight="30.0" prefWidth="225.0" promptText="Descreva todo o valor do serviço" />
       <Label layoutX="52.0" layoutY="307.0" text="Preço do serviço">
          <font>
             <Font size="15.0" />
          </font>
       </Label>
-      <Label layoutX="83.0" layoutY="361.0" prefHeight="18.0" prefWidth="210.0" text="Erro valor serviço" textFill="RED" />
-      <Label layoutX="360.0" layoutY="307.0" text="Data do pedido">
+      <Label fx:id="lblErroPrecoServico" layoutX="83.0" layoutY="361.0" prefHeight="18.0" prefWidth="210.0" text="Erro valor serviço" textFill="RED" />
+      <Label layoutX="358.0" layoutY="317.0" text="Data do pedido">
          <font>
             <Font size="15.0" />
          </font>
       </Label>
-      <ImageView layoutX="360.0" layoutY="332.0">
+      <ImageView layoutX="358.0" layoutY="342.0">
          <image>
             <Image url="@../icones/data.png" />
          </image>
       </ImageView>
-      <DatePicker layoutX="397.0" layoutY="332.0" prefHeight="32.0" prefWidth="226.0" />
+      <DatePicker fx:id="data" layoutX="395.0" layoutY="342.0" prefHeight="32.0" prefWidth="226.0" />
       <Label layoutX="54.0" layoutY="388.0" text="Adicionar Produto">
          <font>
             <Font size="15.0" />
          </font>
       </Label>
-      <ChoiceBox layoutX="85.0" layoutY="410.0" prefHeight="26.0" prefWidth="226.0" />
+      <ChoiceBox fx:id="choiceBoxProduto" layoutX="85.0" layoutY="410.0" prefHeight="26.0" prefWidth="226.0" />
       <ImageView layoutX="51.0" layoutY="407.0">
          <image>
             <Image url="@../icones/produto.png" />
          </image>
       </ImageView>
-      <Button alignment="CENTER" contentDisplay="CENTER" layoutX="367.0" layoutY="459.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="258.0" style="-fx-background-color: green;" text="Cancelar" textFill="WHITE" />
-      <Button alignment="CENTER" contentDisplay="CENTER" layoutX="364.0" layoutY="408.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="258.0" style="-fx-background-color: green;" text="Adicionar Produto" textFill="WHITE" />
+      <Button fx:id="btnCancelar" alignment="CENTER" contentDisplay="CENTER" layoutX="367.0" layoutY="459.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="258.0" style="-fx-background-color: green;" text="Cancelar" textFill="WHITE" />
+      <Button fx:id="btnAdicionarProduto" alignment="CENTER" contentDisplay="CENTER" layoutX="367.0" layoutY="408.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="258.0" style="-fx-background-color: green;" text="Adicionar Produto" textFill="WHITE" />
       <Label layoutX="364.0" layoutY="65.0" text="Procurar Cliente">
          <font>
             <Font size="15.0" />
@@ -123,6 +123,7 @@
             <Image url="@../icones/login.png" />
          </image>
       </ImageView>
-      <ChoiceBox layoutX="392.0" layoutY="91.0" prefHeight="26.0" prefWidth="226.0" />
+      <ChoiceBox fx:id="choiceBoxClientes" layoutX="392.0" layoutY="91.0" prefHeight="26.0" prefWidth="226.0" />
+      <Button fx:id="btnAdicionarServico" alignment="CENTER" contentDisplay="CENTER" layoutX="367.0" layoutY="276.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="258.0" style="-fx-background-color: green;" text="Adicionar Servico" textFill="WHITE" />
    </children>
 </AnchorPane>

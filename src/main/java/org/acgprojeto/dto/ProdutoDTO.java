@@ -127,4 +127,8 @@ public class ProdutoDTO {
             return new ProdutoDTO(idProduto, nomeProduto, categoria, preco, quantidadeEstoque);
         }
     }
+
+    public String toString(){
+        return nomeProduto + " " + categoria + " R$" + preco + " " + "Quant: " + quantidadeEstoque ;
+    }
 }

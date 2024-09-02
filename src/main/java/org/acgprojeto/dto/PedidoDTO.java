@@ -32,7 +32,6 @@ public class PedidoDTO {
 
     }
 
-    // Getters e Setters
     public Integer getIdPedido() {
         return idPedido;
     }

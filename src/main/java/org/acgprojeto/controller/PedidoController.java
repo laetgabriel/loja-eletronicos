@@ -61,6 +61,10 @@ public class PedidoController {
 
     public List<TabelaPedidoDTO> buscarPedidosParaTabelaRelPedidos(){return pedidoDAO.buscarPedidosParaTabelaRelPedidos(); }
 
+    public PedidoDTO obterUltimoPedido() {
+        return pedidoDAO.obterUltimoPedido();
+    }
+
     public void gerarRelatorioPedido(Stage stage, ObservableList<TabelaPedidoDTO> pedidos) {
         File file = FileChooserUtil.gerarFileChooser("Relatório_Pedido").showSaveDialog(stage);
 
