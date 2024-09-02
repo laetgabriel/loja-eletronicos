@@ -132,20 +132,20 @@ public class PedidoDAOImpl implements PedidoDAO {
     }
 
     @Override
-    public List<PedidoDTO> buscarPedidosParaTabelaPedidos() {
+    public List<TabelaPedidoDTO> buscarPedidosParaTabelaPedidos() {
         String sql = "SELECT p.Id_Pedido, c.Id_Cliente, s.Id_Servico, c.Nome, s.Descricao, s.Preco, s.Tipo, p.Estado," +
                 " p.`Data` " +
                 "FROM pedido p " +
                 "INNER JOIN cliente c ON p.Id_Cliente = c.Id_Cliente " +
                 "INNER JOIN servico s ON s.Id_Pedido = p.Id_Pedido ";
 
-        List<PedidoDTO> pedidos = new ArrayList<>();
+        List<TabelaPedidoDTO> pedidos = new ArrayList<>();
 
         try (PreparedStatement stmt = conexao.prepareStatement(sql);
              ResultSet rs = stmt.executeQuery()) {
 
             while (rs.next()) {
-                pedidos.add(instanciarPedidoServico(rs));
+                pedidos.add(instanciarTabelaPedidoServico(rs));
             }
         } catch (SQLException e) {
             throw new DBException("Erro ao listar PedidosServicos: ");
@@ -178,9 +178,9 @@ public class PedidoDAOImpl implements PedidoDAO {
 
 
     private TabelaPedidoDTO instanciarTabelaPedido(ResultSet rs) throws SQLException {
-        Pedido pedido = new Pedido();
+        PedidoDTO pedido = new PedidoDTO();
         pedido.setIdPedido(rs.getInt("Id_Pedido"));
-        pedido.setCliente(new Cliente(new ClienteDAOImpl(conexao).buscarClientePorId(rs.getInt("Id_Cliente"))));
+        pedido.setCliente(new ClienteDTO(new Cliente(new ClienteDAOImpl(conexao).buscarClientePorId(rs.getInt("Id_Cliente")))));
         pedido.setData(rs.getDate("Data").toLocalDate());
 
         // Lê o valor do estado e garante que ele esteja em maiúsculas
@@ -192,31 +192,28 @@ public class PedidoDAOImpl implements PedidoDAO {
             throw new IllegalArgumentException("Valor inválido para o estado: " + estadoString, e);
         }
 
-        EstadoPedido estadoPedido = createEstado(estadoEnum);
-        pedido.setEstado(estadoPedido);
-        return new TabelaPedidoDTO(pedido);
+        pedido.setEstado(estadoEnum);
+        TabelaPedidoDTO tabelaPedidoDTO = new TabelaPedidoDTO();
+        tabelaPedidoDTO.setPedidoDTO(pedido);
+        return tabelaPedidoDTO;
     }
 
     private TabelaPedidoDTO instanciarTabelaPedidoServico(ResultSet rs) throws SQLException {
         TabelaPedidoDTO tabelaPedidoDTO = instanciarTabelaPedido(rs);
         ServicoDTO servicoDTO = new ServicoDAOImpl(conexao).buscarServicoPorId(rs.getInt("Id_Servico"));
-        tabelaPedidoDTO.setDescricaoServico(servicoDTO.getDescricao());
-        tabelaPedidoDTO.setValorServico(servicoDTO.getPreco());
-        tabelaPedidoDTO.setTipoServico(servicoDTO.getTipo());
-
+        tabelaPedidoDTO.setServicoDTO(servicoDTO);
         return tabelaPedidoDTO;
     }
 
     private TabelaPedidoDTO instanciarTabelaPedidoAll(ResultSet rs) throws SQLException{
         TabelaPedidoDTO tabelaPedidoDTO = instanciarTabelaPedidoServico(rs);
         ProdutoDTO produtoDTO = new ProdutoDAOImpl(conexao).buscarProdutoPorId(rs.getInt("Id_Produto"));
+        tabelaPedidoDTO.setProdutoDTO(produtoDTO);
 
         PedidoProdutoDTO pedidoProdutoDTO = new PedidoProdutoDAOImpl(conexao).buscarPedidoProduto(rs.getInt("Id_Pedido"),
                 rs.getInt("Id_Produto"));
 
-        tabelaPedidoDTO.setNomeProduto(produtoDTO.getNomeProduto());
-        tabelaPedidoDTO.setPrecoPedidoProduto(pedidoProdutoDTO.getPreco());
-        tabelaPedidoDTO.setQuantidadePedidoProduto(pedidoProdutoDTO.getQuantidade());
+        tabelaPedidoDTO.setPedidoProdutoDTO(pedidoProdutoDTO);
 
         return tabelaPedidoDTO;
     }
@@ -239,16 +236,6 @@ public class PedidoDAOImpl implements PedidoDAO {
         EstadoPedido estadoPedido = createEstado(estadoEnum);
         pedido.setEstado(estadoPedido);
         return new PedidoDTO(pedido);
-    }
-
-    private PedidoDTO instanciarPedidoServico(ResultSet rs) throws SQLException {
-        PedidoDTO PedidoDTO = instanciarPedido(rs);
-        ServicoDTO servicoDTO = new ServicoDAOImpl(conexao).buscarServicoPorId(rs.getInt("Id_Servico"));
-        PedidoDTO.setDescricaoServico(servicoDTO.getDescricao());
-        PedidoDTO.setValorServico(servicoDTO.getPreco());
-        PedidoDTO.setTipoServico(servicoDTO.getTipo());
-
-        return PedidoDTO;
     }
 
     private EstadoPedido createEstado(Estado estadoEnum) {

@@ -3,20 +3,17 @@ package org.acgprojeto.util;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TableView;
-import org.acgprojeto.dto.ClienteDTO;
-import org.acgprojeto.dto.PedidoDTO;
-import org.acgprojeto.dto.ProdutoDTO;
-import org.acgprojeto.dto.ServicoDTO;
+import org.acgprojeto.dto.*;
 
 import java.time.LocalDate;
 import java.util.List;
 
 public class AtualizarVisaoTabelas {
 
-    public static ObservableList<PedidoDTO> tabelaFiltradaPedido(String filtro, List<PedidoDTO> pedidos, TableView<PedidoDTO> table) {
-        ObservableList<PedidoDTO> listaFiltrada = FXCollections.observableArrayList();
-        for (PedidoDTO pedido : pedidos) {
-            if (filtroPedido(pedido, filtro)) {
+    public static ObservableList<TabelaPedidoDTO> tabelaFiltradaPedido(String filtro, List<TabelaPedidoDTO> pedidos, TableView<TabelaPedidoDTO> table) {
+        ObservableList<TabelaPedidoDTO> listaFiltrada = FXCollections.observableArrayList();
+        for (TabelaPedidoDTO pedido : pedidos) {
+            if (filtroPedido(pedido.getPedidoDTO(), filtro)) {
                 listaFiltrada.add(pedido);
             }
         }

@@ -19,6 +19,7 @@ import org.acgprojeto.dao.impl.ServicoDAOImpl;
 import org.acgprojeto.db.DB;
 import org.acgprojeto.dto.PedidoDTO;
 import org.acgprojeto.dto.ServicoDTO;
+import org.acgprojeto.dto.TabelaPedidoDTO;
 import org.acgprojeto.model.enums.Tipo;
 import org.acgprojeto.util.FileChooserUtil;
 
@@ -54,6 +55,10 @@ public class ServicoController {
     public List<ServicoDTO> listarServicosPorPedido(PedidoDTO pedidoDTO) {
         return servicoDAO.listarServicosPorPedido(pedidoDTO);
     }
+    public List<ServicoDTO> listarServicosPorPedido(TabelaPedidoDTO pedidoDTO) {
+        return servicoDAO.listarServicosPorPedido(pedidoDTO);
+    }
+
 
     public List<String> listarTodosOsTiposDeServico() {
         List<Tipo> tipos = servicoDAO.listarTodosOsTiposDeServicos();

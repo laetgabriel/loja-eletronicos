@@ -20,6 +20,7 @@ import org.acgprojeto.db.DB;
 import org.acgprojeto.dto.PedidoDTO;
 import org.acgprojeto.dto.PedidoProdutoDTO;
 import org.acgprojeto.dto.ServicoDTO;
+import org.acgprojeto.dto.TabelaPedidoDTO;
 import org.acgprojeto.model.entities.Produto;
 import org.acgprojeto.util.FileChooserUtil;
 
@@ -56,11 +57,11 @@ public class PedidoController {
         return pedidoDAO.buscarPedidoPorId(id);
     }
 
-    public List<PedidoDTO> buscarPedidosParaTabelaPedidos(){return pedidoDAO.buscarPedidosParaTabelaPedidos(); }
+    public List<TabelaPedidoDTO> buscarPedidosParaTabelaPedidos(){return pedidoDAO.buscarPedidosParaTabelaPedidos(); }
 
-    public List<PedidoDTO> buscarPedidosParaTabelaRelPedidos(){return pedidoDAO.buscarPedidosParaTabelaRelPedidos(); }
+    public List<TabelaPedidoDTO> buscarPedidosParaTabelaRelPedidos(){return pedidoDAO.buscarPedidosParaTabelaRelPedidos(); }
 
-    public void gerarRelatorioPedido(Stage stage, ObservableList<PedidoDTO> pedidos) {
+    public void gerarRelatorioPedido(Stage stage, ObservableList<TabelaPedidoDTO> pedidos) {
         File file = FileChooserUtil.gerarFileChooser("Relatório_Pedido").showSaveDialog(stage);
 
         if (file != null) {
@@ -77,14 +78,14 @@ public class PedidoController {
 
                 Set<Integer> pedidosAdicionados = new HashSet<>();
 
-                for (PedidoDTO pedidoDTO : pedidos) {
-                    if (!pedidosAdicionados.contains(pedidoDTO.getIdPedido())) {
-                        pedidosAdicionados.add(pedidoDTO.getIdPedido());  // Marca o pedido como incluído
+                for (TabelaPedidoDTO TabelapedidoDTO : pedidos) {
+                    if (!pedidosAdicionados.contains(TabelapedidoDTO.getPedidoDTO().getIdPedido())) {
+                        pedidosAdicionados.add(TabelapedidoDTO.getPedidoDTO().getIdPedido());  // Marca o pedido como incluído
                         BigDecimal valorTotalPedido = BigDecimal.ZERO;  // Valor total do pedido atual
 
-                        gerarDetalhesPedido(document, pedidoDTO, font);
-                        valorTotalPedido = gerarTabelaProdutos(document, pedidoDTO, font, valorTotalPedido);
-                        valorTotalPedido = gerarTabelaServicos(document, pedidoDTO, font, valorTotalPedido);
+                        gerarDetalhesPedido(document, TabelapedidoDTO, font);
+                        valorTotalPedido = gerarTabelaProdutos(document, TabelapedidoDTO, font, valorTotalPedido);
+                        valorTotalPedido = gerarTabelaServicos(document, TabelapedidoDTO, font, valorTotalPedido);
 
                         // Adiciona o valor total do pedido ao relatório
                         document.add(new Paragraph("Valor total do Pedido: R$" + valorTotalPedido)
@@ -109,15 +110,15 @@ public class PedidoController {
         }
     }
 
-    private void gerarDetalhesPedido(Document document, PedidoDTO pedidoDTO, PdfFont font) {
-        document.add(new Paragraph("ID do Pedido: " + pedidoDTO.getIdPedido()));
-        document.add(new Paragraph("Cliente: " + pedidoDTO.getCliente().getNome()));
-        document.add(new Paragraph("Data: " + pedidoDTO.getData().toString()));
-        document.add(new Paragraph("Estado: " + pedidoDTO.getEstado()));
+    private void gerarDetalhesPedido(Document document, TabelaPedidoDTO tabelaPedidoDTO, PdfFont font) {
+        document.add(new Paragraph("ID do Pedido: " + tabelaPedidoDTO.getPedidoDTO().getIdPedido()));
+        document.add(new Paragraph("Cliente: " + tabelaPedidoDTO.getPedidoDTO().getCliente().getNome()));
+        document.add(new Paragraph("Data: " + tabelaPedidoDTO.getPedidoDTO().getData().toString()));
+        document.add(new Paragraph("Estado: " + tabelaPedidoDTO.getPedidoDTO().getEstado()));
         document.add(new Paragraph("\n"));
     }
 
-    private BigDecimal gerarTabelaProdutos(Document document, PedidoDTO pedidoDTO, PdfFont font, BigDecimal valorTotalPedido) {
+    private BigDecimal gerarTabelaProdutos(Document document, TabelaPedidoDTO pedidoDTO, PdfFont font, BigDecimal valorTotalPedido) {
         PedidoProdutoController pedidoProdutoController = new PedidoProdutoController();
         List<PedidoProdutoDTO> pedidoProdutos = pedidoProdutoController.listarPedidoProduto();
 
@@ -132,7 +133,7 @@ public class PedidoController {
         tableProdutos.addHeaderCell(new Cell().add(new Paragraph("Quantidade")));
 
         for (PedidoProdutoDTO pp : pedidoProdutos) {
-            if (pp.getPedido().getIdPedido().equals(pedidoDTO.getIdPedido())) {
+            if (pp.getPedido().getIdPedido().equals(pedidoDTO.getPedidoDTO().getIdPedido())) {
                 Produto produto = new Produto(pp.getProduto());
                 tableProdutos.addCell(new Paragraph(produto.getIdProduto().toString()));
                 tableProdutos.addCell(new Paragraph(produto.getNomeProduto()));
@@ -150,8 +151,9 @@ public class PedidoController {
         return valorTotalPedido;
     }
 
-    private BigDecimal gerarTabelaServicos(Document document, PedidoDTO pedidoDTO, PdfFont font, BigDecimal valorTotalPedido) {
+    private BigDecimal gerarTabelaServicos(Document document, TabelaPedidoDTO pedidoDTO, PdfFont font, BigDecimal valorTotalPedido) {
         ServicoController servicoController = new ServicoController();
+
         List<ServicoDTO> servicos = servicoController.listarServicosPorPedido(pedidoDTO);
 
         Table tableServicos = new Table(UnitValue.createPercentArray(new float[]{2, 4, 2}))

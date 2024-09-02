@@ -1,6 +1,7 @@
 package org.acgprojeto.dto;
 
 import org.acgprojeto.model.entities.Pedido;
+import org.acgprojeto.model.enums.Categoria;
 import org.acgprojeto.model.enums.Estado;
 import org.acgprojeto.model.enums.Tipo;
 
@@ -9,119 +10,107 @@ import java.time.LocalDate;
 
 public class TabelaPedidoDTO {
 
-    private Integer idPedido;
-    private ClienteDTO cliente;
-    private Estado estado;
-    private LocalDate data;
-    private Tipo tipoServico;
-    private BigDecimal valorServico;
-    private String descricaoServico;
-    private String nomeProduto;
-    private BigDecimal precoPedidoProduto;
-    private Integer quantidadePedidoProduto;
+    private PedidoProdutoDTO pedidoProdutoDTO;
+    private ServicoDTO servicoDTO;
+    private PedidoDTO pedidoDTO;
+    private ProdutoDTO produtoDTO;
 
-    public TabelaPedidoDTO(Integer idPedido, ClienteDTO cliente, Estado estado, LocalDate data) {
-        this.idPedido = idPedido;
-        this.cliente = cliente;
-        this.estado = estado;
-        this.data = data;
+
+    public PedidoProdutoDTO getPedidoProdutoDTO() {
+        return pedidoProdutoDTO;
     }
 
-    public TabelaPedidoDTO(Pedido pedido) {
-        this.idPedido = pedido.getIdPedido();
-        this.cliente = new ClienteDTO(pedido.getCliente());
-        this.estado = Estado.valueOf(pedido.getEstado().getNomeEstado());// Se estado for uma instância de EstadoPedido
-        this.data = pedido.getData();
+    public void setPedidoDTO(PedidoDTO pedidoDTO) {
+        this.pedidoDTO = pedidoDTO;
     }
 
-    public TabelaPedidoDTO() {
-
+    public void setProdutoDTO(ProdutoDTO produtoDTO) {
+        this.produtoDTO = produtoDTO;
     }
 
-    // Getters e Setters
+    public void setPedidoProdutoDTO(PedidoProdutoDTO pedidoProdutoDTO) {
+        this.pedidoProdutoDTO = pedidoProdutoDTO;
+    }
+
+    public ServicoDTO getServicoDTO() {
+        return servicoDTO;
+    }
+
+    public void setServicoDTO(ServicoDTO servicoDTO) {
+        this.servicoDTO = servicoDTO;
+    }
+
+    public PedidoDTO getPedidoDTO() {
+        return pedidoProdutoDTO.getPedido();
+    }
+
+
+
+    public ProdutoDTO getProdutoDTO() {
+        return pedidoProdutoDTO.getProduto();
+    }
+
+    public Integer getIdServico() {
+        return this.servicoDTO.getIdServico();
+    }
+
+    public PedidoDTO getPedido() {
+        return this.servicoDTO.getPedido();
+    }
+
+    public String getDescricaoServico() {
+        return servicoDTO.getDescricao();
+    }
+
+    public BigDecimal getValorServico() {
+        return servicoDTO.getPreco();
+    }
+
+    public Tipo getTipoServico() {
+        return servicoDTO.getTipo();
+    }
+
+    public Integer getIdProduto() {
+        return produtoDTO.getIdProduto();
+    }
+
+    public String getNomeProduto() {
+        return produtoDTO.getNomeProduto();
+    }
+
+    public Categoria getCategoria() {
+        return produtoDTO.getCategoria();
+    }
+
     public Integer getIdPedido() {
-        return idPedido;
+        return pedidoDTO.getIdPedido();
     }
 
-    public void setIdPedido(Integer idPedido) {
-        this.idPedido = idPedido;
+    public BigDecimal getPrecoPedidoProduto() {
+        return pedidoProdutoDTO.getPreco();
     }
 
+    public Integer getQuantidadePedidoProduto() {
+        return pedidoProdutoDTO.getQuantidade();
+    }
     public ClienteDTO getCliente() {
-        return cliente;
+        return pedidoDTO.getCliente();
     }
 
     public String getNomeCliente(){
-        return cliente.getNome();
-    }
-
-    public void setCliente(ClienteDTO cliente) {
-        this.cliente = cliente;
+        return pedidoDTO.getCliente().getNome();
     }
 
     public Estado getEstado() {
-        return estado;
+        return pedidoDTO.getEstado();
     }
 
-    public void setEstado(Estado estado) {
-        this.estado = estado;
-    }
 
     public LocalDate getData() {
-        return data;
+        return pedidoDTO.getData();
     }
 
-    public void setData(LocalDate data) {
-        this.data = data;
-    }
 
-    //Preencher tabelas de pedidos na view
-
-    public void setTipoServico(Tipo tipoServico) {
-        this.tipoServico = tipoServico;
-    }
-
-    public void setValorServico(BigDecimal valorServico) {
-        this.valorServico = valorServico;
-    }
-
-    public void setDescricaoServico(String descricaoServico) {
-        this.descricaoServico = descricaoServico;
-    }
-
-    public BigDecimal getValorServico(){
-        return valorServico;
-    }
-
-    public Tipo getTipoServico(){
-        return tipoServico;
-    }
-
-    public String getDescricaoServico(){
-        return descricaoServico;
-    }
-
-    public String getNomeProduto(){
-        return nomeProduto;
-    }
-
-    public BigDecimal getPrecoPedidoProduto(){
-        return precoPedidoProduto;
-    }
-
-    public Integer getQuantidadePedidoProduto(){
-        return quantidadePedidoProduto;
-    }
-
-    public void setNomeProduto(String nomeProduto) {
-        this.nomeProduto = nomeProduto;
-    }
-
-    public void setPrecoPedidoProduto(BigDecimal precoPedidoProduto) {
-        this.precoPedidoProduto = precoPedidoProduto;
-    }
-
-    public void setQuantidadePedidoProduto(Integer quantidadePedidoProduto) {
-        this.quantidadePedidoProduto = quantidadePedidoProduto;
+    public TabelaPedidoDTO() {
     }
 }

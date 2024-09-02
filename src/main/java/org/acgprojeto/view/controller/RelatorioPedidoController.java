@@ -12,6 +12,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import org.acgprojeto.controller.PedidoController;
 import org.acgprojeto.dto.PedidoDTO;
+import org.acgprojeto.dto.TabelaPedidoDTO;
 import org.acgprojeto.model.enums.Estado;
 import org.acgprojeto.model.enums.Tipo;
 import org.acgprojeto.util.AtualizarVisaoTabelas;
@@ -30,38 +31,38 @@ public class RelatorioPedidoController implements Initializable {
     private Button btnGerarRelatorio;
 
     @FXML
-    private TableView<PedidoDTO> tableRelPedido;
+    private TableView<TabelaPedidoDTO> tableRelPedido;
 
     @FXML
-    private TableColumn<PedidoDTO, String> colIdPedido;
+    private TableColumn<TabelaPedidoDTO, String> colIdPedido;
 
     @FXML
-    private TableColumn<PedidoDTO, String> colNomeCliente;
+    private TableColumn<TabelaPedidoDTO, String> colNomeCliente;
 
     @FXML
-    private TableColumn<PedidoDTO, String> colNomeProduto;
+    private TableColumn<TabelaPedidoDTO, String> colNomeProduto;
 
     @FXML
-    private TableColumn<PedidoDTO, BigDecimal> colPrecoPedidoProduto;
+    private TableColumn<TabelaPedidoDTO, BigDecimal> colPrecoPedidoProduto;
 
     @FXML
-    private TableColumn<PedidoDTO, Integer> colQuantidadePedidoProduto;
+    private TableColumn<TabelaPedidoDTO, Integer> colQuantidadePedidoProduto;
 
     @FXML
-    private TableColumn<PedidoDTO, Estado> colEstado;
+    private TableColumn<TabelaPedidoDTO, Estado> colEstado;
 
     @FXML
-    private TableColumn<PedidoDTO, Tipo> colTipo;
+    private TableColumn<TabelaPedidoDTO, Tipo> colTipo;
 
     @FXML
-    private TableColumn<PedidoDTO, BigDecimal> colTotalServico;
+    private TableColumn<TabelaPedidoDTO, BigDecimal> colTotalServico;
 
     @FXML
-    private TableColumn<PedidoDTO, LocalDate> colData;
+    private TableColumn<TabelaPedidoDTO, LocalDate> colData;
 
-    private ObservableList<PedidoDTO> pedidos;
+    private ObservableList<TabelaPedidoDTO> pedidos;
 
-    private ObservableList<PedidoDTO> pedidosFiltro;
+    private ObservableList<TabelaPedidoDTO> pedidosFiltro;
 
     @FXML
     private ComboBox<String> comboBoxFiltro;
@@ -82,7 +83,7 @@ public class RelatorioPedidoController implements Initializable {
 
 
     public void atualizarTabelaRelPedidos(){
-        List<PedidoDTO> listaPedidos = pedidoController.buscarPedidosParaTabelaRelPedidos();
+        List<TabelaPedidoDTO> listaPedidos = pedidoController.buscarPedidosParaTabelaRelPedidos();
         pedidos = FXCollections.observableList(listaPedidos);
         pedidosFiltro = FXCollections.observableList(listaPedidos);
         tableRelPedido.setItems(pedidos);

@@ -13,6 +13,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import org.acgprojeto.dto.PedidoDTO;
+import org.acgprojeto.dto.TabelaPedidoDTO;
 import org.acgprojeto.model.enums.Estado;
 import org.acgprojeto.model.enums.Tipo;
 import org.acgprojeto.view.App;
@@ -64,7 +65,7 @@ public class PedidoController implements Initializable {
     private ObservableList<String> listaOpcoes;
 
     @FXML
-    private TableView<PedidoDTO> tableViewPedido;
+    private TableView<TabelaPedidoDTO> tableViewPedido;
 
     @FXML
     private TableColumn<PedidoDTO, String> colNomeCliente;
@@ -84,7 +85,7 @@ public class PedidoController implements Initializable {
     @FXML
     private TableColumn<PedidoDTO, LocalDate> colData;
 
-    private ObservableList<PedidoDTO> pedidos;
+    private ObservableList<TabelaPedidoDTO> pedidos;
 
     @FXML
     public void onMenuItemPedido() {
@@ -139,7 +140,7 @@ public class PedidoController implements Initializable {
 
 
     public void atualizarTabelaPedidos(){
-        List<PedidoDTO> listaPedidos = controller.buscarPedidosParaTabelaPedidos();
+        List<TabelaPedidoDTO> listaPedidos = controller.buscarPedidosParaTabelaPedidos();
         pedidos = FXCollections.observableList(listaPedidos);
         tableViewPedido.setItems(pedidos);
 
