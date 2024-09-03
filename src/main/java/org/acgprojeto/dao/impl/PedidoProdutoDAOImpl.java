@@ -4,6 +4,7 @@ import org.acgprojeto.dao.PedidoDAO;
 import org.acgprojeto.dao.PedidoProdutoDAO;
 import org.acgprojeto.dao.ProdutoDAO;
 import org.acgprojeto.db.exceptions.DBException;
+import org.acgprojeto.dto.ClienteDTO;
 import org.acgprojeto.dto.PedidoProdutoDTO;
 import org.acgprojeto.model.entities.Pedido;
 import org.acgprojeto.model.entities.PedidoProduto;
@@ -109,6 +110,24 @@ public class PedidoProdutoDAOImpl implements PedidoProdutoDAO {
             throw new DBException("Erro ao listar PedidoProduto: ");
         }
         return pedidoProdutos;
+    }
+
+    public PedidoProdutoDTO obterUltimoPedidoProduto(){
+        String sql = "SELECT * FROM pedido_possui_produto ORDER BY Id_Pedido DESC LIMIT 1";
+        PedidoProdutoDTO ultimoPedidoProduto = null;
+
+        try (PreparedStatement stmt = conexao.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            if (rs.next()) {
+                ultimoPedidoProduto = instanciarPedidoProduto(rs);
+            }
+        } catch (SQLException e) {
+            throw new DBException("Erro ao obter o último pedido relacionado ao produto: " + e.getMessage());
+        }
+
+        return ultimoPedidoProduto;
+
     }
 
     private PedidoProdutoDTO instanciarPedidoProduto(ResultSet rs) throws SQLException {

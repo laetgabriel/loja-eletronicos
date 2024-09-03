@@ -131,7 +131,7 @@ public class ProdutoController implements Initializable, ProdutoObserver {
                 controller.excluirProduto(produto.getIdProduto());
                 atualizarProdutos();
             }catch (DBException e){
-                Alertas.mostrarAlerta("Erro", "Erro ao excluir produto!", Alert.AlertType.ERROR);
+                Alertas.mostrarAlerta("Erro", "Esse produto contem pedidos", Alert.AlertType.ERROR);
             }
         }
 

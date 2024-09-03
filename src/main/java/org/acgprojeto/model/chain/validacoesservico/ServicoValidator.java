@@ -1,4 +1,4 @@
-package org.acgprojeto.model.chain.validacoes;
+package org.acgprojeto.model.chain.validacoesservico;
 
 import org.acgprojeto.dto.ServicoDTO;
 import org.acgprojeto.model.chain.ServicoHandler;

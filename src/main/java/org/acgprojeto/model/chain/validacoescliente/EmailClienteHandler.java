@@ -18,7 +18,6 @@ public class EmailClienteHandler extends ClienteHandler {
             return super.handle(clienteDTO);
         }
         if(!clienteDTO.getEmail().matches(EMAIL_REGEX)){
-            Alertas.mostrarAlerta("Erro", "Formato do email inválido", Alert.AlertType.ERROR);
             throw new ValidacaoException("Erro ao inserir e-mail");
         }
         return super.handle(clienteDTO);

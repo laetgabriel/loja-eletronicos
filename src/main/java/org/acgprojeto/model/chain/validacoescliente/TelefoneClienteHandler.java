@@ -16,7 +16,6 @@ public class TelefoneClienteHandler extends ClienteHandler {
             return super.handle(clienteDTO);
         }
         if(clienteDTO.getTelefone().length() == 9){
-            Alertas.mostrarAlerta("Erro", "O telefone deve conter 9 dígitos", Alert.AlertType.ERROR);
             return clienteDTO;
         }else
             return super.handle(clienteDTO);

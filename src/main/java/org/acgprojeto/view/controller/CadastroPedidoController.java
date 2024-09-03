@@ -11,7 +11,7 @@ import org.acgprojeto.controller.PedidoController;
 import org.acgprojeto.controller.ProdutoController;
 import org.acgprojeto.dto.*;
 import org.acgprojeto.model.chain.exceptions.ValidacaoException;
-import org.acgprojeto.model.chain.validacoes.ServicoValidator;
+import org.acgprojeto.model.chain.validacoesservico.ServicoValidator;
 import org.acgprojeto.model.chain.validacoescliente.ClienteValidator;
 import org.acgprojeto.model.entities.Cliente;
 import org.acgprojeto.model.entities.Pedido;
@@ -84,11 +84,11 @@ public class CadastroPedidoController implements Initializable {
         data.setValue(LocalDate.now());
         Restricoes.setTextFieldDouble(txtPrecoServico);
 
+        btnAdicionarProduto.setDisable(true);
+        btnAdicionarServico.setDisable(true);
+
         choiceBoxTipoServico.getItems().addAll("COMPRA", "VENDA", "CONSERTO");
         choiceBoxTipoServico.setValue("VENDA");
-
-        btnAdicionarServico.setDisable(true);
-        btnAdicionarProduto.setDisable(true);
 
         try {
             List<ClienteDTO> listaClientes = clienteController.listarTodosOsClientes();
@@ -103,7 +103,7 @@ public class CadastroPedidoController implements Initializable {
                     txtNomeCliente.setDisable(true);
                     txtEmailCliente.setDisable(true);
                     txtTelefoneCliente.setDisable(true);
-                }else {
+                } else {
                     txtNomeCliente.setDisable(false);
                     txtEmailCliente.setDisable(false);
                     txtTelefoneCliente.setDisable(false);
@@ -112,16 +112,6 @@ public class CadastroPedidoController implements Initializable {
             });
 
             atualizarComboBoxProduto();
-
-            choiceBoxTipoServico.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-                if("COMPRA".equals(newValue)) {
-                    comboBoxProduto.setDisable(true);
-                    btnAdicionarProduto.setDisable(true);
-                }else {
-                    comboBoxProduto.setDisable(false);
-                    btnAdicionarProduto.setDisable(false);
-                }
-            });
 
         } catch (Exception ignored) {
             Alertas.mostrarAlerta("Erro", "Não foi possível carregar os dados.", Alert.AlertType.ERROR);
@@ -132,40 +122,19 @@ public class CadastroPedidoController implements Initializable {
     private void salvarPedido() {
 
         String quantidadeString = txtQuantidadeProduto.getText();
+        int quantidadeInt = 0;
         Tipo tipo = TipoStringParaEnum(choiceBoxTipoServico.getValue());
         ProdutoDTO produto = comboBoxProduto.getValue();
         atualizarComboBoxProduto();
-        int quantidadeInt;
-        try {
-            quantidadeInt = Integer.parseInt(quantidadeString);
-        } catch (NumberFormatException e) {
-            Alertas.mostrarAlerta("Erro", "Quantidade inválida", Alert.AlertType.ERROR);
-            return;
-        }
-
-        if (produto == null) {
-            Alertas.mostrarAlerta("Erro", "Produto não selecionado", Alert.AlertType.ERROR);
-            return;
-        }
-
-        if (quantidadeString.isEmpty() || quantidadeInt > produto.getQuantidadeEstoque()) {
-            Alertas.mostrarAlerta("Erro", "Quantidade para esse produto indisponível no estoque", Alert.AlertType.ERROR);
-            return;
-        } else {
-            produto.setQuantidadeEstoque(produto.getQuantidadeEstoque() - quantidadeInt);
-            produtoController.atualizarProduto(produto);
-        }
-
         ClienteDTO clienteDTO =
                 comboBoxClientes.getValue() != null ?
                         comboBoxClientes.getValue() : new ClienteDTO(null,
                         txtNomeCliente.getText(),
                         txtEmailCliente.getText(),
                         txtTelefoneCliente.getText());
-
         Cliente cliente = null;
-
         try {
+
             if (comboBoxClientes.getValue() != null) {
                 clienteDTO = comboBoxClientes.getValue();
             } else {
@@ -173,15 +142,13 @@ public class CadastroPedidoController implements Initializable {
                 clienteController.inserirCliente(clienteDTO);
                 clienteDTO = clienteController.obterUltimoCliente();
             }
-        }catch (ValidacaoException _){
-            return;
-        }
+
         cliente = new Cliente(clienteDTO);
 
 
         Pedido pedido = new Pedido(null, cliente, data.getValue());
         PedidoDTO pedidoDTO = new PedidoDTO(pedido);
-        try {
+
             pedidoController.inserirPedido(pedidoDTO);
 
             ServicoDTO servicoDTO = new ServicoDTO(
@@ -194,22 +161,39 @@ public class CadastroPedidoController implements Initializable {
             );
 
             chainServico.validateServico(servicoDTO);
+            validarProduto(produto);
+            validarQuantidadeProduto(quantidadeString, produto);
+            quantidadeInt = Integer.parseInt(quantidadeString);
             servicoController.inserirServico(servicoDTO);
+            produto.setQuantidadeEstoque(produto.getQuantidadeEstoque() - quantidadeInt);
+            produtoController.atualizarProduto(produto);
+            atualizarComboBoxProduto();
             pedidoProdutoController.inserirPedidoProduto
                     (new PedidoProdutoDTO(
                             pedidoController.obterUltimoPedido(),
-                            comboBoxProduto.getValue(),
-                            comboBoxProduto.getValue().getPreco(),
+                            produto,
+                            produto.getPreco(),
                             quantidadeInt));
-            btnAdicionarServico.setDisable(false);
-            btnAdicionarProduto.setDisable(false);
+            txtNomeCliente.setDisable(true);
+            txtEmailCliente.setDisable(true);
+            txtTelefoneCliente.setDisable(true);
             txtDescricaoServico.setDisable(true);
             txtPrecoServico.setDisable(true);
-            btnSalvar.setDisable(true);
+            txtQuantidadeProduto.setDisable(true);
+            comboBoxProduto.setDisable(true);
+            comboBoxClientes.setDisable(true);
+            choiceBoxTipoServico.setDisable(true);
+            btnAdicionarServico.setDisable(false);
+            btnAdicionarProduto.setDisable(false);
+            data.setDisable(true);
         } catch (ValidacaoException e) {
+            Alertas.mostrarAlerta("ERRO", e.getMessage(), Alert.AlertType.ERROR);
             PedidoDTO ultimoPedido = pedidoController.obterUltimoPedido();
             if (ultimoPedido != null) {
                 pedidoController.excluirPedido(ultimoPedido.getIdPedido());
+                if (comboBoxClientes.getValue() == null) {
+                    clienteController.excluirCliente(clienteController.obterUltimoCliente().getIdCliente());
+                }
             }
 
         }
@@ -261,14 +245,14 @@ public class CadastroPedidoController implements Initializable {
 
                 chainServico.validateServico(servicoDTO);
                 servicoController.inserirServico(servicoDTO);
-            }catch (ValidacaoException _) {
-
+            } catch (ValidacaoException e) {
+                Alertas.mostrarAlerta("ERRO", e.getMessage(), Alert.AlertType.ERROR);
             }
         }
     }
 
     @FXML
-    public void abrirDialogProduto(){
+    public void abrirDialogProduto() {
         Dialog<ButtonType> dialog = new Dialog<>();
         dialog.setTitle("Adicionar Produto");
         dialog.setHeaderText("Selecione um produto");
@@ -276,19 +260,38 @@ public class CadastroPedidoController implements Initializable {
         ComboBox<ProdutoDTO> comboBoxProduto = new ComboBox<>();
         comboBoxProduto.getItems().addAll(produtoController.listarTodosOsProdutos());
 
+        TextField txtQuantidade = new TextField();
+        txtQuantidade.setPromptText("Quantidade");
+
         ButtonType buttonTypeOk = new ButtonType("ADICIONAR", ButtonBar.ButtonData.OK_DONE);
         dialog.getDialogPane().getButtonTypes().addAll(buttonTypeOk, ButtonType.CANCEL);
 
         VBox vBox = new VBox();
         vBox.setSpacing(12);
-        vBox.getChildren().addAll(new Label("Produto: "), comboBoxProduto);
+        vBox.getChildren().addAll(new Label("Digite a quantidade... "), txtQuantidade, new Label("Produto: "), comboBoxProduto);
 
         dialog.getDialogPane().setContent(vBox);
 
         Optional<ButtonType> result = dialog.showAndWait();
 
         if (result.isPresent() && result.get() == buttonTypeOk) {
-            System.out.println(comboBoxProduto.getValue());
+            atualizarComboBoxProduto();
+            String quantidadeString = String.valueOf(txtQuantidade.getText());
+            int quantidade;
+            ProdutoDTO produto = comboBoxProduto.getValue();
+            try {
+                validarProduto(produto);
+                validarQuantidadeProduto(quantidadeString, produto);
+                quantidade = Integer.parseInt(quantidadeString);
+
+                pedidoProdutoController.inserirPedidoProduto(new PedidoProdutoDTO(
+                        pedidoController.obterUltimoPedido(),
+                        produto, produto.getPreco(),
+                        quantidade));
+                atualizarComboBoxProduto();
+            } catch (ValidacaoException e) {
+                Alertas.mostrarAlerta("ERRO", e.getMessage(), Alert.AlertType.ERROR);
+            }
         }
 
     }
@@ -307,6 +310,24 @@ public class CadastroPedidoController implements Initializable {
         listaProdutos.removeIf(produtoDTO -> produtoDTO.getQuantidadeEstoque() == 0);
         ObservableList<ProdutoDTO> produtos = FXCollections.observableArrayList(listaProdutos);
         comboBoxProduto.setItems(produtos);
+    }
+
+    private void validarQuantidadeProduto(String quantidadeTxt, ProdutoDTO produtoDTO) {
+        if (quantidadeTxt == null || quantidadeTxt.isEmpty() || !quantidadeTxt.matches("\\d+")) {
+            throw new ValidacaoException("Quantidade inválida");
+        }
+
+        int quantidade = Integer.parseInt(quantidadeTxt);
+
+        if (quantidade > produtoDTO.getQuantidadeEstoque()) {
+            throw new ValidacaoException("Quantidade indisponível");
+        }
+    }
+
+    private void validarProduto(ProdutoDTO produtoDTO) {
+        if (produtoDTO == null) {
+            throw new ValidacaoException("Selecione um produto para adicionar");
+        }
     }
 
 }
