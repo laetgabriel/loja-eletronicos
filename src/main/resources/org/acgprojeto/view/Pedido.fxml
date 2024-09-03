@@ -51,18 +51,18 @@
                     </font>
                 </Label>
 
-                            <Button fx:id="btnNovo" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#onBtnNovo" prefHeight="26.0" prefWidth="105.0" style="-fx-background-color: green;" text="Novo" textFill="WHITE" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="126.0">
+                            <Button fx:id="btnNovo" alignment="CENTER" contentDisplay="CENTER" layoutY="127.2" mnemonicParsing="false" onAction="#onBtnNovo" prefHeight="26.0" prefWidth="117.0" style="-fx-background-color: green;" text="Novo" textFill="WHITE" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="127.0">
                     <font>
                         <Font name="System Bold" size="12.0" />
                     </font>
                 </Button>
 
-                            <Label layoutX="118.0" layoutY="129.0" text="Filtro por data:" AnchorPane.leftAnchor="118.0" AnchorPane.topAnchor="129.0">
+                            <Label layoutX="137.0" layoutY="129.0" text="Filtro por data:" AnchorPane.leftAnchor="137.0" AnchorPane.topAnchor="129.0">
                     <font>
                         <Font name="System Bold" size="15.0" />
                     </font>
                 </Label>
-            <ComboBox fx:id="comboBoxFiltro" layoutX="238.0" layoutY="127.0" onAction="#onComboBoxFiltroChanged" prefWidth="150.0" promptText="selecione o período" />
+            <ComboBox fx:id="comboBoxFiltroData" layoutX="256.0" layoutY="127.0" onAction="#onComboBoxFiltroChanged" prefWidth="150.0" promptText="selecione o período" />
 
                             <TableView fx:id="tableViewPedido" prefHeight="421.0" prefWidth="884.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="167.0">
                     <columns>
@@ -72,11 +72,18 @@
                         <TableColumn fx:id="colTipo" minWidth="8.0" prefWidth="103.20001220703125" text="Tipo" />
                         <TableColumn fx:id="colEstado" prefWidth="108.80001831054688" text="Estado" />
                         <TableColumn fx:id="colData" minWidth="0.0" prefWidth="68.79998779296875" text="Data" />
-                        <TableColumn fx:id="colDetalhe" minWidth="0.0" prefWidth="82.4000244140625" text="Detalhe" />
-                        <TableColumn fx:id="colAtualizar" prefWidth="84.0" text="Atualizar" />
-                        <TableColumn fx:id="colExcluir" prefWidth="85.5999755859375" text="Excluir" />
+                  <TableColumn fx:id="colMudarEstado" prefWidth="116.0" />
+                        <TableColumn fx:id="colDetalhe" minWidth="0.0" />
+                        <TableColumn fx:id="colAtualizar" />
+                        <TableColumn fx:id="colExcluir" />
                     </columns>
                 </TableView>
+            <Label layoutX="418.0" layoutY="130.0" text="Filtro por estado:">
+               <font>
+                  <Font name="System Bold" size="15.0" />
+               </font>
+            </Label>
+            <ComboBox fx:id="comboBoxFiltroEstado" layoutX="550.0" layoutY="127.0" onAction="#onComboBoxFiltroChanged" prefHeight="26.0" prefWidth="207.0" promptText="selecione o estado do pedido" />
             </children>
         </AnchorPane>
     </content>

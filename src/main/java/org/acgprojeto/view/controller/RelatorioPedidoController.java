@@ -64,7 +64,10 @@ public class RelatorioPedidoController implements Initializable {
     private ObservableList<TabelaPedidoDTO> pedidosFiltro;
 
     @FXML
-    private ComboBox<String> comboBoxFiltro;
+    private ComboBox<String> comboBoxFiltroData;
+
+    @FXML
+    private ComboBox<String> comboBoxFiltroEstado;
 
     private ObservableList<String> listaOpcoes;
 
@@ -76,8 +79,18 @@ public class RelatorioPedidoController implements Initializable {
 
     @FXML
     public void onComboBoxFiltroChanged() {
-        String filtroSelecionado = comboBoxFiltro.getValue();
-        tabelaFiltrada(filtroSelecionado);
+        String filtroSelecionadoData = comboBoxFiltroData.getValue();
+        String filtroSelecionadoEstado = comboBoxFiltroEstado.getValue();
+
+        if (filtroSelecionadoData == null) {
+            filtroSelecionadoData = "";
+        }
+
+        if (filtroSelecionadoEstado == null) {
+            filtroSelecionadoEstado = "";
+        }
+
+        tabelaFiltrada(filtroSelecionadoData, filtroSelecionadoEstado);
     }
 
 
@@ -89,8 +102,9 @@ public class RelatorioPedidoController implements Initializable {
 
     }
 
-    private void tabelaFiltrada(String filtro) {
-        pedidosFiltro = AtualizarVisaoTabelas.tabelaFiltradaPedido(filtro, pedidos, tableRelPedido);
+    private void tabelaFiltrada(String filtroData, String filtroEstado) {
+        pedidosFiltro = AtualizarVisaoTabelas.tabelaFiltradaPedido(filtroData, filtroEstado,
+                pedidos, tableRelPedido);;
     }
 
     @Override
@@ -103,7 +117,17 @@ public class RelatorioPedidoController implements Initializable {
         opcoes.add("Mês");
         opcoes.add("Todos");
         listaOpcoes = FXCollections.observableList(opcoes);
-        comboBoxFiltro.setItems(listaOpcoes);
+        comboBoxFiltroData.setItems(listaOpcoes);
+
+        List<String> opcoesEstado = new ArrayList<>();
+        opcoesEstado.add(Estado.ANDAMENTO.toString());
+        opcoesEstado.add(Estado.CANCELADO.toString());
+        opcoesEstado.add(Estado.FINALIZADO.toString());
+        opcoesEstado.add(Estado.PRONTO.toString());
+        opcoesEstado.add("TODOS");
+
+        listaOpcoes = FXCollections.observableList(opcoesEstado);
+        comboBoxFiltroEstado.setItems(listaOpcoes);
 
         colIdPedido.setCellValueFactory(new PropertyValueFactory<>("idPedido"));
         colNomeCliente.setCellValueFactory(new PropertyValueFactory<>("NomeCliente"));
@@ -120,7 +144,9 @@ public class RelatorioPedidoController implements Initializable {
     }
 
     public void setPedidos(ObservableList<TabelaPedidoDTO> pedidos){
-        this.pedidos = pedidos;
+        pedidosFiltro = pedidos;
         tableRelPedido.setItems(pedidos);
+        comboBoxFiltroData.setDisable(true);
+        comboBoxFiltroEstado.setDisable(true);
     }
 }
