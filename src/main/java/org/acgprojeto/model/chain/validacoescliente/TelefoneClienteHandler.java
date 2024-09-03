@@ -5,14 +5,18 @@ import org.acgprojeto.dto.ClienteDTO;
 import org.acgprojeto.dto.ServicoDTO;
 import org.acgprojeto.model.chain.ClienteHandler;
 import org.acgprojeto.model.chain.ServicoHandler;
+import org.acgprojeto.model.chain.exceptions.ValidacaoException;
 import org.acgprojeto.util.Alertas;
 
 public class TelefoneClienteHandler extends ClienteHandler {
 
     @Override
     public ClienteDTO handle(ClienteDTO clienteDTO) {
-        if(clienteDTO.getTelefone() == null || clienteDTO.getTelefone().isEmpty()){
-            Alertas.mostrarAlerta("Erro", "Erro no telefone do cliente", Alert.AlertType.ERROR);
+        if (clienteDTO.getTelefone() == null || clienteDTO.getTelefone().isEmpty()) {
+            return super.handle(clienteDTO);
+        }
+        if(clienteDTO.getTelefone().length() == 9){
+            Alertas.mostrarAlerta("Erro", "O telefone deve conter 9 dígitos", Alert.AlertType.ERROR);
             return clienteDTO;
         }else
             return super.handle(clienteDTO);

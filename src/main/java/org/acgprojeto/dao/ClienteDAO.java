@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface ClienteDAO {
 
-    ClienteDTO inserirCliente(ClienteDTO cliente);
+    void inserirCliente(ClienteDTO cliente);
     void atualizarCliente(ClienteDTO cliente);
     void excluirCliente(Integer id);
     ClienteDTO buscarClientePorId(Integer id);

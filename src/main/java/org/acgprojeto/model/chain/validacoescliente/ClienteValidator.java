@@ -15,8 +15,8 @@ public class ClienteValidator {
         ClienteHandler emailClienteHandler = new EmailClienteHandler();
 
         nomeClienteHandler
-                .setNextHandler(telefoneClienteHandler)
-                .setNextHandler(emailClienteHandler);
+                .setNextHandler(emailClienteHandler)
+                .setNextHandler(telefoneClienteHandler);
 
         this.firstHandler = nomeClienteHandler;
     }

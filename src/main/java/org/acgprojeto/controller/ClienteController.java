@@ -30,13 +30,12 @@ public class ClienteController {
 
     ClienteDAO clienteDAO = new ClienteDAOImpl(DB.getConexao());
 
-    public ClienteDTO inserirCliente(ClienteDTO clienteDTO) {
+    public void inserirCliente(ClienteDTO clienteDTO) {
         if (isEmailOrTelefoneCadastrado(clienteDTO.getEmail(), clienteDTO.getTelefone())) {
             Alertas.mostrarAlerta("Erro na inserção", "Email ou telefone já cadastrado", Alert.AlertType.ERROR);
         } else {
             clienteDAO.inserirCliente(clienteDTO);
         }
-        return clienteDTO;
     }
 
     public void atualizarCliente(ClienteDTO clienteDTO) {
@@ -63,6 +62,9 @@ public class ClienteController {
         List<ClienteDTO> clientes = listarTodosOsClientes();
         for (ClienteDTO cliente : clientes) {
             if (cliente.getEmail() != null) {
+                if (cliente.getEmail().isEmpty() && cliente.getTelefone().isEmpty()) {
+                    return false;
+                }
                 if (cliente.getEmail().equalsIgnoreCase(email) && cliente.getTelefone().equals(telefone)) {
                     return true;
                 }

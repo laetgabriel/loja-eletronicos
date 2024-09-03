@@ -18,7 +18,7 @@ public class ClienteDAOImpl implements ClienteDAO {
     }
 
     @Override
-    public ClienteDTO inserirCliente(ClienteDTO clienteDTO) {
+    public void inserirCliente(ClienteDTO clienteDTO) {
         Cliente cliente = new Cliente(clienteDTO);
 
         try (PreparedStatement stmt = conexao.prepareStatement(
@@ -42,7 +42,6 @@ public class ClienteDAOImpl implements ClienteDAO {
         } catch (SQLException e) {
             throw new DBException("Erro ao inserir cliente: ");
         }
-        return clienteDTO;
     }
 
     @Override

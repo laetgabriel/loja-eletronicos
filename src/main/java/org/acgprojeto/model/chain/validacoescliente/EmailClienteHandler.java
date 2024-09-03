@@ -5,17 +5,23 @@ import org.acgprojeto.dto.ClienteDTO;
 import org.acgprojeto.dto.ServicoDTO;
 import org.acgprojeto.model.chain.ClienteHandler;
 import org.acgprojeto.model.chain.ServicoHandler;
+import org.acgprojeto.model.chain.exceptions.ValidacaoException;
 import org.acgprojeto.util.Alertas;
 
 public class EmailClienteHandler extends ClienteHandler {
 
+    private static final String EMAIL_REGEX = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
+
     @Override
-    public ClienteDTO handle(ClienteDTO clienteDTO) {
-        if(clienteDTO.getEmail() == null || clienteDTO.getEmail().isEmpty()){
-            Alertas.mostrarAlerta("Erro", "Erro no email do cliente", Alert.AlertType.ERROR);
-            return clienteDTO;
-        } else {
+    public ClienteDTO handle(ClienteDTO clienteDTO)  {
+        if (clienteDTO.getEmail() == null || clienteDTO.getEmail().isEmpty()) {
             return super.handle(clienteDTO);
         }
+        if(!clienteDTO.getEmail().matches(EMAIL_REGEX)){
+            Alertas.mostrarAlerta("Erro", "Formato do email inválido", Alert.AlertType.ERROR);
+            return clienteDTO;
+        }
+        return super.handle(clienteDTO);
+        }
     }
-}
+
