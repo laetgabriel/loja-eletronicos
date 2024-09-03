@@ -66,15 +66,15 @@
 
                             <TableView fx:id="tableViewPedido" prefHeight="421.0" prefWidth="884.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="167.0">
                     <columns>
-                        <TableColumn fx:id="colNomeCliente" prefWidth="104.0" text="Cliente" />
-                        <TableColumn fx:id="colDescricao" prefWidth="126.0" text="Descrição" />
-                        <TableColumn fx:id="colValor" prefWidth="73.0" text="Valor" />
-                        <TableColumn fx:id="colTipo" minWidth="8.0" prefWidth="92.0" text="Tipo" />
-                        <TableColumn fx:id="colEstado" prefWidth="75.0" text="Estado" />
-                        <TableColumn fx:id="colData" minWidth="0.0" prefWidth="70.4" text="Data" />
-                        <TableColumn prefWidth="75.0" text="Detalhe" />
-                        <TableColumn prefWidth="75.0" text="Atualizar" />
-                        <TableColumn prefWidth="75.0" text="Excluir" />
+                        <TableColumn fx:id="colNomeCliente" prefWidth="113.6000046133995" text="Cliente" />
+                        <TableColumn fx:id="colDescricao" prefWidth="147.2000503540039" text="Descrição" />
+                        <TableColumn fx:id="colValor" prefWidth="89.60003662109375" text="Valor" />
+                        <TableColumn fx:id="colTipo" minWidth="8.0" prefWidth="103.20001220703125" text="Tipo" />
+                        <TableColumn fx:id="colEstado" prefWidth="108.80001831054688" text="Estado" />
+                        <TableColumn fx:id="colData" minWidth="0.0" prefWidth="68.79998779296875" text="Data" />
+                        <TableColumn minWidth="0.0" prefWidth="82.4000244140625" text="Detalhe" />
+                        <TableColumn prefWidth="84.0" text="Atualizar" />
+                        <TableColumn prefWidth="85.5999755859375" text="Excluir" />
                     </columns>
                 </TableView>
             </children>

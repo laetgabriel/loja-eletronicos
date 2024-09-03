@@ -41,7 +41,7 @@ public class TabelaPedidoDTO {
     }
 
     public PedidoDTO getPedidoDTO() {
-        return pedidoProdutoDTO.getPedido();
+        return pedidoDTO;
     }
 
 
@@ -52,10 +52,6 @@ public class TabelaPedidoDTO {
 
     public Integer getIdServico() {
         return this.servicoDTO.getIdServico();
-    }
-
-    public PedidoDTO getPedido() {
-        return this.servicoDTO.getPedido();
     }
 
     public String getDescricaoServico() {
@@ -93,6 +89,7 @@ public class TabelaPedidoDTO {
     public Integer getQuantidadePedidoProduto() {
         return pedidoProdutoDTO.getQuantidade();
     }
+
     public ClienteDTO getCliente() {
         return pedidoDTO.getCliente();
     }

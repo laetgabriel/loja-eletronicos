@@ -133,11 +133,10 @@ public class PedidoDAOImpl implements PedidoDAO {
 
     @Override
     public List<TabelaPedidoDTO> buscarPedidosParaTabelaPedidos() {
-        String sql = "SELECT p.Id_Pedido, c.Id_Cliente, s.Id_Servico, c.Nome, s.Descricao, s.Preco, s.Tipo, p.Estado," +
-                " p.`Data` " +
+        String sql = "SELECT p.Id_Pedido, c.Id_Cliente, s.Id_Servico, c.Nome, s.Descricao, s.Preco, s.Tipo, p.Estado, p.`Data` " +
                 "FROM pedido p " +
-                "INNER JOIN cliente c ON p.Id_Cliente = c.Id_Cliente " +
-                "INNER JOIN servico s ON s.Id_Pedido = p.Id_Pedido ";
+                "LEFT JOIN cliente c ON p.Id_Cliente = c.Id_Cliente " +
+                "LEFT JOIN servico s ON s.Id_Pedido = p.Id_Pedido ";
 
         List<TabelaPedidoDTO> pedidos = new ArrayList<>();
 
@@ -155,12 +154,12 @@ public class PedidoDAOImpl implements PedidoDAO {
 
     @Override
     public List<TabelaPedidoDTO> buscarPedidosParaTabelaRelPedidos() {
-        String sql = "SELECT p.Id_Pedido, c.Id_Cliente, ppp.Id_Produto, s.Id_Servico, C.Nome as Cliente,P2.Nome as Produto, PPP.Preco, PPP.Quant,P.Estado,s.Tipo,s.Preco as Total,p.`Data` " +
-                    "FROM pedido_possui_produto ppp " +
-                    "INNER JOIN pedido p ON ppp.Id_Pedido = p.Id_Pedido " +
-                    "INNER JOIN produto p2 ON ppp.Id_Produto = p2.Id_Produto " +
-                    "INNER JOIN cliente c ON p.Id_Cliente = c.Id_Cliente " +
-                    "INNER JOIN servico s ON s.Id_Pedido = p.Id_Pedido ";
+        String sql = "SELECT p.Id_Pedido, c.Id_Cliente, ppp.Id_Produto, s.Id_Servico, c.Nome as Cliente, p2.Nome as Produto, ppp.Preco, ppp.Quant,P.Estado,s.Tipo,s.Preco as Total,p.`Data` " +
+                "FROM pedido p " +
+                "LEFT JOIN cliente c ON p.Id_Cliente = c.Id_Cliente " +
+                "LEFT JOIN servico s ON s.Id_Pedido = p.Id_Pedido " +
+                "LEFT JOIN pedido_possui_produto ppp ON ppp.Id_Pedido = p.Id_Pedido " +
+                "LEFT JOIN produto p2 ON ppp.Id_Produto = p2.Id_Produto";
 
         List<TabelaPedidoDTO> pedidos = new ArrayList<>();
 
@@ -168,7 +167,7 @@ public class PedidoDAOImpl implements PedidoDAO {
              ResultSet rs = stmt.executeQuery()) {
 
             while (rs.next()) {
-                pedidos.add(instanciarTabelaPedidoAll(rs));
+                pedidos.add(instanciarTabelaPedidoAll(rs,null));
             }
         } catch (SQLException e) {
             throw new DBException("Erro ao listar PedidosAll: ");
@@ -176,11 +175,48 @@ public class PedidoDAOImpl implements PedidoDAO {
         return pedidos;
     }
 
+    public List<TabelaPedidoDTO> buscarPedidosComProdutos() {
+        List<Integer> listaIndiceServico = indicesServicoPorPedido();
+
+        String sql = "SELECT p.Id_Pedido, c.Id_Cliente, ppp.Id_Produto, c.Nome as Cliente, p2.Nome as Produto, ppp.Preco, ppp.Quant, p.Estado, p.Data " +
+                "FROM pedido p " +
+                "LEFT JOIN cliente c ON p.Id_Cliente = c.Id_Cliente " +
+                "LEFT JOIN pedido_possui_produto ppp ON ppp.Id_Pedido = p.Id_Pedido " +
+                "LEFT JOIN produto p2 ON ppp.Id_Produto = p2.Id_Produto";
+
+        List<TabelaPedidoDTO> pedidos = new ArrayList<>();
+
+        try (PreparedStatement stmt = conexao.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            int indiceServico = 0;
+
+            while (rs.next()) {
+                if (indiceServico < listaIndiceServico.size()) {
+                    pedidos.add(instanciarTabelaPedidoAll(rs, listaIndiceServico.get(indiceServico)));
+                    indiceServico++;
+                } else {
+                    pedidos.add(instanciarTabelaPedidoAll(rs, null));
+                }
+            }
+        } catch (SQLException e) {
+            throw new DBException("Erro ao listar Pedidos com Produtos: " + e);
+        }
+        return pedidos;
+    }
+
+
 
     private TabelaPedidoDTO instanciarTabelaPedido(ResultSet rs) throws SQLException {
         PedidoDTO pedido = new PedidoDTO();
         pedido.setIdPedido(rs.getInt("Id_Pedido"));
-        pedido.setCliente(new ClienteDTO(new Cliente(new ClienteDAOImpl(conexao).buscarClientePorId(rs.getInt("Id_Cliente")))));
+
+        ClienteDTO clienteDTO = new ClienteDAOImpl(conexao).buscarClientePorId(rs.getInt("Id_Cliente"));
+        if(clienteDTO == null) {
+            clienteDTO = new ClienteDTO();
+        }
+
+        pedido.setCliente(clienteDTO);
         pedido.setData(rs.getDate("Data").toLocalDate());
 
         // Lê o valor do estado e garante que ele esteja em maiúsculas
@@ -201,19 +237,40 @@ public class PedidoDAOImpl implements PedidoDAO {
     private TabelaPedidoDTO instanciarTabelaPedidoServico(ResultSet rs) throws SQLException {
         TabelaPedidoDTO tabelaPedidoDTO = instanciarTabelaPedido(rs);
         ServicoDTO servicoDTO = new ServicoDAOImpl(conexao).buscarServicoPorId(rs.getInt("Id_Servico"));
+        if (servicoDTO == null){
+            servicoDTO = new ServicoDTO();
+        }
+
         tabelaPedidoDTO.setServicoDTO(servicoDTO);
         return tabelaPedidoDTO;
+
     }
 
-    private TabelaPedidoDTO instanciarTabelaPedidoAll(ResultSet rs) throws SQLException{
-        TabelaPedidoDTO tabelaPedidoDTO = instanciarTabelaPedidoServico(rs);
+    private TabelaPedidoDTO instanciarTabelaPedidoAll(ResultSet rs, Integer indiceServico) throws SQLException{
+        TabelaPedidoDTO tabelaPedidoDTO = instanciarTabelaPedido(rs);
+
         ProdutoDTO produtoDTO = new ProdutoDAOImpl(conexao).buscarProdutoPorId(rs.getInt("Id_Produto"));
+
+        if(produtoDTO == null){
+            produtoDTO = ProdutoDTO.ProdutoDTOBuilder.aProdutoDTO().build();
+        }
         tabelaPedidoDTO.setProdutoDTO(produtoDTO);
 
         PedidoProdutoDTO pedidoProdutoDTO = new PedidoProdutoDAOImpl(conexao).buscarPedidoProduto(rs.getInt("Id_Pedido"),
                 rs.getInt("Id_Produto"));
 
+        if (pedidoProdutoDTO == null){
+            pedidoProdutoDTO = new PedidoProdutoDTO();
+        }
         tabelaPedidoDTO.setPedidoProdutoDTO(pedidoProdutoDTO);
+
+        ServicoDTO servicoDTO = new ServicoDAOImpl(conexao).buscarServicoPorId(indiceServico);
+        if (servicoDTO == null){
+            servicoDTO = new ServicoDTO();
+        }
+
+        tabelaPedidoDTO.setServicoDTO(servicoDTO);
+
 
         return tabelaPedidoDTO;
     }
@@ -236,6 +293,27 @@ public class PedidoDAOImpl implements PedidoDAO {
         EstadoPedido estadoPedido = createEstado(estadoEnum);
         pedido.setEstado(estadoPedido);
         return new PedidoDTO(pedido);
+    }
+
+    private List<Integer> indicesServicoPorPedido() {
+        String sql = "SELECT p.Id_Pedido, c.Id_Cliente, s.Id_Servico, c.Nome, s.Descricao, s.Preco, s.Tipo, p.Estado,p.`Data` " +
+                "FROM pedido AS P " +
+                "LEFT JOIN cliente c ON p.Id_Cliente = c.Id_Cliente " +
+                "LEFT JOIN servico s ON s.Id_Pedido = p.Id_Pedido ";
+
+        List<Integer> servicos = new ArrayList<>();
+
+        try (PreparedStatement stmt = conexao.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                servicos.add(rs.getInt("Id_Servico"));
+            }
+        } catch (SQLException e) {
+            throw new DBException("Erro ao listar IDs de serviços: " + e);
+        }
+
+        return servicos;
     }
 
     private EstadoPedido createEstado(Estado estadoEnum) {

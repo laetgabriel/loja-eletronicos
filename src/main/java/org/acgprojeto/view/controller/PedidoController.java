@@ -69,22 +69,22 @@ public class PedidoController implements Initializable {
     private TableView<TabelaPedidoDTO> tableViewPedido;
 
     @FXML
-    private TableColumn<PedidoDTO, String> colNomeCliente;
+    private TableColumn<TabelaPedidoDTO, String> colNomeCliente;
 
     @FXML
-    private TableColumn<PedidoDTO, String> colDescricao;
+    private TableColumn<TabelaPedidoDTO, String> colDescricao;
 
     @FXML
-    private TableColumn<PedidoDTO, BigDecimal> colValor;
+    private TableColumn<TabelaPedidoDTO, BigDecimal> colValor;
 
     @FXML
-    private TableColumn<PedidoDTO, Tipo> colTipo;
+    private TableColumn<TabelaPedidoDTO, Tipo> colTipo;
 
     @FXML
-    private TableColumn<PedidoDTO, Estado> colEstado;
+    private TableColumn<TabelaPedidoDTO, Estado> colEstado;
 
     @FXML
-    private TableColumn<PedidoDTO, LocalDate> colData;
+    private TableColumn<TabelaPedidoDTO, LocalDate> colData;
 
     private ObservableList<TabelaPedidoDTO> pedidos;
 
@@ -169,7 +169,7 @@ public class PedidoController implements Initializable {
             telaAtualContent.getChildren().addAll(telaNovaContent.getChildren());
 
         } catch (IOException e) {
-            Alertas.mostrarAlerta("Erro", "Erro ao carregar tela de pedido", Alert.AlertType.ERROR);
+            Alertas.mostrarAlerta("Erro", "Erro ao carregar tela!", Alert.AlertType.ERROR);
         }
     }
 

@@ -121,9 +121,6 @@ public class ProdutoDTO {
         }
 
         public ProdutoDTO build() {
-            if (nomeProduto == null || categoria == null || preco == null || quantidadeEstoque == null) {
-                throw new IllegalStateException("Campos obrigatórios não podem ser nulos");
-            }
             return new ProdutoDTO(idProduto, nomeProduto, categoria, preco, quantidadeEstoque);
         }
     }

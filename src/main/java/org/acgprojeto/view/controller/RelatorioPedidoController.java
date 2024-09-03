@@ -83,7 +83,7 @@ public class RelatorioPedidoController implements Initializable {
 
 
     public void atualizarTabelaRelPedidos(){
-        List<TabelaPedidoDTO> listaPedidos = pedidoController.buscarPedidosParaTabelaRelPedidos();
+        List<TabelaPedidoDTO> listaPedidos = pedidoController.buscarPedidosComProdutos();
         pedidos = FXCollections.observableList(listaPedidos);
         pedidosFiltro = FXCollections.observableList(listaPedidos);
         tableRelPedido.setItems(pedidos);

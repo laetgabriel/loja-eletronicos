@@ -17,11 +17,7 @@ import javafx.stage.Stage;
 import org.acgprojeto.dao.PedidoDAO;
 import org.acgprojeto.dao.impl.PedidoDAOImpl;
 import org.acgprojeto.db.DB;
-import org.acgprojeto.dto.PedidoDTO;
-import org.acgprojeto.dto.PedidoProdutoDTO;
-import org.acgprojeto.dto.ServicoDTO;
-import org.acgprojeto.dto.TabelaPedidoDTO;
-import org.acgprojeto.model.entities.Produto;
+import org.acgprojeto.dto.*;
 import org.acgprojeto.util.FileChooserUtil;
 
 import java.io.File;
@@ -61,6 +57,8 @@ public class PedidoController {
 
     public List<TabelaPedidoDTO> buscarPedidosParaTabelaRelPedidos(){return pedidoDAO.buscarPedidosParaTabelaRelPedidos(); }
 
+    public List<TabelaPedidoDTO> buscarPedidosComProdutos(){ return pedidoDAO.buscarPedidosComProdutos(); }
+
     public void gerarRelatorioPedido(Stage stage, ObservableList<TabelaPedidoDTO> pedidos) {
         File file = FileChooserUtil.gerarFileChooser("Relatório_Pedido").showSaveDialog(stage);
 
@@ -81,20 +79,20 @@ public class PedidoController {
                 for (TabelaPedidoDTO TabelapedidoDTO : pedidos) {
                     if (!pedidosAdicionados.contains(TabelapedidoDTO.getPedidoDTO().getIdPedido())) {
                         pedidosAdicionados.add(TabelapedidoDTO.getPedidoDTO().getIdPedido());  // Marca o pedido como incluído
-                        BigDecimal valorTotalPedido = BigDecimal.ZERO;  // Valor total do pedido atual
+                        BigDecimal valorTotaPedido = BigDecimal.ZERO;  // Valor total do pedido atual
 
                         gerarDetalhesPedido(document, TabelapedidoDTO, font);
-                        valorTotalPedido = gerarTabelaProdutos(document, TabelapedidoDTO, font, valorTotalPedido);
-                        valorTotalPedido = gerarTabelaServicos(document, TabelapedidoDTO, font, valorTotalPedido);
+                        gerarTabelaProdutos(document, TabelapedidoDTO, font);
+                        valorTotaPedido = gerarTabelaServicos(document, TabelapedidoDTO, font, valorTotaPedido);
 
                         // Adiciona o valor total do pedido ao relatório
-                        document.add(new Paragraph("Valor total do Pedido: R$" + valorTotalPedido)
+                        document.add(new Paragraph("Valor total do Pedido: R$" + valorTotaPedido)
                                 .setFont(font)
                                 .setFontSize(14));
                         document.add(new Paragraph("\n"));
 
                         // Acumula o valor total de todos os pedidos
-                        valorTotalGeral = valorTotalGeral.add(valorTotalPedido);
+                        valorTotalGeral = valorTotalGeral.add(valorTotaPedido);
                     }
                 }
 
@@ -118,7 +116,7 @@ public class PedidoController {
         document.add(new Paragraph("\n"));
     }
 
-    private BigDecimal gerarTabelaProdutos(Document document, TabelaPedidoDTO pedidoDTO, PdfFont font, BigDecimal valorTotalPedido) {
+    private void gerarTabelaProdutos(Document document, TabelaPedidoDTO pedidoDTO, PdfFont font) {
         PedidoProdutoController pedidoProdutoController = new PedidoProdutoController();
         List<PedidoProdutoDTO> pedidoProdutos = pedidoProdutoController.listarPedidoProduto();
 
@@ -134,13 +132,12 @@ public class PedidoController {
 
         for (PedidoProdutoDTO pp : pedidoProdutos) {
             if (pp.getPedido().getIdPedido().equals(pedidoDTO.getPedidoDTO().getIdPedido())) {
-                Produto produto = new Produto(pp.getProduto());
-                tableProdutos.addCell(new Paragraph(produto.getIdProduto().toString()));
-                tableProdutos.addCell(new Paragraph(produto.getNomeProduto()));
-                tableProdutos.addCell(new Paragraph(String.valueOf(produto.getCategoria())));
-                tableProdutos.addCell(new Paragraph(String.valueOf(produto.getPreco())));
+                ProdutoDTO produtoDTO = pp.getProduto();
+                tableProdutos.addCell(new Paragraph(produtoDTO.getIdProduto().toString()));
+                tableProdutos.addCell(new Paragraph(produtoDTO.getNomeProduto()));
+                tableProdutos.addCell(new Paragraph(String.valueOf(produtoDTO.getCategoria())));
+                tableProdutos.addCell(new Paragraph(String.valueOf(produtoDTO.getPreco())));
                 tableProdutos.addCell(new Paragraph(pp.getQuantidade().toString()));
-                valorTotalPedido = valorTotalPedido.add(pp.getPreco().multiply(new BigDecimal(pp.getQuantidade())));
             }
         }
 
@@ -148,7 +145,6 @@ public class PedidoController {
         document.add(tableProdutos);
         document.add(new Paragraph("\n"));
 
-        return valorTotalPedido;
     }
 
     private BigDecimal gerarTabelaServicos(Document document, TabelaPedidoDTO pedidoDTO, PdfFont font, BigDecimal valorTotalPedido) {
