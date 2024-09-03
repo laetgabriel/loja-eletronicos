@@ -112,7 +112,7 @@
          </image>
       </ImageView>
       <Button fx:id="btnCancelar" alignment="CENTER" contentDisplay="CENTER" layoutX="364.0" layoutY="501.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="258.0" style="-fx-background-color: green;" text="Cancelar" textFill="WHITE" />
-      <Button fx:id="btnAdicionarProduto" alignment="CENTER" contentDisplay="CENTER" layoutX="51.0" layoutY="446.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="258.0" style="-fx-background-color: green;" text="Adicionar Produto" textFill="WHITE" />
+      <Button fx:id="btnAdicionarProduto" alignment="CENTER" contentDisplay="CENTER" layoutX="51.0" layoutY="446.0" mnemonicParsing="false" onAction="#abrirDialogProduto" prefHeight="30.0" prefWidth="258.0" style="-fx-background-color: green;" text="Adicionar Produto" textFill="WHITE" />
       <Label layoutX="364.0" layoutY="65.0" text="Procurar Cliente">
          <font>
             <Font size="15.0" />
@@ -131,12 +131,12 @@
             <Image url="@../icones/quantidade.png" />
          </image>
       </ImageView>
-      <TextField layoutX="396.0" layoutY="411.0" prefHeight="21.0" prefWidth="225.0" />
+      <TextField fx:id="txtQuantidadeProduto" layoutX="396.0" layoutY="411.0" prefHeight="21.0" prefWidth="225.0" />
       <Label layoutX="357.0" layoutY="388.0" text="Quantidade de produtos">
          <font>
             <Font size="15.0" />
          </font>
       </Label>
-      <Label fx:id="lblErroPrecoServico1" layoutX="400.0" layoutY="437.0" prefHeight="18.0" prefWidth="210.0" text="Erro na quantidade de produtos" textFill="RED" />
+      <Label fx:id="lblErroQuantidadeProduto" layoutX="400.0" layoutY="437.0" prefHeight="18.0" prefWidth="210.0" text="Erro na quantidade de produtos" textFill="RED" />
    </children>
 </AnchorPane>

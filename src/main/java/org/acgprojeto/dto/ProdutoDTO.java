@@ -128,7 +128,8 @@ public class ProdutoDTO {
         }
     }
 
-    public String toString(){
-        return nomeProduto + " " + categoria + " R$" + preco + " " + "Quant: " + quantidadeEstoque ;
+    @Override
+    public String toString() {
+        return nomeProduto + ". Categoria: " + categoria + ", R$" + String.format("%.2f", preco) + ". Quantidade: " + quantidadeEstoque;
     }
 }
