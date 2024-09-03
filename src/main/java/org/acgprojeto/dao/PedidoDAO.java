@@ -12,9 +12,9 @@ public interface PedidoDAO {
     void atualizarEstadoPedido(PedidoDTO pedido);
     void excluirPedido(Integer id);
     PedidoDTO buscarPedidoPorId(Integer id);
+    List<TabelaPedidoDTO> buscarTabelaPedidoPorId(Integer id);
     List<PedidoDTO> buscarPedidos();
     List<TabelaPedidoDTO> buscarPedidosParaTabelaPedidos();
     List<TabelaPedidoDTO> buscarPedidosParaTabelaRelPedidos();
-    List<TabelaPedidoDTO> buscarPedidosComProdutos();
 
 }

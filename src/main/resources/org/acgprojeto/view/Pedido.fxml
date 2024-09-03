@@ -72,9 +72,9 @@
                         <TableColumn fx:id="colTipo" minWidth="8.0" prefWidth="103.20001220703125" text="Tipo" />
                         <TableColumn fx:id="colEstado" prefWidth="108.80001831054688" text="Estado" />
                         <TableColumn fx:id="colData" minWidth="0.0" prefWidth="68.79998779296875" text="Data" />
-                        <TableColumn minWidth="0.0" prefWidth="82.4000244140625" text="Detalhe" />
-                        <TableColumn prefWidth="84.0" text="Atualizar" />
-                        <TableColumn prefWidth="85.5999755859375" text="Excluir" />
+                        <TableColumn fx:id="colDetalhe" minWidth="0.0" prefWidth="82.4000244140625" text="Detalhe" />
+                        <TableColumn fx:id="colAtualizar" prefWidth="84.0" text="Atualizar" />
+                        <TableColumn fx:id="colExcluir" prefWidth="85.5999755859375" text="Excluir" />
                     </columns>
                 </TableView>
             </children>

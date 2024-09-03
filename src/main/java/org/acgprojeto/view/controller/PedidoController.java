@@ -1,5 +1,6 @@
 package org.acgprojeto.view.controller;
 
+import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -13,7 +14,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import org.acgprojeto.dto.PedidoDTO;
+import org.acgprojeto.db.exceptions.DBException;
 import org.acgprojeto.dto.TabelaPedidoDTO;
 import org.acgprojeto.model.enums.Estado;
 import org.acgprojeto.model.enums.Tipo;
@@ -27,6 +28,7 @@ import java.net.URL;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class PedidoController implements Initializable {
@@ -82,6 +84,15 @@ public class PedidoController implements Initializable {
 
     @FXML
     private TableColumn<TabelaPedidoDTO, Estado> colEstado;
+
+    @FXML
+    private TableColumn<TabelaPedidoDTO, TabelaPedidoDTO> colDetalhe;
+
+    @FXML
+    private TableColumn<TabelaPedidoDTO, TabelaPedidoDTO> colAtualizar;
+
+    @FXML
+    private TableColumn<TabelaPedidoDTO, TabelaPedidoDTO> colExcluir;
 
     @FXML
     private TableColumn<TabelaPedidoDTO, LocalDate> colData;
@@ -144,6 +155,9 @@ public class PedidoController implements Initializable {
         List<TabelaPedidoDTO> listaPedidos = controller.buscarPedidosParaTabelaPedidos();
         pedidos = FXCollections.observableList(listaPedidos);
         tableViewPedido.setItems(pedidos);
+        iniciarBotoesDeDetalhe();
+        iniciarBotoesDeAtualizar();
+        iniciarBotoesDeRemover();
 
     }
 
@@ -191,6 +205,99 @@ public class PedidoController implements Initializable {
         } catch (IOException e) {
             Alertas.mostrarAlerta("Erro", "Erro ao carregar tela de cadastro", Alert.AlertType.ERROR);
         }
+    }
+
+    public void detalharPedido(TabelaPedidoDTO tabelaPedidoDTO){
+        try {
+            Stage loginStage = App.getMainStage();
+            ScrollPane telaAtual = (ScrollPane) loginStage.getScene().getRoot();
+            AnchorPane telaAtualContent = (AnchorPane) telaAtual.getContent();
+
+            Node menuBar = telaAtualContent.getChildren().get(0);
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/acgprojeto/view/RelatorioPedido.fxml"));
+            ScrollPane telaNova = loader.load();
+            AnchorPane telaNovaContent = (AnchorPane) telaNova.getContent();
+
+            telaAtualContent.getChildren().clear();
+            telaAtualContent.getChildren().add(menuBar);
+            telaAtualContent.getChildren().addAll(telaNovaContent.getChildren());
+
+            RelatorioPedidoController relatorioPedidoController = loader.getController();
+            List<TabelaPedidoDTO> tabelaPedidoDTOS = controller.buscarTabelaPedidoPorId(tabelaPedidoDTO.getIdPedido());
+            relatorioPedidoController.setPedidos(FXCollections.observableArrayList(tabelaPedidoDTOS));
+
+        } catch (IOException e) {
+            Alertas.mostrarAlerta("Erro", "Erro ao detalhar pedido!", Alert.AlertType.ERROR);
+        }
+
+    }
+
+    public void removerPedido(TabelaPedidoDTO tabelaPedidoDTO){
+        Optional<ButtonType> escolha = Alertas.showConfirmation("Confirmação", "Tem certeza que quer deletar esse " +
+                "pedido?");
+
+        if(escolha.get() == ButtonType.OK){
+            try{
+                controller.excluirPedido(tabelaPedidoDTO.getPedidoDTO().getIdPedido());
+                atualizarTabelaPedidos();
+            }catch (DBException e){
+                Alertas.mostrarAlerta("Erro", "Erro ao excluir pedido!", Alert.AlertType.ERROR);
+            }
+        }
+
+    }
+
+    private void iniciarBotoesDeDetalhe() {
+        colDetalhe.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue()));
+        colDetalhe.setCellFactory(param -> new TableCell<TabelaPedidoDTO, TabelaPedidoDTO>() {
+            private final Button button = new Button("Detalhe");
+            protected void updateItem(TabelaPedidoDTO obj, boolean empty) {
+                super.updateItem(obj, empty);
+                if (obj == null) {
+                    setGraphic(null);
+                    return;
+                }
+                setGraphic(button);
+                button.setOnAction(event -> detalharPedido(obj));
+            }
+        });
+    }
+
+    private void iniciarBotoesDeAtualizar() {
+        colAtualizar.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue()));
+        colAtualizar.setCellFactory(param -> new TableCell<TabelaPedidoDTO, TabelaPedidoDTO>() {
+
+            private final Button button = new Button("Atualizar");
+            protected void updateItem(TabelaPedidoDTO obj, boolean empty) {
+                super.updateItem(obj, empty);
+                if (obj == null || empty) {
+                    setGraphic(null);
+                    return;
+                }
+
+                setGraphic(button);
+                button.setOnAction(event -> {
+                    onBtnNovo();
+                });
+            }
+        });
+    }
+
+    private void iniciarBotoesDeRemover() {
+        colExcluir.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue()));
+        colExcluir.setCellFactory(param -> new TableCell<TabelaPedidoDTO, TabelaPedidoDTO>() {
+            private final Button button = new Button("Remover");
+            protected void updateItem(TabelaPedidoDTO obj, boolean empty) {
+                super.updateItem(obj, empty);
+                if (obj == null) {
+                    setGraphic(null);
+                    return;
+                }
+                setGraphic(button);
+                button.setOnAction(event -> removerPedido(obj));
+            }
+        });
     }
 
 

@@ -115,6 +115,44 @@ public class PedidoDAOImpl implements PedidoDAO {
     }
 
     @Override
+    public List<TabelaPedidoDTO> buscarTabelaPedidoPorId(Integer id) {
+        List<Integer> listaIndiceServico = indicesServicoPorIdPedido(id);
+
+        String sql = "SELECT p.Id_Pedido, c.Id_Cliente, ppp.Id_Produto, c.Nome as Cliente, p2.Nome as Produto, ppp.Preco, ppp.Quant, p.Estado, p.Data " +
+                "FROM pedido p " +
+                "LEFT JOIN cliente c ON p.Id_Cliente = c.Id_Cliente " +
+                "LEFT JOIN pedido_possui_produto ppp ON ppp.Id_Pedido = p.Id_Pedido " +
+                "LEFT JOIN produto p2 ON ppp.Id_Produto = p2.Id_Produto " +
+                "WHERE p.Id_Pedido = ?";
+
+        List<TabelaPedidoDTO> pedidos = new ArrayList<>();
+
+        try (PreparedStatement stmt = conexao.prepareStatement(sql)) {
+            stmt.setInt(1, id);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                int indiceServico = 0;
+
+                while (rs.next()) {
+                    Integer idServico = null;
+
+                    if (indiceServico < listaIndiceServico.size()) {
+                        idServico = listaIndiceServico.get(indiceServico);
+                        indiceServico++;
+                    }
+
+                    pedidos.add(instanciarTabelaPedidoAll(rs, idServico));
+                }
+            }
+        } catch (SQLException e) {
+            throw new DBException("Erro ao listar Pedidos com Produtos: " + e);
+        }
+
+        return pedidos;
+    }
+
+
+    @Override
     public List<PedidoDTO> buscarPedidos() {
         String sql = "SELECT * FROM pedido";
         List<PedidoDTO> pedidos = new ArrayList<>();
@@ -152,30 +190,7 @@ public class PedidoDAOImpl implements PedidoDAO {
         return pedidos;
     }
 
-    @Override
     public List<TabelaPedidoDTO> buscarPedidosParaTabelaRelPedidos() {
-        String sql = "SELECT p.Id_Pedido, c.Id_Cliente, ppp.Id_Produto, s.Id_Servico, c.Nome as Cliente, p2.Nome as Produto, ppp.Preco, ppp.Quant,P.Estado,s.Tipo,s.Preco as Total,p.`Data` " +
-                "FROM pedido p " +
-                "LEFT JOIN cliente c ON p.Id_Cliente = c.Id_Cliente " +
-                "LEFT JOIN servico s ON s.Id_Pedido = p.Id_Pedido " +
-                "LEFT JOIN pedido_possui_produto ppp ON ppp.Id_Pedido = p.Id_Pedido " +
-                "LEFT JOIN produto p2 ON ppp.Id_Produto = p2.Id_Produto";
-
-        List<TabelaPedidoDTO> pedidos = new ArrayList<>();
-
-        try (PreparedStatement stmt = conexao.prepareStatement(sql);
-             ResultSet rs = stmt.executeQuery()) {
-
-            while (rs.next()) {
-                pedidos.add(instanciarTabelaPedidoAll(rs,null));
-            }
-        } catch (SQLException e) {
-            throw new DBException("Erro ao listar PedidosAll: ");
-        }
-        return pedidos;
-    }
-
-    public List<TabelaPedidoDTO> buscarPedidosComProdutos() {
         List<Integer> listaIndiceServico = indicesServicoPorPedido();
 
         String sql = "SELECT p.Id_Pedido, c.Id_Cliente, ppp.Id_Produto, c.Nome as Cliente, p2.Nome as Produto, ppp.Preco, ppp.Quant, p.Estado, p.Data " +
@@ -204,8 +219,6 @@ public class PedidoDAOImpl implements PedidoDAO {
         }
         return pedidos;
     }
-
-
 
     private TabelaPedidoDTO instanciarTabelaPedido(ResultSet rs) throws SQLException {
         PedidoDTO pedido = new PedidoDTO();
@@ -271,7 +284,6 @@ public class PedidoDAOImpl implements PedidoDAO {
 
         tabelaPedidoDTO.setServicoDTO(servicoDTO);
 
-
         return tabelaPedidoDTO;
     }
 
@@ -294,6 +306,31 @@ public class PedidoDAOImpl implements PedidoDAO {
         pedido.setEstado(estadoPedido);
         return new PedidoDTO(pedido);
     }
+
+    private List<Integer> indicesServicoPorIdPedido(Integer idPedido) {
+        String sql = "SELECT s.Id_Servico " +
+                "FROM pedido AS P " +
+                "LEFT JOIN cliente c ON p.Id_Cliente = c.Id_Cliente " +
+                "LEFT JOIN servico s ON s.Id_Pedido = p.Id_Pedido " +
+                "WHERE p.Id_Pedido = ?";
+
+        List<Integer> servicos = new ArrayList<>();
+
+        try (PreparedStatement stmt = conexao.prepareStatement(sql)) {
+            stmt.setInt(1, idPedido);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    servicos.add(rs.getInt("Id_Servico"));
+                }
+            }
+        } catch (SQLException e) {
+            throw new DBException("Erro ao listar IDs de serviços: " + e);
+        }
+
+        return servicos;
+    }
+
 
     private List<Integer> indicesServicoPorPedido() {
         String sql = "SELECT p.Id_Pedido, c.Id_Cliente, s.Id_Servico, c.Nome, s.Descricao, s.Preco, s.Tipo, p.Estado,p.`Data` " +

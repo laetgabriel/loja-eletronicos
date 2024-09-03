@@ -1,16 +1,20 @@
 package org.acgprojeto.view.controller;
 
+import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import org.acgprojeto.db.exceptions.DBException;
 import org.acgprojeto.dto.ProdutoDTO;
 import org.acgprojeto.model.enums.Categoria;
 import org.acgprojeto.util.Alertas;
@@ -22,11 +26,13 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.net.URL;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class ProdutoController implements Initializable, ProdutoObserver {
 
     private org.acgprojeto.controller.ProdutoController controller;
+    public static ProdutoDTO produtoSelecionado;
 
     @FXML
     private Button btnNovo;
@@ -49,6 +55,12 @@ public class ProdutoController implements Initializable, ProdutoObserver {
     @FXML
     private TableColumn<ProdutoDTO, Integer> colQuantidadeEstoque;
 
+    @FXML
+    private TableColumn<ProdutoDTO, ProdutoDTO> colAtualizar;
+
+    @FXML
+    private TableColumn<ProdutoDTO, ProdutoDTO> colExcluir;
+
     private ObservableList<ProdutoDTO> produtos;
 
     @FXML
@@ -56,11 +68,12 @@ public class ProdutoController implements Initializable, ProdutoObserver {
 
     private ObservableList<String> listaOpcoes;
 
+
     @FXML
-    public void onBtnNovo( ) {
+    public void onBtnNovo() {
         loadCadastroView("/org/acgprojeto/view/CadastroProduto.fxml");
     }
-    
+
     private void loadCadastroView(String caminho){
         Stage telaBase = App.getMainStage();
         try {
@@ -69,6 +82,8 @@ public class ProdutoController implements Initializable, ProdutoObserver {
 
             CadastroProdutoController cadastroProdutoController = loader.getController();
             cadastroProdutoController.adicionarObserver(this);
+
+            cadastroProdutoController.setProdutoDTO(getProdutoSelecionado());
 
             Stage palco = new Stage();
             Scene scene = new Scene(novaTela);
@@ -94,7 +109,8 @@ public class ProdutoController implements Initializable, ProdutoObserver {
         List<ProdutoDTO> listaProdutos = controller.listarTodosOsProdutos();
         produtos = FXCollections.observableList(listaProdutos);
         tableProduto.setItems(produtos);
-
+        iniciarBotoesDeAtualizar();
+        iniciarBotoesDeRemover();
     }
 
     private void tabelaFiltrada(String filtro) {
@@ -104,6 +120,61 @@ public class ProdutoController implements Initializable, ProdutoObserver {
     @Override
     public void atualizarProdutos() {
         atualizarTabelaProduto();
+    }
+
+    public void removerProduto(ProdutoDTO produto){
+        Optional<ButtonType> escolha = Alertas.showConfirmation("Confirmação", "Tem certeza que quer deletar esse " +
+                "produto?");
+
+        if(escolha.get() == ButtonType.OK){
+            try{
+                controller.excluirProduto(produto.getIdProduto());
+                atualizarProdutos();
+            }catch (DBException e){
+                Alertas.mostrarAlerta("Erro", "Erro ao excluir produto!", Alert.AlertType.ERROR);
+            }
+        }
+
+    }
+
+    private void iniciarBotoesDeAtualizar() {
+        colAtualizar.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue()));
+        colAtualizar.setCellFactory(param -> new TableCell<ProdutoDTO, ProdutoDTO>() {
+
+            private final Button button = new Button("Atualizar");
+
+            @Override
+            protected void updateItem(ProdutoDTO obj, boolean empty) {
+                super.updateItem(obj, empty);
+                if (obj == null || empty) {
+                    setGraphic(null);
+                    return;
+                }
+
+                setGraphic(button);
+                button.setOnAction(event -> {
+
+                    ProdutoController.produtoSelecionado = obj;
+                    onBtnNovo();
+                });
+            }
+        });
+    }
+
+    private void iniciarBotoesDeRemover() {
+        colExcluir.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue()));
+        colExcluir.setCellFactory(param -> new TableCell<ProdutoDTO, ProdutoDTO>() {
+            private final Button button = new Button("Remover");
+            protected void updateItem(ProdutoDTO obj, boolean empty) {
+                super.updateItem(obj, empty);
+                if (obj == null) {
+                    setGraphic(null);
+                    return;
+                }
+                setGraphic(button);
+                button.setOnAction(event -> removerProduto(obj));
+            }
+        });
     }
 
     @Override
@@ -122,6 +193,10 @@ public class ProdutoController implements Initializable, ProdutoObserver {
         colQuantidadeEstoque.setCellValueFactory(new PropertyValueFactory<>("quantidadeEstoque"));
 
         atualizarTabelaProduto();
+    }
+
+    public ProdutoDTO getProdutoSelecionado() {
+        return produtoSelecionado;
     }
 
 }

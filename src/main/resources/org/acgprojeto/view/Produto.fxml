@@ -38,9 +38,8 @@
                         <TableColumn fx:id="colCategoria" prefWidth="124.80006408691406" text="Categoria" />
                         <TableColumn fx:id="colPreco" prefWidth="92.0" text="Preço" />
                         <TableColumn fx:id="colQuantidadeEstoque" minWidth="8.0" prefWidth="102.40005493164062" text="Quant_Estoque" />
-                        <TableColumn minWidth="8.79998779296875" prefWidth="66.39996337890625" text="Detalhe" />
-                        <TableColumn prefWidth="69.5999755859375" text="Atualizar" />
-                        <TableColumn prefWidth="66.39996337890625" text="Excluir" />
+                        <TableColumn fx:id="colAtualizar" prefWidth="77.59991455078125" />
+                        <TableColumn fx:id="colExcluir" prefWidth="81.5999755859375" />
                     </columns>
                 </TableView>
             </children>

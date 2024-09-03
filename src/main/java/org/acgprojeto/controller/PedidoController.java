@@ -55,9 +55,9 @@ public class PedidoController {
 
     public List<TabelaPedidoDTO> buscarPedidosParaTabelaPedidos(){return pedidoDAO.buscarPedidosParaTabelaPedidos(); }
 
-    public List<TabelaPedidoDTO> buscarPedidosParaTabelaRelPedidos(){return pedidoDAO.buscarPedidosParaTabelaRelPedidos(); }
+    public List<TabelaPedidoDTO> buscarTabelaPedidoPorId(Integer id){ return pedidoDAO.buscarTabelaPedidoPorId(id); };
 
-    public List<TabelaPedidoDTO> buscarPedidosComProdutos(){ return pedidoDAO.buscarPedidosComProdutos(); }
+    public List<TabelaPedidoDTO> buscarPedidosParaTabelaRelPedidos(){ return pedidoDAO.buscarPedidosParaTabelaRelPedidos(); }
 
     public void gerarRelatorioPedido(Stage stage, ObservableList<TabelaPedidoDTO> pedidos) {
         File file = FileChooserUtil.gerarFileChooser("Relatório_Pedido").showSaveDialog(stage);
