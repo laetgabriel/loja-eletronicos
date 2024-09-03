@@ -27,7 +27,7 @@ public class App extends Application {
             Scene cenaLogin = new Scene(login);
             stage.setScene(cenaLogin);
             stage.setTitle("Cyber Tigre Inforcell");
-            stage.setResizable(true);
+            stage.setResizable(false);
             stage.centerOnScreen();
             stage.show();
 

@@ -29,7 +29,7 @@
                <font>
                   <Font name="System Bold" size="15.0" />
                </font></Label>
-            <ComboBox fx:id="comboBoxFiltro" layoutX="269.0" layoutY="127.0" onAction="#onComboBoxFiltroChanged" prefWidth="150.0" promptText="selecione o período" />
+            <ComboBox fx:id="comboBoxFiltroData" layoutX="269.0" layoutY="127.0" onAction="#onComboBoxFiltroChanged" prefWidth="150.0" promptText="selecione o período" />
 
                 <TableView fx:id="tableRelPedido" layoutY="167.0" prefHeight="421.0" prefWidth="884.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="167.0">
                     <columns>
@@ -42,10 +42,14 @@
                         <TableColumn fx:id="colTipo" prefWidth="95.19989013671875" text="Tipo" />
                   <TableColumn fx:id="colTotalServico" prefWidth="88.80010986328125" text="Total" />
                   <TableColumn fx:id="colData" prefWidth="75.0" text="Data" />
-                  <TableColumn prefWidth="75.0" text="Atualizar" />
-                  <TableColumn prefWidth="75.0" text="Excluir" />
                     </columns>
                 </TableView>
+            <Label layoutX="436.0" layoutY="129.0" text="Filtro por estado:">
+               <font>
+                  <Font name="System Bold" size="15.0" />
+               </font>
+            </Label>
+            <ComboBox fx:id="comboBoxFiltroEstado" layoutX="569.0" layoutY="127.0" onAction="#onComboBoxFiltroChanged" prefHeight="26.0" prefWidth="199.0" promptText="selecione o estado do pedido" />
             </children>
         </AnchorPane>
     </content>

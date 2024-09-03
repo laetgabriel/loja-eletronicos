@@ -63,7 +63,11 @@ public class PedidoController implements Initializable {
     private Button btnNovo;
 
     @FXML
-    private ComboBox<String> comboBoxFiltro;
+    private ComboBox<String> comboBoxFiltroData;
+
+    @FXML
+    private ComboBox<String> comboBoxFiltroEstado;
+
 
     private ObservableList<String> listaOpcoes;
 
@@ -84,6 +88,9 @@ public class PedidoController implements Initializable {
 
     @FXML
     private TableColumn<TabelaPedidoDTO, Estado> colEstado;
+
+    @FXML
+    private TableColumn<TabelaPedidoDTO, TabelaPedidoDTO> colMudarEstado;
 
     @FXML
     private TableColumn<TabelaPedidoDTO, TabelaPedidoDTO> colDetalhe;
@@ -146,23 +153,36 @@ public class PedidoController implements Initializable {
 
     @FXML
     public void onComboBoxFiltroChanged() {
-        String filtroSelecionado = comboBoxFiltro.getValue();
-        tabelaFiltrada(filtroSelecionado);
+        String filtroSelecionadoData = comboBoxFiltroData.getValue();
+        String filtroSelecionadoEstado = comboBoxFiltroEstado.getValue();
+
+        if (filtroSelecionadoData == null) {
+            filtroSelecionadoData = "";
+        }
+
+        if (filtroSelecionadoEstado == null) {
+            filtroSelecionadoEstado = "";
+        }
+
+        tabelaFiltrada(filtroSelecionadoData, filtroSelecionadoEstado);
     }
+
 
 
     public void atualizarTabelaPedidos(){
         List<TabelaPedidoDTO> listaPedidos = controller.buscarPedidosParaTabelaPedidos();
         pedidos = FXCollections.observableList(listaPedidos);
         tableViewPedido.setItems(pedidos);
+        iniciarBotoesDeMudarEstado();
         iniciarBotoesDeDetalhe();
         iniciarBotoesDeAtualizar();
         iniciarBotoesDeRemover();
 
     }
 
-    private void tabelaFiltrada(String filtro) {
-        AtualizarVisaoTabelas.tabelaFiltradaPedido(filtro, pedidos, tableViewPedido);
+    private void tabelaFiltrada(String filtroData, String filtroEstado) {
+        AtualizarVisaoTabelas.tabelaFiltradaPedido(filtroData, filtroEstado,
+                pedidos, tableViewPedido);
     }
 
 
@@ -207,6 +227,33 @@ public class PedidoController implements Initializable {
         }
     }
 
+    public void mudarEstado(TabelaPedidoDTO tabelaPedidoDTO) {
+        try {
+            TextInputDialog dialog = new TextInputDialog();
+            dialog.setTitle("Atualizar estado pedido");
+            dialog.setHeaderText("Digite o estado:");
+            dialog.setContentText("Por favor, insira o novo estado de pedido:");
+
+            Optional<String> result = dialog.showAndWait();
+
+            if (result.isPresent()) {
+                String estadoDigitado = result.get().toUpperCase();
+                try {
+                    Estado novoEstado = Estado.valueOf(estadoDigitado);
+                    tabelaPedidoDTO.getPedidoDTO().setEstado(novoEstado);
+                    controller.atualizarEstadoPedido(tabelaPedidoDTO.getPedidoDTO());
+                    Alertas.mostrarAlerta("Sucesso", "Estado do pedido atualizado com sucesso", Alert.AlertType.INFORMATION);
+                    atualizarTabelaPedidos();
+                } catch (IllegalArgumentException e) {
+                    Alertas.mostrarAlerta("Erro", "Estado inválido! Tente novamente.", Alert.AlertType.ERROR);
+                }
+            }
+        } catch (DBException e) {
+            Alertas.mostrarAlerta("Erro", "Erro ao atualizar estado de pedido", Alert.AlertType.ERROR);
+        }
+    }
+
+
     public void detalharPedido(TabelaPedidoDTO tabelaPedidoDTO){
         try {
             Stage loginStage = App.getMainStage();
@@ -248,6 +295,22 @@ public class PedidoController implements Initializable {
 
     }
 
+    private void iniciarBotoesDeMudarEstado() {
+        colMudarEstado.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue()));
+        colMudarEstado.setCellFactory(param -> new TableCell<TabelaPedidoDTO, TabelaPedidoDTO>() {
+            private final Button button = new Button("Mudar Estado");
+            protected void updateItem(TabelaPedidoDTO obj, boolean empty) {
+                super.updateItem(obj, empty);
+                if (obj == null) {
+                    setGraphic(null);
+                    return;
+                }
+                setGraphic(button);
+                button.setOnAction(event -> mudarEstado(obj));
+            }
+        });
+    }
+
     private void iniciarBotoesDeDetalhe() {
         colDetalhe.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue()));
         colDetalhe.setCellFactory(param -> new TableCell<TabelaPedidoDTO, TabelaPedidoDTO>() {
@@ -263,6 +326,7 @@ public class PedidoController implements Initializable {
             }
         });
     }
+
 
     private void iniciarBotoesDeAtualizar() {
         colAtualizar.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue()));
@@ -311,7 +375,17 @@ public class PedidoController implements Initializable {
         opcoes.add("Mês");
         opcoes.add("Todos");
         listaOpcoes = FXCollections.observableList(opcoes);
-        comboBoxFiltro.setItems(listaOpcoes);
+        comboBoxFiltroData.setItems(listaOpcoes);
+
+        List<String> opcoesEstado = new ArrayList<>();
+        opcoesEstado.add(Estado.ANDAMENTO.toString());
+        opcoesEstado.add(Estado.CANCELADO.toString());
+        opcoesEstado.add(Estado.FINALIZADO.toString());
+        opcoesEstado.add(Estado.PRONTO.toString());
+        opcoesEstado.add("TODOS");
+
+        listaOpcoes = FXCollections.observableList(opcoesEstado);
+        comboBoxFiltroEstado.setItems(listaOpcoes);
 
         colNomeCliente.setCellValueFactory(new PropertyValueFactory<>("NomeCliente"));
         colDescricao.setCellValueFactory(new PropertyValueFactory<>("DescricaoServico"));

@@ -4,16 +4,18 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TableView;
 import org.acgprojeto.dto.*;
+import org.acgprojeto.model.enums.Estado;
 
 import java.time.LocalDate;
 import java.util.List;
 
 public class AtualizarVisaoTabelas {
 
-    public static ObservableList<TabelaPedidoDTO> tabelaFiltradaPedido(String filtro, List<TabelaPedidoDTO> pedidos, TableView<TabelaPedidoDTO> table) {
+    public static ObservableList<TabelaPedidoDTO> tabelaFiltradaPedido(String filtroData, String filtroEstado, List<TabelaPedidoDTO> pedidos, TableView<TabelaPedidoDTO> table) {
         ObservableList<TabelaPedidoDTO> listaFiltrada = FXCollections.observableArrayList();
+
         for (TabelaPedidoDTO pedido : pedidos) {
-            if (filtroPedido(pedido.getPedidoDTO(), filtro)) {
+            if (filtroPorData(pedido.getPedidoDTO(), filtroData) && filtroPorEstado(pedido.getPedidoDTO(), filtroEstado)) {
                 listaFiltrada.add(pedido);
             }
         }
@@ -21,23 +23,39 @@ public class AtualizarVisaoTabelas {
         return listaFiltrada;
     }
 
-    private static boolean filtroPedido(PedidoDTO pedidoDTO, String filtro) {
+    private static boolean filtroPorData(PedidoDTO pedidoDTO, String filtroData) {
         LocalDate hoje = LocalDate.now();
-        switch (filtro) {
+
+        switch (filtroData) {
             case "Hoje":
                 return pedidoDTO.getData().isEqual(hoje);
             case "Semanal":
-                LocalDate umaSemanaAtras = hoje.minusWeeks(1);
-                return !pedidoDTO.getData().isBefore(umaSemanaAtras) && !pedidoDTO.getData().isAfter(hoje);
+                return pedidoDTO.getData().isAfter(hoje.minusDays(7)) && pedidoDTO.getData().isBefore(hoje.plusDays(1));
             case "Mês":
-                LocalDate umMesAtras = hoje.minusMonths(1);
-                return !pedidoDTO.getData().isBefore(umMesAtras) && !pedidoDTO.getData().isAfter(hoje);
+                return pedidoDTO.getData().getMonth().equals(hoje.getMonth());
             case "Todos":
-                return true;
             default:
-                return false;
+                return true;
         }
     }
+
+    private static boolean filtroPorEstado(PedidoDTO pedidoDTO, String filtroEstado) {
+        switch (filtroEstado) {
+            case "ANDAMENTO":
+                return pedidoDTO.getEstado().equals(Estado.ANDAMENTO);
+            case "PRONTO":
+                return pedidoDTO.getEstado().equals(Estado.PRONTO);
+            case "CANCELADO":
+                return pedidoDTO.getEstado().equals(Estado.CANCELADO);
+            case "FINALIZADO":
+                return pedidoDTO.getEstado().equals(Estado.FINALIZADO);
+            case "Todos":
+            default:
+                return true;
+        }
+    }
+
+
 
     public static ObservableList<ProdutoDTO> tabelaFiltradaProduto(String filtro, List<ProdutoDTO> produtos, TableView<ProdutoDTO> table) {
         ObservableList<ProdutoDTO> listaFiltrada = FXCollections.observableArrayList();
