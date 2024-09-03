@@ -11,7 +11,6 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import org.acgprojeto.controller.PedidoController;
-import org.acgprojeto.dto.PedidoDTO;
 import org.acgprojeto.dto.TabelaPedidoDTO;
 import org.acgprojeto.model.enums.Estado;
 import org.acgprojeto.model.enums.Tipo;
@@ -118,5 +117,10 @@ public class RelatorioPedidoController implements Initializable {
 
         atualizarTabelaRelPedidos();
 
+    }
+
+    public void setPedidos(ObservableList<TabelaPedidoDTO> pedidos){
+        this.pedidos = pedidos;
+        tableRelPedido.setItems(pedidos);
     }
 }

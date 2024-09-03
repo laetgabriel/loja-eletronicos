@@ -12,6 +12,8 @@ public class PedidoProdutoDTO {
     private BigDecimal preco;
     private Integer quantidade;
 
+    public PedidoProdutoDTO() {}
+
     public PedidoProdutoDTO(PedidoDTO pedido, ProdutoDTO produto, BigDecimal preco, Integer quantidade) {
         this.pedido = pedido;
         this.produto = produto;

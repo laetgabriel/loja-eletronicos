@@ -34,13 +34,12 @@
                 <TableView fx:id="tableProduto" layoutY="167.0" prefHeight="421.0" prefWidth="884.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="167.0">
                     <columns>
                   <TableColumn fx:id="colIdProduto" prefWidth="75.0" text="Id" />
-                        <TableColumn fx:id="colNomeProduto" prefWidth="104.0" text="Nome" />
-                        <TableColumn fx:id="colCategoria" prefWidth="126.0" text="Categoria" />
-                        <TableColumn fx:id="colPreco" prefWidth="73.0" text="Preço" />
-                        <TableColumn fx:id="colQuantidadeEstoque" minWidth="8.0" prefWidth="108.0" text="Quant_Estoque" />
-                        <TableColumn prefWidth="59.20001220703125" text="Detalhe" />
-                        <TableColumn prefWidth="75.0" text="Atualizar" />
-                        <TableColumn prefWidth="75.0" text="Excluir" />
+                        <TableColumn fx:id="colNomeProduto" prefWidth="143.1999740600586" text="Nome" />
+                        <TableColumn fx:id="colCategoria" prefWidth="124.80006408691406" text="Categoria" />
+                        <TableColumn fx:id="colPreco" prefWidth="92.0" text="Preço" />
+                        <TableColumn fx:id="colQuantidadeEstoque" minWidth="8.0" prefWidth="102.40005493164062" text="Quant_Estoque" />
+                        <TableColumn fx:id="colAtualizar" prefWidth="77.59991455078125" />
+                        <TableColumn fx:id="colExcluir" prefWidth="81.5999755859375" />
                     </columns>
                 </TableView>
             </children>

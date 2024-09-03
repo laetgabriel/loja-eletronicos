@@ -8,7 +8,6 @@ import javafx.scene.control.*;
 import javafx.stage.Stage;
 import org.acgprojeto.controller.ProdutoController;
 import org.acgprojeto.dto.ProdutoDTO;
-import org.acgprojeto.model.entities.Produto;
 import org.acgprojeto.model.enums.Categoria;
 import org.acgprojeto.model.exceptions.ValidacaoCadastrosException;
 import org.acgprojeto.util.Alertas;
@@ -22,6 +21,10 @@ import java.util.*;
 public class CadastroProdutoController implements Initializable {
 
     private ProdutoController controller;
+
+    private ProdutoDTO produtoDTO;
+
+    private Boolean isAtualizarProduto = false;
 
     @FXML
     private TextField txtNome;
@@ -58,15 +61,27 @@ public class CadastroProdutoController implements Initializable {
     public void onBtnSalvar() {
         limparErros();
         try {
-            ProdutoDTO produtoDTO = getDadosCampos();
-            controller.inserirProduto(produtoDTO);
-            notificarOuvintes();
-            Stage stage = (Stage) btnSalvar.getScene().getWindow();
-            stage.close();
+            if (!isAtualizarProduto) {
+                produtoDTO = getDadosCampos();
+                controller.inserirProduto(produtoDTO);
+                notificarOuvintes();
+                Stage stage = (Stage) btnSalvar.getScene().getWindow();
+                stage.close();
+            }else{
+                produtoDTO = getDadosCampos();
+                controller.atualizarProduto(produtoDTO);
+                notificarOuvintes();
+                Stage stage = (Stage) btnSalvar.getScene().getWindow();
+                stage.close();
+                org.acgprojeto.view.controller.ProdutoController.produtoSelecionado = null;
+            }
+
+
         } catch (ValidacaoCadastrosException e) {
             setLblErros(e.getErrors());
         } catch (Exception e) {
-            Alertas.mostrarAlerta("Erro", "Erro ao salvar produto!", Alert.AlertType.ERROR);
+            Alertas.mostrarAlerta("Erro", "Erro ao salvar/atualizar produto!", Alert.AlertType.ERROR);
+            e.printStackTrace();
         }
     }
 
@@ -75,6 +90,7 @@ public class CadastroProdutoController implements Initializable {
     @FXML
     public void onBtnCancelar() {
         Stage stage = (Stage) btnCancelar.getScene().getWindow();
+        org.acgprojeto.view.controller.ProdutoController.produtoSelecionado = null;
         stage.close();
     }
 
@@ -102,22 +118,32 @@ public class CadastroProdutoController implements Initializable {
             validacaoCampos.addErro("qtdEstoque", "Quantidade no estoque não pode ser vazio!");
         }
 
-        if(controller.isProdutoCadastrado(nome,categoria)){
+        if(controller.isProdutoCadastrado(nome,categoria) && !isAtualizarProduto){
             validacaoCampos.addErro("nome", "Produto com esse nome e categoria já existe!");
         }
 
         if (!validacaoCampos.getErrors().isEmpty()) {
             throw validacaoCampos;
         }
+        ProdutoDTO produtoDTO;
 
-        ProdutoDTO produtoDTO = ProdutoDTO.ProdutoDTOBuilder.aProdutoDTO()
+        if(!isAtualizarProduto){
+            produtoDTO= ProdutoDTO.ProdutoDTOBuilder.aProdutoDTO()
                 .idProduto(null)
                 .nomeProduto(nome)
                 .categoria(categoria)
                 .preco(new BigDecimal(precoText))
                 .quantidadeEstoque(Integer.parseInt(qtdEstoqueText))
                 .build();
-
+        }else{
+            produtoDTO = ProdutoDTO.ProdutoDTOBuilder.aProdutoDTO()
+                .idProduto(this.produtoDTO.getIdProduto())
+                .nomeProduto(nome)
+                .categoria(categoria)
+                .preco(new BigDecimal(precoText))
+                .quantidadeEstoque(Integer.parseInt(qtdEstoqueText))
+                .build();
+    }
         return produtoDTO;
     }
 
@@ -147,12 +173,33 @@ public class CadastroProdutoController implements Initializable {
 
     }
 
+    private void preencherCampos() {
+        if(produtoDTO != null){
+            txtNome.setText(produtoDTO.getNomeProduto());
+            comboBoxCategoria.setValue(produtoDTO.getCategoria());
+            txtPreco.setText(produtoDTO.getPreco().toString());
+            txtQtdEstoque.setText(String.valueOf(produtoDTO.getQuantidadeEstoque()));
+        }
+
+    }
+
+
     private void limparErros() {
         lblErroNome.setText("");
         lblErroCategoria.setText("");
         lblErroPreco.setText("");
         lblErroQtdEstoque.setText("");
     }
+
+    public void setProdutoDTO(ProdutoDTO pd) {
+        if(pd != null){
+            produtoDTO = pd;
+            isAtualizarProduto = true;
+            preencherCampos();
+        }
+
+    }
+
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
