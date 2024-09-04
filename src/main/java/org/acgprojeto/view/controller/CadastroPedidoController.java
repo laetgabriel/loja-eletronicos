@@ -274,6 +274,7 @@ public class CadastroPedidoController implements Initializable {
     public void onBtnCancelar() {
         Stage stage = (Stage) btnCancelar.getScene().getWindow();
         stage.close();
+        notificarOuvintes();
     }
 
     @FXML

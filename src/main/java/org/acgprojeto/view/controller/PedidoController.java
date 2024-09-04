@@ -178,7 +178,6 @@ public class PedidoController implements Initializable, PedidoObserver {
         tableViewPedido.setItems(pedidos);
         iniciarBotoesDeMudarEstado();
         iniciarBotoesDeDetalhe();
-        iniciarBotoesDeAtualizar();
     }
 
     private void tabelaFiltrada(String filtroData, String filtroEstado) {
@@ -214,8 +213,10 @@ public class PedidoController implements Initializable, PedidoObserver {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(caminho));
             Parent novaTela = loader.load();
 
-            CadastroPedidoController cadastroPedidoController = loader.getController();
-            cadastroPedidoController.adicionarObserver(this);
+            if (loader.getController() instanceof CadastroPedidoController) {
+                CadastroPedidoController cadastroPedidoController = loader.getController();
+                cadastroPedidoController.adicionarObserver(this);
+            }
 
             Stage palco = new Stage();
             Scene scene = new Scene(novaTela);
@@ -320,26 +321,6 @@ public class PedidoController implements Initializable, PedidoObserver {
         });
     }
 
-
-    private void iniciarBotoesDeAtualizar() {
-        colAtualizar.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue()));
-        colAtualizar.setCellFactory(param -> new TableCell<TabelaPedidoDTO, TabelaPedidoDTO>() {
-
-            private final Button button = new Button("Atualizar");
-            protected void updateItem(TabelaPedidoDTO obj, boolean empty) {
-                super.updateItem(obj, empty);
-                if (obj == null || empty) {
-                    setGraphic(null);
-                    return;
-                }
-
-                setGraphic(button);
-                button.setOnAction(event -> {
-                    onBtnNovo();
-                });
-            }
-        });
-    }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {

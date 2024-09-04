@@ -25,7 +25,7 @@ public class LoginController {
     private TextField txtUsername;
 
     @FXML
-    private TextField txtPassword;
+    private PasswordField txtPassword;
 
     @FXML
     private Label txtErroUsername;
@@ -41,7 +41,7 @@ public class LoginController {
 
     @FXML
     public void onBtnLogin() {
-        /*
+
         adminController = new AdminController();
         adminDTO = adminController.buscarAdminPorId(1);
 
@@ -54,8 +54,7 @@ public class LoginController {
             txtErroSenha.setText("Erro na senha!");
         }else {
             loadView("/org/acgprojeto/view/Pedido.fxml");
-        }*/
-        loadView("/org/acgprojeto/view/Pedido.fxml");
+        }
     }
 
     @FXML
