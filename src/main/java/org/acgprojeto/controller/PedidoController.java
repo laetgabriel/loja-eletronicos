@@ -19,6 +19,7 @@ import org.acgprojeto.dao.PedidoDAO;
 import org.acgprojeto.dao.impl.PedidoDAOImpl;
 import org.acgprojeto.db.DB;
 import org.acgprojeto.dto.*;
+import org.acgprojeto.model.enums.Tipo;
 import org.acgprojeto.util.FileChooserUtil;
 
 import java.io.File;
@@ -72,7 +73,8 @@ public class PedidoController {
                  PdfDocument pdfDoc = new PdfDocument(writer);
                  Document document = new Document(pdfDoc)) {
 
-                BigDecimal valorTotalGeral = BigDecimal.ZERO;  // Valor total de todos os pedidos
+                BigDecimal valorTotalGeralVendas = BigDecimal.ZERO;  // Valor total das vendas
+                BigDecimal valorTotalGeralCompras = BigDecimal.ZERO;  // Valor total das compras
                 PdfFont font = PdfFontFactory.createRegisteredFont("Helvetica-Bold");
                 document.add(new Paragraph("Relatório de Pedido")
                         .setFont(font)
@@ -81,14 +83,15 @@ public class PedidoController {
 
                 Set<Integer> pedidosAdicionados = new HashSet<>();
 
-                for (TabelaPedidoDTO TabelapedidoDTO : pedidos) {
-                    if (!pedidosAdicionados.contains(TabelapedidoDTO.getPedidoDTO().getIdPedido())) {
-                        pedidosAdicionados.add(TabelapedidoDTO.getPedidoDTO().getIdPedido());  // Marca o pedido como incluído
+                for (TabelaPedidoDTO tabelaPedidoDTO : pedidos) {
+                    if (!pedidosAdicionados.contains(tabelaPedidoDTO.getPedidoDTO().getIdPedido())) {
+                        pedidosAdicionados.add(tabelaPedidoDTO.getPedidoDTO().getIdPedido());  // Marca o pedido como incluído
                         BigDecimal valorTotalPedido = BigDecimal.ZERO;  // Valor total do pedido atual
+                        BigDecimal valorTotalCompra = BigDecimal.ZERO;  // Valor total dos serviços de compra
 
-                        gerarDetalhesPedido(document, TabelapedidoDTO, font);
-                        gerarTabelaProdutos(document, TabelapedidoDTO, font);
-                        valorTotalPedido = gerarTabelaServicos(document, TabelapedidoDTO, font, valorTotalPedido);
+                        gerarDetalhesPedido(document, tabelaPedidoDTO, font);
+                        gerarTabelaProdutos(document, tabelaPedidoDTO, font);
+                        valorTotalPedido = gerarTabelaServicos(document, tabelaPedidoDTO, font, valorTotalPedido, valorTotalCompra);
 
                         // Adiciona o valor total do pedido ao relatório
                         document.add(new Paragraph("Valor total do Pedido: R$" + valorTotalPedido)
@@ -96,16 +99,21 @@ public class PedidoController {
                                 .setFontSize(14));
                         document.add(new Paragraph("\n"));
 
-                        // Acumula o valor total de todos os pedidos
-                        valorTotalGeral = valorTotalGeral.add(valorTotalPedido);
+                        // Acumula o valor total de todos os pedidos, subtraindo o valor total dos serviços de compra
+                        valorTotalGeralVendas = valorTotalGeralVendas.add(valorTotalPedido);
+                        valorTotalGeralCompras = valorTotalGeralCompras.add(valorTotalCompra);
                     }
                 }
 
-
-                // Adiciona o valor total geral ao final do relatório
-                document.add(new Paragraph("Valor total das vendas: R$" + valorTotalGeral)
+                // Adiciona o valor total geral das vendas e das compras ao final do relatório
+                document.add(new Paragraph("Valor total das vendas: R$" + valorTotalGeralVendas)
                         .setFont(font)
                         .setFontSize(16));
+
+                document.add(new Paragraph("Valor total das compras: - R$" + valorTotalGeralCompras)
+                        .setFont(font)
+                        .setFontSize(16)
+                        .setFontColor(ColorConstants.RED)); // Destaca em vermelho
 
             } catch (IOException e) {
                 throw new RuntimeException("Erro ao gerar relatório de pedido", e);
@@ -149,10 +157,9 @@ public class PedidoController {
         document.add(new Paragraph("Produtos:").setFont(font).setFontSize(14));
         document.add(tableProdutos);
         document.add(new Paragraph("\n"));
-
     }
 
-    private BigDecimal gerarTabelaServicos(Document document, TabelaPedidoDTO pedidoDTO, PdfFont font, BigDecimal valorTotalPedido) {
+    private BigDecimal gerarTabelaServicos(Document document, TabelaPedidoDTO pedidoDTO, PdfFont font, BigDecimal valorTotalPedido, BigDecimal valorTotalCompra) {
         ServicoController servicoController = new ServicoController();
 
         List<ServicoDTO> servicos = servicoController.listarServicosPorPedido(pedidoDTO);
@@ -169,7 +176,17 @@ public class PedidoController {
             tableServicos.addCell(new Paragraph(servico.getIdServico().toString()));
             tableServicos.addCell(new Paragraph(servico.getDescricao()));
             tableServicos.addCell(new Paragraph(servico.getPreco().toString()));
-            valorTotalPedido = valorTotalPedido.add(servico.getPreco());
+
+            if (Tipo.COMPRA.equals(servico.getTipo())) {
+                valorTotalCompra = valorTotalCompra.add(servico.getPreco());
+                document.add(new Paragraph("Nota: Valor do serviço de compra: - R$" + servico.getPreco())
+                        .setFont(font)
+                        .setFontSize(12)
+                        .setTextAlignment(TextAlignment.LEFT)
+                        .setFontColor(ColorConstants.RED)); // Destaca em vermelho
+            } else {
+                valorTotalPedido = valorTotalPedido.add(servico.getPreco());
+            }
         }
 
         document.add(new Paragraph("Serviços:").setFont(font).setFontSize(14));
