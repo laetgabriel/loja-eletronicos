@@ -52,6 +52,32 @@ public class PedidoDAOImpl implements PedidoDAO {
     }
 
     @Override
+    public void inserirPedidoSemCliente(PedidoDTO pedidoDTO) {
+        Pedido pedido = new Pedido(pedidoDTO);
+
+        String sql = "INSERT INTO Pedido(Estado, Data) VALUES (?, ?)";
+
+        try (PreparedStatement stmt = conexao.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            stmt.setString(1, pedido.getEstado().getNomeEstado());
+            stmt.setDate(2, Date.valueOf(pedido.getData()));
+            int linhasAfetadas = stmt.executeUpdate();
+
+            if (linhasAfetadas > 0) {
+                try (ResultSet rs = stmt.getGeneratedKeys()) {
+                    if (rs.next()) {
+                        int id = rs.getInt(1);
+                        pedido.setIdPedido(id);
+                    }
+                }
+            } else {
+                throw new DBException("Erro ao inserir linha");
+            }
+        } catch (SQLException e) {
+            throw new DBException("Erro ao inserir Pedido: " + e.getMessage()   );
+        }
+    }
+
+    @Override
     public void atualizarPedido(PedidoDTO pedidoDTO) {
         Pedido pedido = new Pedido(pedidoDTO);
 
@@ -308,7 +334,13 @@ public class PedidoDAOImpl implements PedidoDAO {
     private PedidoDTO instanciarPedido(ResultSet rs) throws SQLException {
         Pedido pedido = new Pedido();
         pedido.setIdPedido(rs.getInt("Id_Pedido"));
-        pedido.setCliente(new Cliente(DAOFactory.criarClienteDAO().buscarClientePorId(rs.getInt("Id_Cliente"))));
+        ClienteDTO clienteDTO = DAOFactory.criarClienteDAO().buscarClientePorId(rs.getInt("Id_Cliente"));
+
+        if (clienteDTO == null){
+            clienteDTO = new ClienteDTO();
+        }
+
+        pedido.setCliente(new Cliente(clienteDTO));
         pedido.setData(rs.getDate("Data").toLocalDate());
 
         // Lê o valor do estado e garante que ele esteja em maiúsculas

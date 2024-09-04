@@ -21,6 +21,7 @@ import org.acgprojeto.model.enums.Tipo;
 import org.acgprojeto.view.App;
 import org.acgprojeto.util.Alertas;
 import org.acgprojeto.util.AtualizarVisaoTabelas;
+import org.acgprojeto.view.observer.PedidoObserver;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -31,7 +32,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
-public class PedidoController implements Initializable {
+public class PedidoController implements Initializable, PedidoObserver {
 
     private org.acgprojeto.controller.PedidoController controller;
 
@@ -208,10 +209,14 @@ public class PedidoController implements Initializable {
     }
 
     private void loadCadastroView(String caminho){
-        Parent novaTela = null;
         Stage telaBase = App.getMainStage();
         try {
-            novaTela = FXMLLoader.load(getClass().getResource(caminho));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(caminho));
+            Parent novaTela = loader.load();
+
+            CadastroPedidoController cadastroPedidoController = loader.getController();
+            cadastroPedidoController.adicionarObserver(this);
+
             Stage palco = new Stage();
             Scene scene = new Scene(novaTela);
             palco.setScene(scene);
@@ -396,5 +401,10 @@ public class PedidoController implements Initializable {
 
         atualizarTabelaPedidos();
 
+    }
+
+    @Override
+    public void atualizarPedidos() {
+        atualizarTabelaPedidos();
     }
 }

@@ -111,7 +111,7 @@
             <Image url="@../icones/produto.png" />
          </image>
       </ImageView>
-      <Button fx:id="btnCancelar" alignment="CENTER" contentDisplay="CENTER" layoutX="364.0" layoutY="501.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="258.0" style="-fx-background-color: green;" text="Cancelar" textFill="WHITE" />
+      <Button fx:id="btnCancelar" alignment="CENTER" contentDisplay="CENTER" layoutX="364.0" layoutY="501.0" mnemonicParsing="false" onAction="#onBtnCancelar" prefHeight="32.0" prefWidth="258.0" style="-fx-background-color: green;" text="Cancelar" textFill="WHITE" />
       <Button fx:id="btnAdicionarProduto" alignment="CENTER" contentDisplay="CENTER" layoutX="51.0" layoutY="446.0" mnemonicParsing="false" onAction="#abrirDialogProduto" prefHeight="30.0" prefWidth="258.0" style="-fx-background-color: green;" text="Adicionar Produto" textFill="WHITE" />
       <Label layoutX="364.0" layoutY="65.0" text="Procurar Cliente">
          <font>

@@ -6,18 +6,22 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import org.acgprojeto.controller.*;
 import org.acgprojeto.controller.PedidoController;
 import org.acgprojeto.controller.ProdutoController;
+import org.acgprojeto.db.exceptions.DBException;
 import org.acgprojeto.dto.*;
 import org.acgprojeto.model.chain.exceptions.ValidacaoException;
 import org.acgprojeto.model.chain.validacoesservico.ServicoValidator;
 import org.acgprojeto.model.chain.validacoescliente.ClienteValidator;
 import org.acgprojeto.model.entities.Cliente;
 import org.acgprojeto.model.entities.Pedido;
+import org.acgprojeto.model.enums.Estado;
 import org.acgprojeto.model.enums.Tipo;
 import org.acgprojeto.util.Alertas;
 import org.acgprojeto.util.Restricoes;
+import org.acgprojeto.view.observer.PedidoObserver;
 
 import java.math.BigDecimal;
 import java.net.URL;
@@ -67,6 +71,7 @@ public class CadastroPedidoController implements Initializable {
     @FXML
     private Button btnAdicionarServico;
 
+    private List<PedidoObserver> observers = new ArrayList<>();
     private final ProdutoController produtoController = new ProdutoController();
     private final ClienteController clienteController = new ClienteController();
     private final PedidoController pedidoController = new PedidoController();
@@ -77,50 +82,13 @@ public class CadastroPedidoController implements Initializable {
     private final ServicoValidator chainServico = new ServicoValidator();
     private final ClienteValidator clienteValidator = new ClienteValidator();
 
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-
-        Restricoes.setTextFieldString(txtNomeCliente);
-        data.setValue(LocalDate.now());
-        Restricoes.setTextFieldDouble(txtPrecoServico);
-
-        btnAdicionarProduto.setDisable(true);
-        btnAdicionarServico.setDisable(true);
-
-        choiceBoxTipoServico.getItems().addAll("COMPRA", "VENDA", "CONSERTO");
-        choiceBoxTipoServico.setValue("VENDA");
-
-        try {
-            List<ClienteDTO> listaClientes = clienteController.listarTodosOsClientes();
-            clientes = FXCollections.observableArrayList(listaClientes);
-            comboBoxClientes.setItems(clientes);
-
-            comboBoxClientes.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-                if (newValue != null) {
-                    txtNomeCliente.setText(newValue.getNome());
-                    txtEmailCliente.setText(newValue.getEmail());
-                    txtTelefoneCliente.setText(newValue.getTelefone());
-                    txtNomeCliente.setDisable(true);
-                    txtEmailCliente.setDisable(true);
-                    txtTelefoneCliente.setDisable(true);
-                } else {
-                    txtNomeCliente.setDisable(false);
-                    txtEmailCliente.setDisable(false);
-                    txtTelefoneCliente.setDisable(false);
-                }
-
-            });
-
-            atualizarComboBoxProduto();
-
-        } catch (Exception ignored) {
-            Alertas.mostrarAlerta("Erro", "Não foi possível carregar os dados.", Alert.AlertType.ERROR);
-        }
+    public void adicionarObserver(PedidoObserver observer) {
+        observers.add(observer);
     }
+
 
     @FXML
     private void salvarPedido() {
-
         String quantidadeString = txtQuantidadeProduto.getText();
         int quantidadeInt = 0;
         Tipo tipo = TipoStringParaEnum(choiceBoxTipoServico.getValue());
@@ -143,11 +111,11 @@ public class CadastroPedidoController implements Initializable {
                 clienteDTO = clienteController.obterUltimoCliente();
             }
 
-        cliente = new Cliente(clienteDTO);
+            cliente = new Cliente(clienteDTO);
 
 
-        Pedido pedido = new Pedido(null, cliente, data.getValue());
-        PedidoDTO pedidoDTO = new PedidoDTO(pedido);
+            Pedido pedido = new Pedido(null, cliente, data.getValue());
+            PedidoDTO pedidoDTO = new PedidoDTO(pedido);
 
             pedidoController.inserirPedido(pedidoDTO);
 
@@ -186,18 +154,39 @@ public class CadastroPedidoController implements Initializable {
             btnAdicionarServico.setDisable(false);
             btnAdicionarProduto.setDisable(false);
             data.setDisable(true);
+            btnSalvar.setDisable(false);
+
+            notificarOuvintes();
+
+            Optional<ButtonType> ocpcao = Alertas.showConfirmation("Pedido criado", "Pedido adicionado! Adicionar mais produtos ou serviços?");
+
+            if (ocpcao.get() == ButtonType.CANCEL) {
+                Stage stage = (Stage) btnCancelar.getScene().getWindow();
+                stage.close();
+            }
+
         } catch (ValidacaoException e) {
-            Alertas.mostrarAlerta("ERRO", e.getMessage(), Alert.AlertType.ERROR);
-            PedidoDTO ultimoPedido = pedidoController.obterUltimoPedido();
-            if (ultimoPedido != null) {
-                pedidoController.excluirPedido(ultimoPedido.getIdPedido());
-                if (comboBoxClientes.getValue() == null) {
-                    clienteController.excluirCliente(clienteController.obterUltimoCliente().getIdCliente());
+            try{
+                Alertas.mostrarAlerta("ERRO", e.getMessage(), Alert.AlertType.ERROR);
+                PedidoDTO ultimoPedido = pedidoController.obterUltimoPedido();
+                if (ultimoPedido != null) {
+                    pedidoController.excluirPedido(ultimoPedido.getIdPedido());
+                    if (comboBoxClientes.getValue() == null) {
+                        clienteController.excluirCliente(clienteController.obterUltimoCliente().getIdCliente());
+                    }
                 }
+            }catch (DBException z){
+
             }
 
         }
 
+    }
+
+    @FXML
+    public void onBtnCancelar(){
+        Stage stage = (Stage) btnCancelar.getScene().getWindow();
+        stage.close();
     }
 
     @FXML
@@ -327,6 +316,54 @@ public class CadastroPedidoController implements Initializable {
     private void validarProduto(ProdutoDTO produtoDTO) {
         if (produtoDTO == null) {
             throw new ValidacaoException("Selecione um produto para adicionar");
+        }
+    }
+
+    private void notificarOuvintes(){
+        for (PedidoObserver observer : observers) {
+            observer.atualizarPedidos();
+        }
+    }
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+
+        Restricoes.setTextFieldString(txtNomeCliente);
+        data.setValue(LocalDate.now());
+        Restricoes.setTextFieldDouble(txtPrecoServico);
+
+        btnAdicionarProduto.setDisable(true);
+        btnAdicionarServico.setDisable(true);
+
+        choiceBoxTipoServico.getItems().addAll("COMPRA", "VENDA", "CONSERTO");
+        choiceBoxTipoServico.setValue("VENDA");
+
+        try {
+            List<ClienteDTO> listaClientes = clienteController.listarTodosOsClientes();
+            clientes = FXCollections.observableArrayList(listaClientes);
+            comboBoxClientes.setItems(clientes);
+
+            comboBoxClientes.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+                if (newValue != null) {
+                    txtNomeCliente.setText(newValue.getNome());
+                    txtEmailCliente.setText(newValue.getEmail());
+                    txtTelefoneCliente.setText(newValue.getTelefone());
+                    txtNomeCliente.setDisable(true);
+                    txtEmailCliente.setDisable(true);
+                    txtTelefoneCliente.setDisable(true);
+                } else {
+                    txtNomeCliente.setDisable(false);
+                    txtEmailCliente.setDisable(false);
+                    txtTelefoneCliente.setDisable(false);
+                }
+
+            });
+
+            Restricoes.validarEmail(txtEmailCliente.getText());
+            atualizarComboBoxProduto();
+
+        } catch (Exception ignored) {
+            Alertas.mostrarAlerta("Erro", "Não foi possível carregar os dados.", Alert.AlertType.ERROR);
         }
     }
 

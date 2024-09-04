@@ -16,8 +16,6 @@ import javafx.collections.ObservableList;
 import javafx.stage.Stage;
 import org.acgprojeto.dao.DAOFactory;
 import org.acgprojeto.dao.PedidoDAO;
-import org.acgprojeto.dao.impl.PedidoDAOImpl;
-import org.acgprojeto.db.DB;
 import org.acgprojeto.dto.*;
 import org.acgprojeto.util.FileChooserUtil;
 
@@ -34,6 +32,10 @@ public class PedidoController {
 
     public void inserirPedido(PedidoDTO pedidoDTO) {
         pedidoDAO.inserirPedido(pedidoDTO);
+    }
+
+    public void inserirPedidoSemCliente(PedidoDTO pedidoDTO) {
+        pedidoDAO.inserirPedidoSemCliente(pedidoDTO);
     }
 
     public void atualizarPedido(PedidoDTO pedidoDTO) {
