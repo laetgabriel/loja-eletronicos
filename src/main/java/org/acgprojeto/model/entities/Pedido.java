@@ -21,7 +21,7 @@ public class Pedido {
         this.idPedido = idPedido;
         this.cliente = cliente;
         this.data = data;
-        this.estado = new EstadoAndamento();// Inicialmente, o estado é 'Andamento'
+        this.estado = new EstadoAndamento();
         estado.setPedidoDTO(this.toDTO());
     }
 
@@ -52,16 +52,16 @@ public class Pedido {
         }
     }
 
-    public void concluir() {
-        estado.concluir();
+    public boolean concluir() {
+        return estado.concluir();
     }
 
-    public void finalizar() {
-        estado.finalizar();
+    public boolean finalizar() {
+        return estado.finalizar();
     }
 
-    public void cancelar() {
-        estado.cancelar();
+    public boolean cancelar() {
+        return estado.cancelar();
     }
 
     public Integer getIdPedido() {
