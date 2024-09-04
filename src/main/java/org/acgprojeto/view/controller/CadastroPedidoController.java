@@ -185,11 +185,10 @@ public class CadastroPedidoController implements Initializable {
                     tipo
             );
 
-            chainServico.validateServico(servicoDTO);
+            validacoCompletaServico(servicoDTO);
 
             if(!checkBoxPedido.isSelected()){
-                validarProduto(produto);
-                validarQuantidadeProduto(quantidadeString, produto);
+                validarProdutoEQuantidade(quantidadeString, produto);
                 quantidadeInt = Integer.parseInt(quantidadeString);
                 produto.setQuantidadeEstoque(produto.getQuantidadeEstoque() - quantidadeInt);
                 produtoController.atualizarProduto(produto);
@@ -330,8 +329,7 @@ public class CadastroPedidoController implements Initializable {
             int quantidade;
             ProdutoDTO produto = comboBoxProduto.getValue();
             try {
-                validarProduto(produto);
-                validarQuantidadeProduto(quantidadeString, produto);
+                validarProdutoEQuantidade(quantidadeString, produto);
 
                 quantidade = Integer.parseInt(quantidadeString);
                 produto.setQuantidadeEstoque(produto.getQuantidadeEstoque() - quantidade);
@@ -365,23 +363,6 @@ public class CadastroPedidoController implements Initializable {
         comboBoxProduto.setItems(produtos);
     }
 
-    private void validarQuantidadeProduto(String quantidadeTxt, ProdutoDTO produtoDTO) {
-        if (quantidadeTxt == null || quantidadeTxt.isEmpty() || !quantidadeTxt.matches("\\d+")) {
-            throw new ValidacaoException("Quantidade inválida");
-        }
-
-        int quantidade = Integer.parseInt(quantidadeTxt);
-
-        if (quantidade > produtoDTO.getQuantidadeEstoque()) {
-            throw new ValidacaoException("Quantidade indisponível");
-        }
-    }
-
-    private void validarProduto(ProdutoDTO produtoDTO) {
-        if (produtoDTO == null) {
-            throw new ValidacaoException("Selecione um produto para adicionar");
-        }
-    }
 
     private void notificarOuvintes(){
         for (PedidoObserver observer : observers) {
@@ -432,6 +413,24 @@ public class CadastroPedidoController implements Initializable {
         }
     }
 
+    private void validarProdutoEQuantidade(String quantidadeTxt, ProdutoDTO produtoDTO) {
+        // Validação do produto
+        if (produtoDTO == null) {
+            throw new ValidacaoException("Selecione um produto para adicionar");
+        }
+
+        // Validação da quantidade
+        if (quantidadeTxt == null || quantidadeTxt.isEmpty() || !quantidadeTxt.matches("\\d+")) {
+            throw new ValidacaoException("Quantidade inválida");
+        }
+
+        int quantidade = Integer.parseInt(quantidadeTxt);
+
+        if (quantidade > produtoDTO.getQuantidadeEstoque()) {
+            throw new ValidacaoException("Quantidade indisponível");
+        }
+    }
+
     private void validacaoCompletaCliente(ClienteDTO clienteDTO) {
         try {
             lblErroNomeCliente.setText("");
@@ -449,4 +448,21 @@ public class CadastroPedidoController implements Initializable {
         }
     }
 
+
+
+    private void validacoCompletaServico(ServicoDTO servicoDTO) {
+        try {
+            lblErroDescricaoServico.setText("");
+            lblErroPrecoServico.setText("");
+            chainServico.validateServico(servicoDTO);
+        } catch (ValidacaoException e) {
+            if (e.getMessage().contains("descrição")) {
+                lblErroDescricaoServico.setText(e.getMessage());
+            } else if (e.getMessage().contains("preço")) {
+                lblErroPrecoServico.setText(e.getMessage());
+            }
+        }
+    }
+
 }
+

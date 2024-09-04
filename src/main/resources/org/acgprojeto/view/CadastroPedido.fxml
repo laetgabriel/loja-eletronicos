@@ -76,7 +76,7 @@
             <Image url="@../icones/documento.png" />
          </image>
       </ImageView>
-      <Label fx:id="lblErroDescricaoServico" layoutX="83.0" layoutY="275.0" prefHeight="18.0" prefWidth="210.0" text="Erro descrição servico" textFill="RED" />
+      <Label fx:id="lblErroDescricaoServico" layoutX="83.0" layoutY="275.0" prefHeight="18.0" prefWidth="210.0" textFill="RED" />
       <ImageView fitHeight="32.0" fitWidth="26.0" layoutX="54.0" layoutY="329.0">
          <image>
             <Image url="@../icones/preco.png" />
@@ -88,7 +88,7 @@
             <Font size="15.0" />
          </font>
       </Label>
-      <Label fx:id="lblErroPrecoServico" layoutX="83.0" layoutY="361.0" prefHeight="18.0" prefWidth="210.0" text="Erro valor serviço" textFill="RED" />
+      <Label fx:id="lblErroPrecoServico" layoutX="83.0" layoutY="361.0" prefHeight="18.0" prefWidth="210.0" textFill="RED" />
       <Label layoutX="358.0" layoutY="317.0" text="Data do pedido">
          <font>
             <Font size="15.0" />
