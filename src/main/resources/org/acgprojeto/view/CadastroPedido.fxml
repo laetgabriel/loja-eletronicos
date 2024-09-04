@@ -63,9 +63,9 @@
             <Image url="@../icones/documento.png" />
          </image>
       </ImageView>
-      <Label fx:id="lblErroNomeCliente" layoutX="86.0" layoutY="120.0" prefHeight="18.0" prefWidth="210.0" text="Erro nome cliente" textFill="RED" />
-      <Label fx:id="lblErroEmailCliente" layoutX="87.0" layoutY="196.0" prefHeight="18.0" prefWidth="210.0" text="Erro email cliente" textFill="RED" />
-      <Label fx:id="lblErroTelefoneCliente" layoutX="392.0" layoutY="192.0" prefHeight="18.0" prefWidth="210.0" text="Erro telefone cliente" textFill="RED" />
+      <Label fx:id="lblErroNomeCliente" layoutX="86.0" layoutY="120.0" prefHeight="18.0" prefWidth="210.0" textFill="RED" />
+      <Label fx:id="lblErroEmailCliente" layoutX="87.0" layoutY="196.0" prefHeight="18.0" prefWidth="210.0" textFill="RED" />
+      <Label fx:id="lblErroTelefoneCliente" layoutX="392.0" layoutY="192.0" prefHeight="18.0" prefWidth="210.0" textFill="RED" />
       <Label layoutX="361.0" layoutY="219.0" text="Tipo do serviço">
          <font>
             <Font size="15.0" />

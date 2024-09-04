@@ -15,6 +15,9 @@ public class TelefoneClienteHandler extends ClienteHandler {
         if (clienteDTO.getTelefone() == null || clienteDTO.getTelefone().isEmpty()) {
             return super.handle(clienteDTO);
         }
+        if(clienteDTO.getTelefone().length() < 8){
+            throw new ValidacaoException("Erro ao inserir telefone");
+        }
         if(clienteDTO.getTelefone().length() == 9){
             return clienteDTO;
         }else

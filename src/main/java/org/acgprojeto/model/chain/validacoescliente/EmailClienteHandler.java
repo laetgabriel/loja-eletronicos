@@ -18,7 +18,7 @@ public class EmailClienteHandler extends ClienteHandler {
             return super.handle(clienteDTO);
         }
         if(!clienteDTO.getEmail().matches(EMAIL_REGEX)){
-            throw new ValidacaoException("Erro ao inserir e-mail");
+            throw new ValidacaoException("Erro ao inserir email");
         }
         return super.handle(clienteDTO);
         }

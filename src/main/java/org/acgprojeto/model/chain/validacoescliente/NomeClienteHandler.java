@@ -11,7 +11,7 @@ public class NomeClienteHandler extends ClienteHandler {
     @Override
     public ClienteDTO handle(ClienteDTO clienteDTO) {
         if(clienteDTO == null || clienteDTO.getNome() == null || clienteDTO.getNome().isEmpty()){
-            throw new ValidacaoException("Insira o nome do cliente");
+            throw new ValidacaoException("Erro ao inserir nome do cliente");
         }else
             return super.handle(clienteDTO);
     }

@@ -12,7 +12,9 @@ import org.acgprojeto.controller.PedidoController;
 import org.acgprojeto.controller.ProdutoController;
 import org.acgprojeto.db.exceptions.DBException;
 import org.acgprojeto.dto.*;
+import org.acgprojeto.model.chain.ClienteHandler;
 import org.acgprojeto.model.chain.exceptions.ValidacaoException;
+import org.acgprojeto.model.chain.validacoescliente.EmailClienteHandler;
 import org.acgprojeto.model.chain.validacoesservico.ServicoValidator;
 import org.acgprojeto.model.chain.validacoescliente.ClienteValidator;
 import org.acgprojeto.model.entities.Cliente;
@@ -157,7 +159,7 @@ public class CadastroPedidoController implements Initializable {
                     clienteDTO = comboBoxClientes.getValue();
                 } else {
                     clienteDTO = new ClienteDTO(null, txtNomeCliente.getText(), txtEmailCliente.getText(), txtTelefoneCliente.getText());
-                    clienteValidator.validarCliente(clienteDTO);
+                    validacaoCompletaCliente(clienteDTO);
                     clienteController.inserirCliente(clienteDTO);
                     clienteDTO = clienteController.obterUltimoCliente();
                 }
@@ -229,7 +231,6 @@ public class CadastroPedidoController implements Initializable {
 
         } catch (ValidacaoException e) {
             try{
-                Alertas.mostrarAlerta("ERRO", e.getMessage(), Alert.AlertType.ERROR);
                 PedidoDTO ultimoPedido = pedidoController.obterUltimoPedido();
                 if (ultimoPedido != null) {
                     pedidoController.excluirPedido(ultimoPedido.getIdPedido());
@@ -237,7 +238,7 @@ public class CadastroPedidoController implements Initializable {
                         clienteController.excluirCliente(clienteController.obterUltimoCliente().getIdCliente());
                     }
                 }
-            }catch (DBException z){
+            }catch (DBException _){
 
             }
 
@@ -268,11 +269,10 @@ public class CadastroPedidoController implements Initializable {
 
         ChoiceBox<String> choiceBoxTipoServico = new ChoiceBox<>();
         choiceBoxTipoServico.getItems().addAll("COMPRA", "VENDA", "CONSERTO");
-        choiceBoxTipoServico.setValue("COMPRA");
 
         VBox vbox = new VBox();
         vbox.setSpacing(12);
-        vbox.getChildren().addAll(new Label("Servico:"), txtDescricao, new Label("Descrição:"), txtPreco, new Label("Tipo de Serviço:"), choiceBoxTipoServico);
+        vbox.getChildren().addAll(new Label("Descrição do servico:"), txtDescricao, new Label("Preço:"), txtPreco, new Label("Tipo de Serviço:"), choiceBoxTipoServico);
 
         dialog.getDialogPane().setContent(vbox);
 
@@ -394,7 +394,7 @@ public class CadastroPedidoController implements Initializable {
         data.setValue(LocalDate.now());
         checkBoxPedido.setDisable(true);
 
-
+        Restricoes.setTextFieldMaxLength(txtTelefoneCliente,9);
         Restricoes.setTextFieldDouble(txtPrecoServico);
         Restricoes.setTextFieldInteger(txtQuantidadeProduto);
 
@@ -429,6 +429,23 @@ public class CadastroPedidoController implements Initializable {
 
         } catch (Exception ignored) {
             Alertas.mostrarAlerta("Erro", "Não foi possível carregar os dados.", Alert.AlertType.ERROR);
+        }
+    }
+
+    private void validacaoCompletaCliente(ClienteDTO clienteDTO) {
+        try {
+            lblErroNomeCliente.setText("");
+            lblErroEmailCliente.setText("");
+            lblErroTelefoneCliente.setText("");
+            clienteValidator.validarCliente(clienteDTO);
+        } catch (ValidacaoException e) {
+            if (e.getMessage().contains("cliente")) {
+                lblErroNomeCliente.setText(e.getMessage());
+            } else if (e.getMessage().contains("email")) {
+                lblErroEmailCliente.setText(e.getMessage());
+            } else if (e.getMessage().contains("telefone")) {
+                lblErroTelefoneCliente.setText(e.getMessage());
+            }
         }
     }
 
