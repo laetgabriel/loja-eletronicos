@@ -17,6 +17,7 @@ import org.acgprojeto.model.chain.validacoesservico.ServicoValidator;
 import org.acgprojeto.model.chain.validacoescliente.ClienteValidator;
 import org.acgprojeto.model.entities.Cliente;
 import org.acgprojeto.model.entities.Pedido;
+import org.acgprojeto.model.entities.Produto;
 import org.acgprojeto.model.enums.Estado;
 import org.acgprojeto.model.enums.Tipo;
 import org.acgprojeto.model.state.EstadoPedido;
@@ -229,7 +230,7 @@ public class CadastroPedidoController implements Initializable {
             comboBoxClientes.setDisable(true);
             ccomboBoxTipoServico.setDisable(true);
 
-            btnAdicionarProduto.setDisable(checkBoxPedido.isSelected());
+            btnAdicionarProduto.setDisable(false);
 
             btnAdicionarServico.setDisable(false);
             data.setDisable(true);
@@ -266,6 +267,7 @@ public class CadastroPedidoController implements Initializable {
     public void onBtnCancelar(){
         Stage stage = (Stage) btnCancelar.getScene().getWindow();
         stage.close();
+        notificarOuvintes();
     }
 
     @FXML

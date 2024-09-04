@@ -25,6 +25,7 @@ public class PedidoProdutoDAOImpl implements PedidoProdutoDAO {
     @Override
     public void inserirPedidoProduto(PedidoProdutoDTO pedidoProdutoDTO) {
         PedidoProduto pedidoProduto = new PedidoProduto(pedidoProdutoDTO);
+
         String sql = "INSERT INTO pedido_possui_produto(Id_Pedido, Id_Produto, Preco, Quant) VALUES (?, ?, ?, ?)";
 
         try (PreparedStatement stmt = conexao.prepareStatement(sql)) {
