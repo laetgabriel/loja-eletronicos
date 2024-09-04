@@ -13,15 +13,20 @@ import com.itextpdf.layout.element.Table;
 import com.itextpdf.layout.properties.TextAlignment;
 import com.itextpdf.layout.properties.UnitValue;
 import javafx.collections.ObservableList;
+import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 import org.acgprojeto.dao.DAOFactory;
 import org.acgprojeto.dao.PedidoDAO;
 import org.acgprojeto.dto.*;
+import org.acgprojeto.model.entities.Pedido;
+import org.acgprojeto.model.enums.Tipo;
+import org.acgprojeto.util.Alertas;
 import org.acgprojeto.util.FileChooserUtil;
 
 import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -66,6 +71,24 @@ public class PedidoController {
         return pedidoDAO.obterUltimoPedido();
     }
 
+    public void mudarEstadoPedido(PedidoDTO pedidoDTO, String estadoDigitado) {
+        Pedido pedido = new Pedido(pedidoDTO);
+        switch( estadoDigitado) {
+            case "PRONTO":
+                pedido.concluir();
+                return;
+            case "FINALIZADO":
+                pedido.finalizar();
+                return;
+            case "CANCELADO":
+                pedido.cancelar();
+                return;
+            default:
+                Alertas.mostrarAlerta("Erro", "Estado inválido! Tente novamente.", Alert.AlertType.ERROR);
+        }
+    }
+
+
     public void gerarRelatorioPedido(Stage stage, ObservableList<TabelaPedidoDTO> pedidos) {
         File file = FileChooserUtil.gerarFileChooser("Relatório_Pedido").showSaveDialog(stage);
 
@@ -74,7 +97,8 @@ public class PedidoController {
                  PdfDocument pdfDoc = new PdfDocument(writer);
                  Document document = new Document(pdfDoc)) {
 
-                BigDecimal valorTotalGeral = BigDecimal.ZERO;  // Valor total de todos os pedidos
+                BigDecimal valorTotalGeralVendas = BigDecimal.ZERO;  // Valor total das vendas
+                BigDecimal valorTotalGeralCompras = BigDecimal.ZERO;  // Valor total das compras
                 PdfFont font = PdfFontFactory.createRegisteredFont("Helvetica-Bold");
                 document.add(new Paragraph("Relatório de Pedido")
                         .setFont(font)
@@ -83,31 +107,47 @@ public class PedidoController {
 
                 Set<Integer> pedidosAdicionados = new HashSet<>();
 
-                for (TabelaPedidoDTO TabelapedidoDTO : pedidos) {
-                    if (!pedidosAdicionados.contains(TabelapedidoDTO.getPedidoDTO().getIdPedido())) {
-                        pedidosAdicionados.add(TabelapedidoDTO.getPedidoDTO().getIdPedido());  // Marca o pedido como incluído
+                for (TabelaPedidoDTO tabelaPedidoDTO : pedidos) {
+                    if (!pedidosAdicionados.contains(tabelaPedidoDTO.getPedidoDTO().getIdPedido())) {
+                        pedidosAdicionados.add(tabelaPedidoDTO.getPedidoDTO().getIdPedido());  // Marca o pedido como incluído
                         BigDecimal valorTotalPedido = BigDecimal.ZERO;  // Valor total do pedido atual
+                        BigDecimal valorTotalCompra = BigDecimal.ZERO;  // Valor total dos serviços de compra
 
-                        gerarDetalhesPedido(document, TabelapedidoDTO, font);
-                        gerarTabelaProdutos(document, TabelapedidoDTO, font);
-                        valorTotalPedido = gerarTabelaServicos(document, TabelapedidoDTO, font, valorTotalPedido);
+                        gerarDetalhesPedido(document, tabelaPedidoDTO, font);
+                        gerarTabelaProdutos(document, tabelaPedidoDTO, font);
+                        List<BigDecimal> valores = gerarTabelaServicos(document, tabelaPedidoDTO, font, valorTotalPedido, valorTotalCompra);
 
                         // Adiciona o valor total do pedido ao relatório
-                        document.add(new Paragraph("Valor total do Pedido: R$" + valorTotalPedido)
+                        document.add(new Paragraph("Valor total do Pedido: R$" + valores.getFirst())
                                 .setFont(font)
                                 .setFontSize(14));
+                        document.add(new Paragraph("Valor do serviço de compra: - R$" + valores.getLast())
+                                .setFont(font)
+                                .setFontSize(12)
+                                .setTextAlignment(TextAlignment.LEFT)
+                                .setFontColor(ColorConstants.RED)); // Destaca em vermelho
                         document.add(new Paragraph("\n"));
 
-                        // Acumula o valor total de todos os pedidos
-                        valorTotalGeral = valorTotalGeral.add(valorTotalPedido);
+                        // Acumula o valor total de todos os pedidos, subtraindo o valor total dos serviços de compra
+                        valorTotalGeralVendas = valorTotalGeralVendas.add(valores.getFirst());
+                        valorTotalGeralCompras = valorTotalGeralCompras.add(valores.getLast());
                     }
                 }
 
-
-                // Adiciona o valor total geral ao final do relatório
-                document.add(new Paragraph("Valor total das vendas: R$" + valorTotalGeral)
+                // Adiciona o valor total geral das vendas e das compras ao final do relatório
+                document.add(new Paragraph("Valor total das vendas: R$" + valorTotalGeralVendas)
                         .setFont(font)
                         .setFontSize(16));
+
+                document.add(new Paragraph("Valor total das compras: - R$" + valorTotalGeralCompras)
+                        .setFont(font)
+                        .setFontSize(16)
+                        .setFontColor(ColorConstants.RED)); // Destaca em vermelho
+
+                document.add(new Paragraph("Lucro Total: R$" + valorTotalGeralVendas.subtract(valorTotalGeralCompras))
+                        .setFont(font)
+                        .setFontSize(16)
+                        .setFontColor(ColorConstants.GREEN)); // Destaca em verde
 
             } catch (IOException e) {
                 throw new RuntimeException("Erro ao gerar relatório de pedido", e);
@@ -151,34 +191,44 @@ public class PedidoController {
         document.add(new Paragraph("Produtos:").setFont(font).setFontSize(14));
         document.add(tableProdutos);
         document.add(new Paragraph("\n"));
-
     }
 
-    private BigDecimal gerarTabelaServicos(Document document, TabelaPedidoDTO pedidoDTO, PdfFont font, BigDecimal valorTotalPedido) {
+    private List<BigDecimal> gerarTabelaServicos(Document document, TabelaPedidoDTO pedidoDTO, PdfFont font, BigDecimal valorTotalPedido, BigDecimal valorTotalCompra) {
         ServicoController servicoController = new ServicoController();
-
         List<ServicoDTO> servicos = servicoController.listarServicosPorPedido(pedidoDTO);
+        List<BigDecimal> valores = new ArrayList<BigDecimal>();
 
-        Table tableServicos = new Table(UnitValue.createPercentArray(new float[]{2, 4, 2}))
+        Table tableServicos = new Table(UnitValue.createPercentArray(new float[]{2, 4, 2, 2}))
                 .setWidth(UnitValue.createPercentValue(100));
 
         tableServicos.addHeaderCell(new Cell().add(new Paragraph("Serviço ID"))
                 .setBackgroundColor(new DeviceRgb(0, 128, 0)).setFontColor(ColorConstants.WHITE));
         tableServicos.addHeaderCell(new Cell().add(new Paragraph("Descrição")));
+        tableServicos.addHeaderCell(new Cell().add(new Paragraph("Tipo")));
         tableServicos.addHeaderCell(new Cell().add(new Paragraph("Preço")));
 
         for (ServicoDTO servico : servicos) {
             tableServicos.addCell(new Paragraph(servico.getIdServico().toString()));
             tableServicos.addCell(new Paragraph(servico.getDescricao()));
+            tableServicos.addCell(new Paragraph(servico.getTipo().name()));
             tableServicos.addCell(new Paragraph(servico.getPreco().toString()));
-            valorTotalPedido = valorTotalPedido.add(servico.getPreco());
+
+            if (Tipo.COMPRA.equals(servico.getTipo())) {
+                valorTotalCompra = valorTotalCompra.add(servico.getPreco());
+                valores.add(valorTotalPedido);
+                valores.add(valorTotalCompra);
+            } else {
+                valorTotalPedido = valorTotalPedido.add(servico.getPreco());
+                valores.add(valorTotalPedido);
+                valores.add(valorTotalCompra);
+            }
         }
 
         document.add(new Paragraph("Serviços:").setFont(font).setFontSize(14));
         document.add(tableServicos);
         document.add(new Paragraph("\n"));
 
-        return valorTotalPedido;
+        return valores;
     }
 }
 

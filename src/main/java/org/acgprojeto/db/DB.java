@@ -28,16 +28,6 @@ public class DB {
         return conexao;
     }
 
-    public static void fecharConexao() {
-        try {
-            if (conexao != null) {
-                conexao.close();
-            }
-        } catch (SQLException e) {
-            throw new DBException("Erro ao fechar o Banco de Dados: " + e.getMessage());
-        }
-    }
-
     private static Properties carregarPropriedades(){
         try(FileInputStream fs = new FileInputStream("db.properties")){
             Properties prop = new Properties();
@@ -48,23 +38,4 @@ public class DB {
         }
     }
 
-    public static void fecharStatement(Statement st){
-        if(st != null){
-            try {
-                st.close();
-            } catch (SQLException e) {
-                throw new DBException("Erro ao fechar o statement: " + e.getMessage());
-            }
-        }
-    }
-
-    public static void fecharResultSet(ResultSet rs){
-        if(rs != null){
-            try{
-                rs.close();
-            } catch (SQLException e) {
-                throw new DBException("Erro ao fechar o ResultSet: " + e.getMessage());
-            }
-        }
-    }
 }
