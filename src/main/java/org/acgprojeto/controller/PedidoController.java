@@ -86,20 +86,20 @@ public class PedidoController {
                 for (TabelaPedidoDTO TabelapedidoDTO : pedidos) {
                     if (!pedidosAdicionados.contains(TabelapedidoDTO.getPedidoDTO().getIdPedido())) {
                         pedidosAdicionados.add(TabelapedidoDTO.getPedidoDTO().getIdPedido());  // Marca o pedido como incluído
-                        BigDecimal valorTotaPedido = BigDecimal.ZERO;  // Valor total do pedido atual
+                        BigDecimal valorTotalPedido = BigDecimal.ZERO;  // Valor total do pedido atual
 
                         gerarDetalhesPedido(document, TabelapedidoDTO, font);
                         gerarTabelaProdutos(document, TabelapedidoDTO, font);
-                        valorTotaPedido = gerarTabelaServicos(document, TabelapedidoDTO, font, valorTotaPedido);
+                        valorTotalPedido = gerarTabelaServicos(document, TabelapedidoDTO, font, valorTotalPedido);
 
                         // Adiciona o valor total do pedido ao relatório
-                        document.add(new Paragraph("Valor total do Pedido: R$" + valorTotaPedido)
+                        document.add(new Paragraph("Valor total do Pedido: R$" + valorTotalPedido)
                                 .setFont(font)
                                 .setFontSize(14));
                         document.add(new Paragraph("\n"));
 
                         // Acumula o valor total de todos os pedidos
-                        valorTotalGeral = valorTotalGeral.add(valorTotaPedido);
+                        valorTotalGeral = valorTotalGeral.add(valorTotalPedido);
                     }
                 }
 
