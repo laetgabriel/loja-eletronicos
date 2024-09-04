@@ -81,7 +81,6 @@ public class CadastroProdutoController implements Initializable {
             setLblErros(e.getErrors());
         } catch (Exception e) {
             Alertas.mostrarAlerta("Erro", "Erro ao salvar/atualizar produto!", Alert.AlertType.ERROR);
-            e.printStackTrace();
         }
     }
 

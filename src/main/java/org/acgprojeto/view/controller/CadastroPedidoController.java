@@ -6,9 +6,11 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import org.acgprojeto.controller.*;
 import org.acgprojeto.controller.PedidoController;
 import org.acgprojeto.controller.ProdutoController;
+import org.acgprojeto.db.exceptions.DBException;
 import org.acgprojeto.dto.*;
 import org.acgprojeto.model.chain.exceptions.ValidacaoException;
 import org.acgprojeto.model.chain.validacoesservico.ServicoValidator;
@@ -18,6 +20,7 @@ import org.acgprojeto.model.entities.Pedido;
 import org.acgprojeto.model.enums.Tipo;
 import org.acgprojeto.util.Alertas;
 import org.acgprojeto.util.Restricoes;
+import org.acgprojeto.view.observer.PedidoObserver;
 
 import java.math.BigDecimal;
 import java.net.URL;
@@ -27,9 +30,16 @@ import java.util.*;
 public class CadastroPedidoController implements Initializable {
 
     @FXML
-    private ChoiceBox<String> choiceBoxTipoServico;
+    private ComboBox<String> ccomboBoxTipoServico;
     @FXML
     private ComboBox<ClienteDTO> comboBoxClientes;
+
+    @FXML
+    private CheckBox checkBoxCliente;
+
+    @FXML
+    private CheckBox checkBoxPedido;
+
     @FXML
     private ComboBox<ProdutoDTO> comboBoxProduto;
     @FXML
@@ -56,6 +66,7 @@ public class CadastroPedidoController implements Initializable {
     private Label lblErroPrecoServico;
     @FXML
     private Label lblErroQuantidadeProduto;
+
     @FXML
     private DatePicker data;
     @FXML
@@ -67,89 +78,101 @@ public class CadastroPedidoController implements Initializable {
     @FXML
     private Button btnAdicionarServico;
 
+    private List<PedidoObserver> observers = new ArrayList<>();
     private final ProdutoController produtoController = new ProdutoController();
     private final ClienteController clienteController = new ClienteController();
     private final PedidoController pedidoController = new PedidoController();
     private final ServicoController servicoController = new ServicoController();
     private final PedidoProdutoController pedidoProdutoController = new PedidoProdutoController();
-    private ObservableList<ProdutoDTO> produtos;
     private ObservableList<ClienteDTO> clientes;
     private final ServicoValidator chainServico = new ServicoValidator();
     private final ClienteValidator clienteValidator = new ClienteValidator();
 
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
+    public void adicionarObserver(PedidoObserver observer) {
+        observers.add(observer);
+    }
 
-        Restricoes.setTextFieldString(txtNomeCliente);
-        data.setValue(LocalDate.now());
-        Restricoes.setTextFieldDouble(txtPrecoServico);
+    public void onCheckBoxCliente(){
+        if(checkBoxCliente.isSelected()){
+            txtNomeCliente.clear();
+            txtEmailCliente.clear();
+            txtTelefoneCliente.clear();
+            comboBoxClientes.setValue(null);
+            comboBoxClientes.setDisable(true);
+            txtNomeCliente.setDisable(true);
+            txtEmailCliente.setDisable(true);
+            txtTelefoneCliente.setDisable(true);
+        }else{
+            txtNomeCliente.setDisable(false);
+            txtEmailCliente.setDisable(false);
+            txtTelefoneCliente.setDisable(false);
+            comboBoxClientes.setDisable(false);
+        }
 
-        btnAdicionarProduto.setDisable(true);
-        btnAdicionarServico.setDisable(true);
+    }
 
-        choiceBoxTipoServico.getItems().addAll("COMPRA", "VENDA", "CONSERTO");
-        choiceBoxTipoServico.setValue("VENDA");
+    public void onCheckBoxPedido(){
+        if(checkBoxPedido.isSelected()){
+            comboBoxProduto.setValue(null);
+            comboBoxProduto.setDisable(true);
+            txtQuantidadeProduto.clear();
+            txtQuantidadeProduto.setDisable(true);
+        }else{
+            comboBoxProduto.setDisable(false);
+            txtQuantidadeProduto.setDisable(false);
+        }
 
-        try {
-            List<ClienteDTO> listaClientes = clienteController.listarTodosOsClientes();
-            clientes = FXCollections.observableArrayList(listaClientes);
-            comboBoxClientes.setItems(clientes);
+    }
 
-            comboBoxClientes.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-                if (newValue != null) {
-                    txtNomeCliente.setText(newValue.getNome());
-                    txtEmailCliente.setText(newValue.getEmail());
-                    txtTelefoneCliente.setText(newValue.getTelefone());
-                    txtNomeCliente.setDisable(true);
-                    txtEmailCliente.setDisable(true);
-                    txtTelefoneCliente.setDisable(true);
-                } else {
-                    txtNomeCliente.setDisable(false);
-                    txtEmailCliente.setDisable(false);
-                    txtTelefoneCliente.setDisable(false);
-                }
+    public void onComboBoxTipoServico(){
+        if(Tipo.valueOf(ccomboBoxTipoServico.getValue()) == Tipo.CONSERTO){
+            checkBoxCliente.setDisable(true);
+            checkBoxCliente.setSelected(false);
+            onCheckBoxCliente();
 
-            });
-
-            atualizarComboBoxProduto();
-
-        } catch (Exception ignored) {
-            Alertas.mostrarAlerta("Erro", "Não foi possível carregar os dados.", Alert.AlertType.ERROR);
+            checkBoxPedido.setSelected(true);
+            checkBoxPedido.setDisable(true);
+            onCheckBoxPedido();
+        }else {
+            checkBoxCliente.setDisable(false);
+            checkBoxPedido.setSelected(false);
+            checkBoxPedido.setDisable(true);
+            onCheckBoxPedido();
         }
     }
 
+
     @FXML
     private void salvarPedido() {
-
         String quantidadeString = txtQuantidadeProduto.getText();
         int quantidadeInt = 0;
-        Tipo tipo = TipoStringParaEnum(choiceBoxTipoServico.getValue());
+        Tipo tipo = TipoStringParaEnum(ccomboBoxTipoServico.getValue());
         ProdutoDTO produto = comboBoxProduto.getValue();
         atualizarComboBoxProduto();
-        ClienteDTO clienteDTO =
-                comboBoxClientes.getValue() != null ?
-                        comboBoxClientes.getValue() : new ClienteDTO(null,
-                        txtNomeCliente.getText(),
-                        txtEmailCliente.getText(),
-                        txtTelefoneCliente.getText());
-        Cliente cliente = null;
-        try {
+        ClienteDTO clienteDTO = null;
 
-            if (comboBoxClientes.getValue() != null) {
-                clienteDTO = comboBoxClientes.getValue();
-            } else {
-                clienteValidator.validarCliente(clienteDTO);
-                clienteController.inserirCliente(clienteDTO);
-                clienteDTO = clienteController.obterUltimoCliente();
+        try{
+            if (!checkBoxCliente.isSelected()) {
+                if (comboBoxClientes.getValue() != null) {
+                    clienteDTO = comboBoxClientes.getValue();
+                } else {
+                    clienteDTO = new ClienteDTO(null, txtNomeCliente.getText(), txtEmailCliente.getText(), txtTelefoneCliente.getText());
+                    clienteValidator.validarCliente(clienteDTO);
+                    clienteController.inserirCliente(clienteDTO);
+                    clienteDTO = clienteController.obterUltimoCliente();
+                }
+
+                Cliente cliente = new Cliente(clienteDTO);
+                Pedido pedido = new Pedido(null, cliente, data.getValue());
+                PedidoDTO pedidoDTO = new PedidoDTO(pedido);
+
+                pedidoController.inserirPedido(pedidoDTO);
+            } else{
+                Pedido pedido = new Pedido(null, new Cliente(), data.getValue());
+                PedidoDTO pedidoDTO = new PedidoDTO(pedido);
+
+                pedidoController.inserirPedidoSemCliente(pedidoDTO);
             }
-
-        cliente = new Cliente(clienteDTO);
-
-
-        Pedido pedido = new Pedido(null, cliente, data.getValue());
-        PedidoDTO pedidoDTO = new PedidoDTO(pedido);
-
-            pedidoController.inserirPedido(pedidoDTO);
 
             ServicoDTO servicoDTO = new ServicoDTO(
                     null,
@@ -161,19 +184,24 @@ public class CadastroPedidoController implements Initializable {
             );
 
             chainServico.validateServico(servicoDTO);
-            validarProduto(produto);
-            validarQuantidadeProduto(quantidadeString, produto);
-            quantidadeInt = Integer.parseInt(quantidadeString);
+
+            if(!checkBoxPedido.isSelected()){
+                validarProduto(produto);
+                validarQuantidadeProduto(quantidadeString, produto);
+                quantidadeInt = Integer.parseInt(quantidadeString);
+                produto.setQuantidadeEstoque(produto.getQuantidadeEstoque() - quantidadeInt);
+                produtoController.atualizarProduto(produto);
+                atualizarComboBoxProduto();
+                pedidoProdutoController.inserirPedidoProduto
+                        (new PedidoProdutoDTO(
+                                pedidoController.obterUltimoPedido(),
+                                produto,
+                                produto.getPreco(),
+                                quantidadeInt));
+            }
+
             servicoController.inserirServico(servicoDTO);
-            produto.setQuantidadeEstoque(produto.getQuantidadeEstoque() - quantidadeInt);
-            produtoController.atualizarProduto(produto);
-            atualizarComboBoxProduto();
-            pedidoProdutoController.inserirPedidoProduto
-                    (new PedidoProdutoDTO(
-                            pedidoController.obterUltimoPedido(),
-                            produto,
-                            produto.getPreco(),
-                            quantidadeInt));
+
             txtNomeCliente.setDisable(true);
             txtEmailCliente.setDisable(true);
             txtTelefoneCliente.setDisable(true);
@@ -182,22 +210,45 @@ public class CadastroPedidoController implements Initializable {
             txtQuantidadeProduto.setDisable(true);
             comboBoxProduto.setDisable(true);
             comboBoxClientes.setDisable(true);
-            choiceBoxTipoServico.setDisable(true);
+            ccomboBoxTipoServico.setDisable(true);
+
+            btnAdicionarProduto.setDisable(checkBoxPedido.isSelected());
+
             btnAdicionarServico.setDisable(false);
-            btnAdicionarProduto.setDisable(false);
             data.setDisable(true);
+            btnSalvar.setDisable(false);
+
+            notificarOuvintes();
+
+            Optional<ButtonType> ocpcao = Alertas.showConfirmation("Pedido criado", "Pedido adicionado! Adicionar mais produtos ou serviços?");
+
+            if (ocpcao.get() == ButtonType.CANCEL) {
+                Stage stage = (Stage) btnCancelar.getScene().getWindow();
+                stage.close();
+            }
+
         } catch (ValidacaoException e) {
-            Alertas.mostrarAlerta("ERRO", e.getMessage(), Alert.AlertType.ERROR);
-            PedidoDTO ultimoPedido = pedidoController.obterUltimoPedido();
-            if (ultimoPedido != null) {
-                pedidoController.excluirPedido(ultimoPedido.getIdPedido());
-                if (comboBoxClientes.getValue() == null) {
-                    clienteController.excluirCliente(clienteController.obterUltimoCliente().getIdCliente());
+            try{
+                Alertas.mostrarAlerta("ERRO", e.getMessage(), Alert.AlertType.ERROR);
+                PedidoDTO ultimoPedido = pedidoController.obterUltimoPedido();
+                if (ultimoPedido != null) {
+                    pedidoController.excluirPedido(ultimoPedido.getIdPedido());
+                    if (comboBoxClientes.getValue() == null) {
+                        clienteController.excluirCliente(clienteController.obterUltimoCliente().getIdCliente());
+                    }
                 }
+            }catch (DBException z){
+
             }
 
         }
 
+    }
+
+    @FXML
+    public void onBtnCancelar(){
+        Stage stage = (Stage) btnCancelar.getScene().getWindow();
+        stage.close();
     }
 
     @FXML
@@ -269,20 +320,22 @@ public class CadastroPedidoController implements Initializable {
         VBox vBox = new VBox();
         vBox.setSpacing(12);
         vBox.getChildren().addAll(new Label("Digite a quantidade... "), txtQuantidade, new Label("Produto: "), comboBoxProduto);
-
+        atualizarComboBoxProduto();
         dialog.getDialogPane().setContent(vBox);
 
         Optional<ButtonType> result = dialog.showAndWait();
 
         if (result.isPresent() && result.get() == buttonTypeOk) {
-            atualizarComboBoxProduto();
             String quantidadeString = String.valueOf(txtQuantidade.getText());
             int quantidade;
             ProdutoDTO produto = comboBoxProduto.getValue();
             try {
                 validarProduto(produto);
                 validarQuantidadeProduto(quantidadeString, produto);
+
                 quantidade = Integer.parseInt(quantidadeString);
+                produto.setQuantidadeEstoque(produto.getQuantidadeEstoque() - quantidade);
+                produtoController.atualizarProduto(produto);
 
                 pedidoProdutoController.inserirPedidoProduto(new PedidoProdutoDTO(
                         pedidoController.obterUltimoPedido(),
@@ -327,6 +380,55 @@ public class CadastroPedidoController implements Initializable {
     private void validarProduto(ProdutoDTO produtoDTO) {
         if (produtoDTO == null) {
             throw new ValidacaoException("Selecione um produto para adicionar");
+        }
+    }
+
+    private void notificarOuvintes(){
+        for (PedidoObserver observer : observers) {
+            observer.atualizarPedidos();
+        }
+    }
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        data.setValue(LocalDate.now());
+        checkBoxPedido.setDisable(true);
+
+
+        Restricoes.setTextFieldDouble(txtPrecoServico);
+        Restricoes.setTextFieldInteger(txtQuantidadeProduto);
+
+        btnAdicionarProduto.setDisable(true);
+        btnAdicionarServico.setDisable(true);
+
+        ccomboBoxTipoServico.getItems().addAll("COMPRA", "VENDA", "CONSERTO");
+        ccomboBoxTipoServico.setValue("VENDA");
+
+        try {
+            List<ClienteDTO> listaClientes = clienteController.listarTodosOsClientes();
+            clientes = FXCollections.observableArrayList(listaClientes);
+            comboBoxClientes.setItems(clientes);
+
+            comboBoxClientes.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+                if (newValue != null) {
+                    txtNomeCliente.setText(newValue.getNome());
+                    txtEmailCliente.setText(newValue.getEmail());
+                    txtTelefoneCliente.setText(newValue.getTelefone());
+                    txtNomeCliente.setDisable(true);
+                    txtEmailCliente.setDisable(true);
+                    txtTelefoneCliente.setDisable(true);
+                } else {
+                    txtNomeCliente.setDisable(false);
+                    txtEmailCliente.setDisable(false);
+                    txtTelefoneCliente.setDisable(false);
+                }
+
+            });
+
+            atualizarComboBoxProduto();
+
+        } catch (Exception ignored) {
+            Alertas.mostrarAlerta("Erro", "Não foi possível carregar os dados.", Alert.AlertType.ERROR);
         }
     }
 

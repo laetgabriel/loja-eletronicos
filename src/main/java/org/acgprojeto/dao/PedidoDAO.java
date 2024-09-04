@@ -8,6 +8,7 @@ import java.util.List;
 public interface PedidoDAO {
 
     void inserirPedido(PedidoDTO pedido);
+    void inserirPedidoSemCliente(PedidoDTO pedido);
     void atualizarPedido(PedidoDTO pedido);
     void atualizarEstadoPedido(PedidoDTO pedido);
     void excluirPedido(Integer id);

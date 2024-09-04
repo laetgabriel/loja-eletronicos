@@ -22,6 +22,7 @@ import org.acgprojeto.model.enums.Tipo;
 import org.acgprojeto.view.App;
 import org.acgprojeto.util.Alertas;
 import org.acgprojeto.util.AtualizarVisaoTabelas;
+import org.acgprojeto.view.observer.PedidoObserver;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -32,7 +33,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
-public class PedidoController implements Initializable {
+public class PedidoController implements Initializable, PedidoObserver {
 
     private org.acgprojeto.controller.PedidoController controller;
 
@@ -177,8 +178,6 @@ public class PedidoController implements Initializable {
         iniciarBotoesDeMudarEstado();
         iniciarBotoesDeDetalhe();
         iniciarBotoesDeAtualizar();
-        iniciarBotoesDeRemover();
-
     }
 
     private void tabelaFiltrada(String filtroData, String filtroEstado) {
@@ -209,10 +208,14 @@ public class PedidoController implements Initializable {
     }
 
     private void loadCadastroView(String caminho){
-        Parent novaTela = null;
         Stage telaBase = App.getMainStage();
         try {
-            novaTela = FXMLLoader.load(getClass().getResource(caminho));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(caminho));
+            Parent novaTela = loader.load();
+
+            CadastroPedidoController cadastroPedidoController = loader.getController();
+            cadastroPedidoController.adicionarObserver(this);
+
             Stage palco = new Stage();
             Scene scene = new Scene(novaTela);
             palco.setScene(scene);
@@ -293,21 +296,6 @@ public class PedidoController implements Initializable {
 
     }
 
-    public void removerPedido(TabelaPedidoDTO tabelaPedidoDTO){
-        Optional<ButtonType> escolha = Alertas.showConfirmation("Confirmação", "Tem certeza que quer deletar esse " +
-                "pedido?");
-
-        if(escolha.get() == ButtonType.OK){
-            try{
-                controller.excluirPedido(tabelaPedidoDTO.getPedidoDTO().getIdPedido());
-                atualizarTabelaPedidos();
-            }catch (DBException e){
-                Alertas.mostrarAlerta("Erro", "Erro ao excluir pedido!", Alert.AlertType.ERROR);
-            }
-        }
-
-    }
-
     private void iniciarBotoesDeMudarEstado() {
         colMudarEstado.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue()));
         colMudarEstado.setCellFactory(param -> new TableCell<TabelaPedidoDTO, TabelaPedidoDTO>() {
@@ -361,23 +349,6 @@ public class PedidoController implements Initializable {
         });
     }
 
-    private void iniciarBotoesDeRemover() {
-        colExcluir.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue()));
-        colExcluir.setCellFactory(param -> new TableCell<TabelaPedidoDTO, TabelaPedidoDTO>() {
-            private final Button button = new Button("Remover");
-            protected void updateItem(TabelaPedidoDTO obj, boolean empty) {
-                super.updateItem(obj, empty);
-                if (obj == null) {
-                    setGraphic(null);
-                    return;
-                }
-                setGraphic(button);
-                button.setOnAction(event -> removerPedido(obj));
-            }
-        });
-    }
-
-
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         controller = new org.acgprojeto.controller.PedidoController();
@@ -409,5 +380,10 @@ public class PedidoController implements Initializable {
 
         atualizarTabelaPedidos();
 
+    }
+
+    @Override
+    public void atualizarPedidos() {
+        atualizarTabelaPedidos();
     }
 }
