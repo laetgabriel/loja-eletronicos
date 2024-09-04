@@ -178,8 +178,6 @@ public class PedidoController implements Initializable, PedidoObserver {
         iniciarBotoesDeMudarEstado();
         iniciarBotoesDeDetalhe();
         iniciarBotoesDeAtualizar();
-        iniciarBotoesDeRemover();
-
     }
 
     private void tabelaFiltrada(String filtroData, String filtroEstado) {
@@ -298,21 +296,6 @@ public class PedidoController implements Initializable, PedidoObserver {
 
     }
 
-    public void removerPedido(TabelaPedidoDTO tabelaPedidoDTO){
-        Optional<ButtonType> escolha = Alertas.showConfirmation("Confirmação", "Tem certeza que quer deletar esse " +
-                "pedido?");
-
-        if(escolha.get() == ButtonType.OK){
-            try{
-                controller.excluirPedido(tabelaPedidoDTO.getPedidoDTO().getIdPedido());
-                atualizarTabelaPedidos();
-            }catch (DBException e){
-                Alertas.mostrarAlerta("Erro", "Erro ao excluir pedido!", Alert.AlertType.ERROR);
-            }
-        }
-
-    }
-
     private void iniciarBotoesDeMudarEstado() {
         colMudarEstado.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue()));
         colMudarEstado.setCellFactory(param -> new TableCell<TabelaPedidoDTO, TabelaPedidoDTO>() {
@@ -365,23 +348,6 @@ public class PedidoController implements Initializable, PedidoObserver {
             }
         });
     }
-
-    private void iniciarBotoesDeRemover() {
-        colExcluir.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue()));
-        colExcluir.setCellFactory(param -> new TableCell<TabelaPedidoDTO, TabelaPedidoDTO>() {
-            private final Button button = new Button("Remover");
-            protected void updateItem(TabelaPedidoDTO obj, boolean empty) {
-                super.updateItem(obj, empty);
-                if (obj == null) {
-                    setGraphic(null);
-                    return;
-                }
-                setGraphic(button);
-                button.setOnAction(event -> removerPedido(obj));
-            }
-        });
-    }
-
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {

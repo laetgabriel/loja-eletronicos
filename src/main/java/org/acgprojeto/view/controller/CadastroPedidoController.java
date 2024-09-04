@@ -258,20 +258,22 @@ public class CadastroPedidoController implements Initializable {
         VBox vBox = new VBox();
         vBox.setSpacing(12);
         vBox.getChildren().addAll(new Label("Digite a quantidade... "), txtQuantidade, new Label("Produto: "), comboBoxProduto);
-
+        atualizarComboBoxProduto();
         dialog.getDialogPane().setContent(vBox);
 
         Optional<ButtonType> result = dialog.showAndWait();
 
         if (result.isPresent() && result.get() == buttonTypeOk) {
-            atualizarComboBoxProduto();
             String quantidadeString = String.valueOf(txtQuantidade.getText());
             int quantidade;
             ProdutoDTO produto = comboBoxProduto.getValue();
             try {
                 validarProduto(produto);
                 validarQuantidadeProduto(quantidadeString, produto);
+
                 quantidade = Integer.parseInt(quantidadeString);
+                produto.setQuantidadeEstoque(produto.getQuantidadeEstoque() - quantidade);
+                produtoController.atualizarProduto(produto);
 
                 pedidoProdutoController.inserirPedidoProduto(new PedidoProdutoDTO(
                         pedidoController.obterUltimoPedido(),
@@ -328,9 +330,7 @@ public class CadastroPedidoController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
-        Restricoes.setTextFieldString(txtNomeCliente);
         data.setValue(LocalDate.now());
-        Restricoes.setTextFieldDouble(txtPrecoServico);
 
         btnAdicionarProduto.setDisable(true);
         btnAdicionarServico.setDisable(true);
@@ -359,7 +359,6 @@ public class CadastroPedidoController implements Initializable {
 
             });
 
-            Restricoes.validarEmail(txtEmailCliente.getText());
             atualizarComboBoxProduto();
 
         } catch (Exception ignored) {

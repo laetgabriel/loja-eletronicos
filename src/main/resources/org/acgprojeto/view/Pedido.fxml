@@ -75,7 +75,6 @@
                   <TableColumn fx:id="colMudarEstado" prefWidth="116.0" />
                         <TableColumn fx:id="colDetalhe" minWidth="0.0" />
                         <TableColumn fx:id="colAtualizar" />
-                        <TableColumn fx:id="colExcluir" />
                     </columns>
                 </TableView>
             <Label layoutX="418.0" layoutY="130.0" text="Filtro por estado:">
