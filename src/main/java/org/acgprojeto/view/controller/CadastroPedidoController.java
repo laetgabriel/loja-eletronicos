@@ -38,6 +38,9 @@ public class CadastroPedidoController implements Initializable {
     private CheckBox checkBoxCliente;
 
     @FXML
+    private CheckBox checkBoxPedido;
+
+    @FXML
     private ComboBox<ProdutoDTO> comboBoxProduto;
     @FXML
     private TextField txtNomeCliente;
@@ -81,7 +84,6 @@ public class CadastroPedidoController implements Initializable {
     private final PedidoController pedidoController = new PedidoController();
     private final ServicoController servicoController = new ServicoController();
     private final PedidoProdutoController pedidoProdutoController = new PedidoProdutoController();
-    private ObservableList<ProdutoDTO> produtos;
     private ObservableList<ClienteDTO> clientes;
     private final ServicoValidator chainServico = new ServicoValidator();
     private final ClienteValidator clienteValidator = new ClienteValidator();
@@ -109,13 +111,33 @@ public class CadastroPedidoController implements Initializable {
 
     }
 
+    public void onCheckBoxPedido(){
+        if(checkBoxPedido.isSelected()){
+            comboBoxProduto.setValue(null);
+            comboBoxProduto.setDisable(true);
+            txtQuantidadeProduto.clear();
+            txtQuantidadeProduto.setDisable(true);
+        }else{
+            comboBoxProduto.setDisable(false);
+            txtQuantidadeProduto.setDisable(false);
+        }
+
+    }
+
     public void onComboBoxTipoServico(){
         if(Tipo.valueOf(ccomboBoxTipoServico.getValue()) == Tipo.CONSERTO){
             checkBoxCliente.setDisable(true);
             checkBoxCliente.setSelected(false);
             onCheckBoxCliente();
+
+            checkBoxPedido.setSelected(true);
+            checkBoxPedido.setDisable(true);
+            onCheckBoxPedido();
         }else {
             checkBoxCliente.setDisable(false);
+            checkBoxPedido.setSelected(false);
+            checkBoxPedido.setDisable(true);
+            onCheckBoxPedido();
         }
     }
 
@@ -162,19 +184,24 @@ public class CadastroPedidoController implements Initializable {
             );
 
             chainServico.validateServico(servicoDTO);
-            validarProduto(produto);
-            validarQuantidadeProduto(quantidadeString, produto);
-            quantidadeInt = Integer.parseInt(quantidadeString);
+
+            if(!checkBoxPedido.isSelected()){
+                validarProduto(produto);
+                validarQuantidadeProduto(quantidadeString, produto);
+                quantidadeInt = Integer.parseInt(quantidadeString);
+                produto.setQuantidadeEstoque(produto.getQuantidadeEstoque() - quantidadeInt);
+                produtoController.atualizarProduto(produto);
+                atualizarComboBoxProduto();
+                pedidoProdutoController.inserirPedidoProduto
+                        (new PedidoProdutoDTO(
+                                pedidoController.obterUltimoPedido(),
+                                produto,
+                                produto.getPreco(),
+                                quantidadeInt));
+            }
+
             servicoController.inserirServico(servicoDTO);
-            produto.setQuantidadeEstoque(produto.getQuantidadeEstoque() - quantidadeInt);
-            produtoController.atualizarProduto(produto);
-            atualizarComboBoxProduto();
-            pedidoProdutoController.inserirPedidoProduto
-                    (new PedidoProdutoDTO(
-                            pedidoController.obterUltimoPedido(),
-                            produto,
-                            produto.getPreco(),
-                            quantidadeInt));
+
             txtNomeCliente.setDisable(true);
             txtEmailCliente.setDisable(true);
             txtTelefoneCliente.setDisable(true);
@@ -184,8 +211,10 @@ public class CadastroPedidoController implements Initializable {
             comboBoxProduto.setDisable(true);
             comboBoxClientes.setDisable(true);
             ccomboBoxTipoServico.setDisable(true);
+
+            btnAdicionarProduto.setDisable(checkBoxPedido.isSelected());
+
             btnAdicionarServico.setDisable(false);
-            btnAdicionarProduto.setDisable(false);
             data.setDisable(true);
             btnSalvar.setDisable(false);
 
@@ -363,6 +392,8 @@ public class CadastroPedidoController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         data.setValue(LocalDate.now());
+        checkBoxPedido.setDisable(true);
+
 
         Restricoes.setTextFieldDouble(txtPrecoServico);
         Restricoes.setTextFieldInteger(txtQuantidadeProduto);

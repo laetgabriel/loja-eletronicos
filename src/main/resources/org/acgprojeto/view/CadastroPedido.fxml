@@ -111,7 +111,7 @@
          </image>
       </ImageView>
       <Button fx:id="btnCancelar" alignment="CENTER" contentDisplay="CENTER" layoutX="364.0" layoutY="501.0" mnemonicParsing="false" onAction="#onBtnCancelar" prefHeight="32.0" prefWidth="258.0" style="-fx-background-color: green;" text="Cancelar" textFill="WHITE" />
-      <Button fx:id="btnAdicionarProduto" alignment="CENTER" contentDisplay="CENTER" layoutX="51.0" layoutY="446.0" mnemonicParsing="false" onAction="#abrirDialogProduto" prefHeight="30.0" prefWidth="258.0" style="-fx-background-color: green;" text="Adicionar Produto" textFill="WHITE" />
+      <Button fx:id="btnAdicionarProduto" alignment="CENTER" contentDisplay="CENTER" layoutX="51.0" layoutY="454.0" mnemonicParsing="false" onAction="#abrirDialogProduto" prefHeight="30.0" prefWidth="258.0" style="-fx-background-color: green;" text="Adicionar Produto" textFill="WHITE" />
       <Label layoutX="364.0" layoutY="65.0" text="Procurar Cliente">
          <font>
             <Font size="15.0" />
@@ -139,5 +139,6 @@
       <Label fx:id="lblErroQuantidadeProduto" layoutX="399.0" layoutY="439.0" prefHeight="18.0" prefWidth="210.0" text="Erro na quantidade de produtos" textFill="RED" />
       <CheckBox fx:id="checkBoxCliente" layoutX="368.0" layoutY="120.0" mnemonicParsing="false" onAction="#onCheckBoxCliente" text="Sem cliente" />
       <ComboBox fx:id="ccomboBoxTipoServico" layoutX="395.0" layoutY="244.0" onAction="#onComboBoxTipoServico" prefHeight="26.0" prefWidth="226.0" />
+      <CheckBox fx:id="checkBoxPedido" layoutX="368.0" layoutY="460.0" mnemonicParsing="false" onAction="#onCheckBoxPedido" text="Sem pedido" />
    </children>
 </AnchorPane>
