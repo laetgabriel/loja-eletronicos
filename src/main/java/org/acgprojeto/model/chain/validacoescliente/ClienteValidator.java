@@ -7,7 +7,7 @@ import org.acgprojeto.model.chain.ServicoHandler;
 public class ClienteValidator {
 
 
-    private ClienteHandler firstHandler;
+    private final ClienteHandler firstHandler;
 
     public ClienteValidator() {
         ClienteHandler nomeClienteHandler = new NomeClienteHandler();
@@ -26,4 +26,5 @@ public class ClienteValidator {
             firstHandler.handle(cliente);
         }
     }
+
 }

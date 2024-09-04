@@ -114,24 +114,21 @@ public class PedidoController {
                         gerarTabelaProdutos(document, tabelaPedidoDTO, font);
                         List<BigDecimal> valores = gerarTabelaServicos(document, tabelaPedidoDTO, font, valorTotalPedido, valorTotalCompra);
 
-                        // Adiciona o valor total do pedido ao relatório
                         document.add(new Paragraph("Valor total do Pedido: R$" + valores.getFirst())
                                 .setFont(font)
                                 .setFontSize(14));
                         document.add(new Paragraph("Valor do serviço de compra: - R$" + valores.getLast())
                                 .setFont(font)
-                                .setFontSize(12)
+                                .setFontSize(14)
                                 .setTextAlignment(TextAlignment.LEFT)
-                                .setFontColor(ColorConstants.RED)); // Destaca em vermelho
+                                .setFontColor(ColorConstants.RED)); //
                         document.add(new Paragraph("\n"));
 
-                        // Acumula o valor total de todos os pedidos, subtraindo o valor total dos serviços de compra
                         valorTotalGeralVendas = valorTotalGeralVendas.add(valores.getFirst());
                         valorTotalGeralCompras = valorTotalGeralCompras.add(valores.getLast());
                     }
                 }
 
-                // Adiciona o valor total geral das vendas e das compras ao final do relatório
                 document.add(new Paragraph("Valor total das vendas: R$" + valorTotalGeralVendas)
                         .setFont(font)
                         .setFontSize(16));
@@ -139,12 +136,12 @@ public class PedidoController {
                 document.add(new Paragraph("Valor total das compras: - R$" + valorTotalGeralCompras)
                         .setFont(font)
                         .setFontSize(16)
-                        .setFontColor(ColorConstants.RED)); // Destaca em vermelho
+                        .setFontColor(ColorConstants.RED));
 
                 document.add(new Paragraph("Lucro Total: R$" + valorTotalGeralVendas.subtract(valorTotalGeralCompras))
                         .setFont(font)
                         .setFontSize(16)
-                        .setFontColor(ColorConstants.GREEN)); // Destaca em verde
+                        .setFontColor(ColorConstants.GREEN));
 
             } catch (IOException e) {
                 throw new RuntimeException("Erro ao gerar relatório de pedido", e);

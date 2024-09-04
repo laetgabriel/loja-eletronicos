@@ -1,6 +1,5 @@
 package org.acgprojeto.model.chain;
 
-import org.acgprojeto.dto.PedidoDTO;
 import org.acgprojeto.dto.ServicoDTO;
 
 public abstract class ServicoHandler {
@@ -14,9 +13,8 @@ public abstract class ServicoHandler {
         return servicoDTO;
     }
 
-    public ServicoHandler setNextHandler(ServicoHandler nextHandler) {
+    public void setNextHandler(ServicoHandler nextHandler) {
         this.nextHandler = nextHandler;
-        return nextHandler;
     }
 
 }
