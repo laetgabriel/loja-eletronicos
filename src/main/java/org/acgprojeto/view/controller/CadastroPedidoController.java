@@ -461,7 +461,6 @@ public class CadastroPedidoController implements Initializable {
 
     private void validacaoProdutoeQuantidadeCompleta(String quantidadeTxt, ProdutoDTO produtoDTO) throws ValidacaoException{
         validarProdutoEQuantidade(quantidadeTxt, produtoDTO);
-        validarProdutoEQuantidade(quantidadeTxt, produtoDTO);
 
     }
 
