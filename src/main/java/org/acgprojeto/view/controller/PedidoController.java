@@ -16,6 +16,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.acgprojeto.db.exceptions.DBException;
 import org.acgprojeto.dto.TabelaPedidoDTO;
+import org.acgprojeto.model.entities.Pedido;
 import org.acgprojeto.model.enums.Estado;
 import org.acgprojeto.model.enums.Tipo;
 import org.acgprojeto.view.App;
@@ -238,14 +239,26 @@ public class PedidoController implements Initializable {
 
             if (result.isPresent()) {
                 String estadoDigitado = result.get().toUpperCase();
+                Pedido pedido = new Pedido(tabelaPedidoDTO.getPedidoDTO());
                 try {
-                    Estado novoEstado = Estado.valueOf(estadoDigitado);
-                    tabelaPedidoDTO.getPedidoDTO().setEstado(novoEstado);
-                    controller.atualizarEstadoPedido(tabelaPedidoDTO.getPedidoDTO());
-                    Alertas.mostrarAlerta("Sucesso", "Estado do pedido atualizado com sucesso", Alert.AlertType.INFORMATION);
-                    atualizarTabelaPedidos();
+                    switch( estadoDigitado) {
+                    case "PRONTO":
+                        pedido.concluir();
+                        atualizarTabelaPedidos();
+                        return;
+                    case "FINALIZADO":
+                        pedido.finalizar();
+                        atualizarTabelaPedidos();
+                        return;
+                    case "CANCELADO":
+                        pedido.cancelar();
+                        atualizarTabelaPedidos();
+                        return;
+                        default:
+                            Alertas.mostrarAlerta("Erro", "Estado inválido! Tente novamente.", Alert.AlertType.ERROR);
+                }
+
                 } catch (IllegalArgumentException e) {
-                    Alertas.mostrarAlerta("Erro", "Estado inválido! Tente novamente.", Alert.AlertType.ERROR);
                 }
             }
         } catch (DBException e) {

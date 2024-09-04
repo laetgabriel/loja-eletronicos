@@ -1,6 +1,8 @@
 package org.acgprojeto.model.state.impl;
 
+import javafx.scene.control.Alert;
 import org.acgprojeto.model.enums.Estado;
+import org.acgprojeto.util.Alertas;
 
 public class EstadoAndamento extends AbstractEstadoPedido {
     public EstadoAndamento() {
@@ -9,7 +11,7 @@ public class EstadoAndamento extends AbstractEstadoPedido {
 
     @Override
     public void finalizar() {
-        System.out.println("Pedido em andamento finalizado.");
+        Alertas.mostrarAlerta("Sucesso", "Estado do pedido atualizado com sucesso", Alert.AlertType.INFORMATION);
         pedidoDTO.setEstado(Estado.FINALIZADO);
         pedidoController.atualizarEstadoPedido(pedidoDTO);
 
@@ -17,14 +19,14 @@ public class EstadoAndamento extends AbstractEstadoPedido {
 
     @Override
     public void cancelar() {
-        System.out.println("Pedido em andamento cancelado.");
+        Alertas.mostrarAlerta("Sucesso", "Estado do pedido atualizado com sucesso", Alert.AlertType.INFORMATION);
         pedidoDTO.setEstado(Estado.CANCELADO);
         pedidoController.atualizarEstadoPedido(pedidoDTO);
     }
 
     @Override
     public void concluir() {
-        System.out.println("Pedido em andamento concluído.");
+        Alertas.mostrarAlerta("Sucesso", "Estado do pedido atualizado com sucesso", Alert.AlertType.INFORMATION);
         pedidoDTO.setEstado(Estado.PRONTO);
         pedidoController.atualizarEstadoPedido(pedidoDTO);
     }
