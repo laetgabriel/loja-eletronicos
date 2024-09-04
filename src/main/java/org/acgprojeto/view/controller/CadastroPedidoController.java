@@ -17,7 +17,6 @@ import org.acgprojeto.model.chain.validacoesservico.ServicoValidator;
 import org.acgprojeto.model.chain.validacoescliente.ClienteValidator;
 import org.acgprojeto.model.entities.Cliente;
 import org.acgprojeto.model.entities.Pedido;
-import org.acgprojeto.model.enums.Estado;
 import org.acgprojeto.model.enums.Tipo;
 import org.acgprojeto.util.Alertas;
 import org.acgprojeto.util.Restricoes;
@@ -31,9 +30,13 @@ import java.util.*;
 public class CadastroPedidoController implements Initializable {
 
     @FXML
-    private ChoiceBox<String> choiceBoxTipoServico;
+    private ComboBox<String> ccomboBoxTipoServico;
     @FXML
     private ComboBox<ClienteDTO> comboBoxClientes;
+
+    @FXML
+    private CheckBox checkBoxCliente;
+
     @FXML
     private ComboBox<ProdutoDTO> comboBoxProduto;
     @FXML
@@ -60,6 +63,7 @@ public class CadastroPedidoController implements Initializable {
     private Label lblErroPrecoServico;
     @FXML
     private Label lblErroQuantidadeProduto;
+
     @FXML
     private DatePicker data;
     @FXML
@@ -86,38 +90,67 @@ public class CadastroPedidoController implements Initializable {
         observers.add(observer);
     }
 
+    public void onCheckBoxCliente(){
+        if(checkBoxCliente.isSelected()){
+            txtNomeCliente.clear();
+            txtEmailCliente.clear();
+            txtTelefoneCliente.clear();
+            comboBoxClientes.setValue(null);
+            comboBoxClientes.setDisable(true);
+            txtNomeCliente.setDisable(true);
+            txtEmailCliente.setDisable(true);
+            txtTelefoneCliente.setDisable(true);
+        }else{
+            txtNomeCliente.setDisable(false);
+            txtEmailCliente.setDisable(false);
+            txtTelefoneCliente.setDisable(false);
+            comboBoxClientes.setDisable(false);
+        }
+
+    }
+
+    public void onComboBoxTipoServico(){
+        if(Tipo.valueOf(ccomboBoxTipoServico.getValue()) == Tipo.CONSERTO){
+            checkBoxCliente.setDisable(true);
+            checkBoxCliente.setSelected(false);
+            onCheckBoxCliente();
+        }else {
+            checkBoxCliente.setDisable(false);
+        }
+    }
+
 
     @FXML
     private void salvarPedido() {
         String quantidadeString = txtQuantidadeProduto.getText();
         int quantidadeInt = 0;
-        Tipo tipo = TipoStringParaEnum(choiceBoxTipoServico.getValue());
+        Tipo tipo = TipoStringParaEnum(ccomboBoxTipoServico.getValue());
         ProdutoDTO produto = comboBoxProduto.getValue();
         atualizarComboBoxProduto();
-        ClienteDTO clienteDTO =
-                comboBoxClientes.getValue() != null ?
-                        comboBoxClientes.getValue() : new ClienteDTO(null,
-                        txtNomeCliente.getText(),
-                        txtEmailCliente.getText(),
-                        txtTelefoneCliente.getText());
-        Cliente cliente = null;
-        try {
+        ClienteDTO clienteDTO = null;
 
-            if (comboBoxClientes.getValue() != null) {
-                clienteDTO = comboBoxClientes.getValue();
-            } else {
-                clienteValidator.validarCliente(clienteDTO);
-                clienteController.inserirCliente(clienteDTO);
-                clienteDTO = clienteController.obterUltimoCliente();
+        try{
+            if (!checkBoxCliente.isSelected()) {
+                if (comboBoxClientes.getValue() != null) {
+                    clienteDTO = comboBoxClientes.getValue();
+                } else {
+                    clienteDTO = new ClienteDTO(null, txtNomeCliente.getText(), txtEmailCliente.getText(), txtTelefoneCliente.getText());
+                    clienteValidator.validarCliente(clienteDTO);
+                    clienteController.inserirCliente(clienteDTO);
+                    clienteDTO = clienteController.obterUltimoCliente();
+                }
+
+                Cliente cliente = new Cliente(clienteDTO);
+                Pedido pedido = new Pedido(null, cliente, data.getValue());
+                PedidoDTO pedidoDTO = new PedidoDTO(pedido);
+
+                pedidoController.inserirPedido(pedidoDTO);
+            } else{
+                Pedido pedido = new Pedido(null, new Cliente(), data.getValue());
+                PedidoDTO pedidoDTO = new PedidoDTO(pedido);
+
+                pedidoController.inserirPedidoSemCliente(pedidoDTO);
             }
-
-            cliente = new Cliente(clienteDTO);
-
-
-            Pedido pedido = new Pedido(null, cliente, data.getValue());
-            PedidoDTO pedidoDTO = new PedidoDTO(pedido);
-
-            pedidoController.inserirPedido(pedidoDTO);
 
             ServicoDTO servicoDTO = new ServicoDTO(
                     null,
@@ -150,7 +183,7 @@ public class CadastroPedidoController implements Initializable {
             txtQuantidadeProduto.setDisable(true);
             comboBoxProduto.setDisable(true);
             comboBoxClientes.setDisable(true);
-            choiceBoxTipoServico.setDisable(true);
+            ccomboBoxTipoServico.setDisable(true);
             btnAdicionarServico.setDisable(false);
             btnAdicionarProduto.setDisable(false);
             data.setDisable(true);
@@ -329,14 +362,16 @@ public class CadastroPedidoController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
         data.setValue(LocalDate.now());
+
+        Restricoes.setTextFieldDouble(txtPrecoServico);
+        Restricoes.setTextFieldInteger(txtQuantidadeProduto);
 
         btnAdicionarProduto.setDisable(true);
         btnAdicionarServico.setDisable(true);
 
-        choiceBoxTipoServico.getItems().addAll("COMPRA", "VENDA", "CONSERTO");
-        choiceBoxTipoServico.setValue("VENDA");
+        ccomboBoxTipoServico.getItems().addAll("COMPRA", "VENDA", "CONSERTO");
+        ccomboBoxTipoServico.setValue("VENDA");
 
         try {
             List<ClienteDTO> listaClientes = clienteController.listarTodosOsClientes();
