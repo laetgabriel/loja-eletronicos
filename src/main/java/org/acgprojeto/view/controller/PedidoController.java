@@ -15,6 +15,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.acgprojeto.db.exceptions.DBException;
+import org.acgprojeto.dto.PedidoDTO;
 import org.acgprojeto.dto.TabelaPedidoDTO;
 import org.acgprojeto.model.entities.Pedido;
 import org.acgprojeto.model.enums.Estado;
@@ -242,25 +243,10 @@ public class PedidoController implements Initializable, PedidoObserver {
 
             if (result.isPresent()) {
                 String estadoDigitado = result.get().toUpperCase();
-                Pedido pedido = new Pedido(tabelaPedidoDTO.getPedidoDTO());
+                PedidoDTO pedidoDTO = tabelaPedidoDTO.getPedidoDTO();
                 try {
-                    switch( estadoDigitado) {
-                    case "PRONTO":
-                        pedido.concluir();
-                        atualizarTabelaPedidos();
-                        return;
-                    case "FINALIZADO":
-                        pedido.finalizar();
-                        atualizarTabelaPedidos();
-                        return;
-                    case "CANCELADO":
-                        pedido.cancelar();
-                        atualizarTabelaPedidos();
-                        return;
-                        default:
-                            Alertas.mostrarAlerta("Erro", "Estado inválido! Tente novamente.", Alert.AlertType.ERROR);
-                }
-
+                    controller.mudarEstadoPedido(pedidoDTO, estadoDigitado);
+                    atualizarTabelaPedidos();
                 } catch (IllegalArgumentException e) {
                 }
             }
