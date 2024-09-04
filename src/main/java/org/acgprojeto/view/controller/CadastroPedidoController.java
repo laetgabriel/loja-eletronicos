@@ -68,7 +68,8 @@ public class CadastroPedidoController implements Initializable {
     private Label lblErroPrecoServico;
     @FXML
     private Label lblErroQuantidadeProduto;
-
+    @FXML
+    private Label lblErroProdutoSelecionado;
     @FXML
     private DatePicker data;
     @FXML
@@ -94,8 +95,8 @@ public class CadastroPedidoController implements Initializable {
         observers.add(observer);
     }
 
-    public void onCheckBoxCliente(){
-        if(checkBoxCliente.isSelected()){
+    public void onCheckBoxCliente() {
+        if (checkBoxCliente.isSelected()) {
             txtNomeCliente.clear();
             txtEmailCliente.clear();
             txtTelefoneCliente.clear();
@@ -104,7 +105,7 @@ public class CadastroPedidoController implements Initializable {
             txtNomeCliente.setDisable(true);
             txtEmailCliente.setDisable(true);
             txtTelefoneCliente.setDisable(true);
-        }else{
+        } else {
             txtNomeCliente.setDisable(false);
             txtEmailCliente.setDisable(false);
             txtTelefoneCliente.setDisable(false);
@@ -113,21 +114,21 @@ public class CadastroPedidoController implements Initializable {
 
     }
 
-    public void onCheckBoxPedido(){
-        if(checkBoxPedido.isSelected()){
+    public void onCheckBoxPedido() {
+        if (checkBoxPedido.isSelected()) {
             comboBoxProduto.setValue(null);
             comboBoxProduto.setDisable(true);
             txtQuantidadeProduto.clear();
             txtQuantidadeProduto.setDisable(true);
-        }else{
+        } else {
             comboBoxProduto.setDisable(false);
             txtQuantidadeProduto.setDisable(false);
         }
 
     }
 
-    public void onComboBoxTipoServico(){
-        if(Tipo.valueOf(ccomboBoxTipoServico.getValue()) == Tipo.CONSERTO){
+    public void onComboBoxTipoServico() {
+        if (Tipo.valueOf(ccomboBoxTipoServico.getValue()) == Tipo.CONSERTO) {
             checkBoxCliente.setDisable(true);
             checkBoxCliente.setSelected(false);
             onCheckBoxCliente();
@@ -135,7 +136,7 @@ public class CadastroPedidoController implements Initializable {
             checkBoxPedido.setSelected(true);
             checkBoxPedido.setDisable(true);
             onCheckBoxPedido();
-        }else {
+        } else {
             checkBoxCliente.setDisable(false);
             checkBoxPedido.setSelected(false);
             checkBoxPedido.setDisable(true);
@@ -153,7 +154,7 @@ public class CadastroPedidoController implements Initializable {
         atualizarComboBoxProduto();
         ClienteDTO clienteDTO = null;
 
-        try{
+        try {
             if (!checkBoxCliente.isSelected()) {
                 if (comboBoxClientes.getValue() != null) {
                     clienteDTO = comboBoxClientes.getValue();
@@ -169,7 +170,7 @@ public class CadastroPedidoController implements Initializable {
                 PedidoDTO pedidoDTO = new PedidoDTO(pedido);
 
                 pedidoController.inserirPedido(pedidoDTO);
-            } else{
+            } else {
                 Pedido pedido = new Pedido(null, new Cliente(), data.getValue());
                 PedidoDTO pedidoDTO = new PedidoDTO(pedido);
 
@@ -187,8 +188,8 @@ public class CadastroPedidoController implements Initializable {
 
             validacoCompletaServico(servicoDTO);
 
-            if(!checkBoxPedido.isSelected()){
-                validarProdutoEQuantidade(quantidadeString, produto);
+            if (!checkBoxPedido.isSelected()) {
+                validacaoProdutoeQuantidadeCompleta(quantidadeString, produto);
                 quantidadeInt = Integer.parseInt(quantidadeString);
                 produto.setQuantidadeEstoque(produto.getQuantidadeEstoque() - quantidadeInt);
                 produtoController.atualizarProduto(produto);
@@ -212,6 +213,8 @@ public class CadastroPedidoController implements Initializable {
             comboBoxProduto.setDisable(true);
             comboBoxClientes.setDisable(true);
             ccomboBoxTipoServico.setDisable(true);
+            lblErroProdutoSelecionado.setText("");
+            lblErroQuantidadeProduto.setText("");
 
             btnAdicionarProduto.setDisable(checkBoxPedido.isSelected());
 
@@ -229,7 +232,7 @@ public class CadastroPedidoController implements Initializable {
             }
 
         } catch (ValidacaoException e) {
-            try{
+            try {
                 PedidoDTO ultimoPedido = pedidoController.obterUltimoPedido();
                 if (ultimoPedido != null) {
                     pedidoController.excluirPedido(ultimoPedido.getIdPedido());
@@ -237,8 +240,30 @@ public class CadastroPedidoController implements Initializable {
                         clienteController.excluirCliente(clienteController.obterUltimoCliente().getIdCliente());
                     }
                 }
-            }catch (DBException _){
+            } catch (DBException _) {
 
+            }
+            lblErroNomeCliente.setText("");
+            lblErroEmailCliente.setText("");
+            lblErroTelefoneCliente.setText("");
+            lblErroDescricaoServico.setText("");
+            lblErroPrecoServico.setText("");
+            lblErroProdutoSelecionado.setText("");
+            lblErroQuantidadeProduto.setText("");
+            if (e.getMessage().contains("nome")) {
+                lblErroNomeCliente.setText(e.getMessage());
+            } else if (e.getMessage().contains("email")) {
+                lblErroEmailCliente.setText(e.getMessage());
+            } else if (e.getMessage().contains("telefone")) {
+                lblErroTelefoneCliente.setText(e.getMessage());
+            } else if (e.getMessage().contains("descrição")) {
+                lblErroDescricaoServico.setText(e.getMessage());
+            } else if (e.getMessage().contains("preço")) {
+                lblErroPrecoServico.setText(e.getMessage());
+            } else if (e.getMessage().contains("produto")) {
+                lblErroProdutoSelecionado.setText(e.getMessage());
+            } else if (e.getMessage().contains("indisponível") || e.getMessage().contains("inválida") ||  e.getMessage().contains("zero")) {
+                lblErroQuantidadeProduto.setText(e.getMessage());
             }
 
         }
@@ -246,7 +271,7 @@ public class CadastroPedidoController implements Initializable {
     }
 
     @FXML
-    public void onBtnCancelar(){
+    public void onBtnCancelar() {
         Stage stage = (Stage) btnCancelar.getScene().getWindow();
         stage.close();
     }
@@ -268,6 +293,7 @@ public class CadastroPedidoController implements Initializable {
 
         ChoiceBox<String> choiceBoxTipoServico = new ChoiceBox<>();
         choiceBoxTipoServico.getItems().addAll("COMPRA", "VENDA", "CONSERTO");
+        choiceBoxTipoServico.setValue("VENDA");
 
         VBox vbox = new VBox();
         vbox.setSpacing(12);
@@ -329,7 +355,7 @@ public class CadastroPedidoController implements Initializable {
             int quantidade;
             ProdutoDTO produto = comboBoxProduto.getValue();
             try {
-                validarProdutoEQuantidade(quantidadeString, produto);
+                validacaoProdutoeQuantidadeCompleta(quantidadeString, produto);
 
                 quantidade = Integer.parseInt(quantidadeString);
                 produto.setQuantidadeEstoque(produto.getQuantidadeEstoque() - quantidade);
@@ -364,7 +390,7 @@ public class CadastroPedidoController implements Initializable {
     }
 
 
-    private void notificarOuvintes(){
+    private void notificarOuvintes() {
         for (PedidoObserver observer : observers) {
             observer.atualizarPedidos();
         }
@@ -375,7 +401,7 @@ public class CadastroPedidoController implements Initializable {
         data.setValue(LocalDate.now());
         checkBoxPedido.setDisable(true);
 
-        Restricoes.setTextFieldMaxLength(txtTelefoneCliente,9);
+        Restricoes.setTextFieldMaxLength(txtTelefoneCliente, 9);
         Restricoes.setTextFieldDouble(txtPrecoServico);
         Restricoes.setTextFieldInteger(txtQuantidadeProduto);
 
@@ -413,56 +439,42 @@ public class CadastroPedidoController implements Initializable {
         }
     }
 
-    private void validarProdutoEQuantidade(String quantidadeTxt, ProdutoDTO produtoDTO) {
-        // Validação do produto
+    private void validarProdutoEQuantidade(String quantidadeTxt, ProdutoDTO produtoDTO)  {
         if (produtoDTO == null) {
             throw new ValidacaoException("Selecione um produto para adicionar");
         }
 
-        // Validação da quantidade
         if (quantidadeTxt == null || quantidadeTxt.isEmpty() || !quantidadeTxt.matches("\\d+")) {
             throw new ValidacaoException("Quantidade inválida");
         }
 
         int quantidade = Integer.parseInt(quantidadeTxt);
+        if (quantidade == 0) {
+            throw new ValidacaoException("Quantidade não pode ser zero");
+        }
 
         if (quantidade > produtoDTO.getQuantidadeEstoque()) {
             throw new ValidacaoException("Quantidade indisponível");
         }
     }
 
-    private void validacaoCompletaCliente(ClienteDTO clienteDTO) {
-        try {
-            lblErroNomeCliente.setText("");
-            lblErroEmailCliente.setText("");
-            lblErroTelefoneCliente.setText("");
-            clienteValidator.validarCliente(clienteDTO);
-        } catch (ValidacaoException e) {
-            if (e.getMessage().contains("cliente")) {
-                lblErroNomeCliente.setText(e.getMessage());
-            } else if (e.getMessage().contains("email")) {
-                lblErroEmailCliente.setText(e.getMessage());
-            } else if (e.getMessage().contains("telefone")) {
-                lblErroTelefoneCliente.setText(e.getMessage());
-            }
-        }
+    private void validacaoProdutoeQuantidadeCompleta(String quantidadeTxt, ProdutoDTO produtoDTO) throws ValidacaoException{
+        validarProdutoEQuantidade(quantidadeTxt, produtoDTO);
+        validarProdutoEQuantidade(quantidadeTxt, produtoDTO);
+
     }
 
-
-
-    private void validacoCompletaServico(ServicoDTO servicoDTO) {
-        try {
-            lblErroDescricaoServico.setText("");
-            lblErroPrecoServico.setText("");
-            chainServico.validateServico(servicoDTO);
-        } catch (ValidacaoException e) {
-            if (e.getMessage().contains("descrição")) {
-                lblErroDescricaoServico.setText(e.getMessage());
-            } else if (e.getMessage().contains("preço")) {
-                lblErroPrecoServico.setText(e.getMessage());
-            }
-        }
+    private void validacaoCompletaCliente(ClienteDTO clienteDTO) throws ValidacaoException {
+        lblErroNomeCliente.setText("");
+        lblErroEmailCliente.setText("");
+        lblErroTelefoneCliente.setText("");
+        clienteValidator.validarCliente(clienteDTO);
     }
 
+    private void validacoCompletaServico(ServicoDTO servicoDTO) throws ValidacaoException {
+        lblErroDescricaoServico.setText("");
+        lblErroPrecoServico.setText("");
+        chainServico.validateServico(servicoDTO);
+    }
 }
 

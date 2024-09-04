@@ -100,12 +100,12 @@
          </image>
       </ImageView>
       <DatePicker fx:id="data" layoutX="395.0" layoutY="342.0" prefHeight="32.0" prefWidth="226.0" />
-      <Label layoutX="54.0" layoutY="388.0" text="Adicionar produto">
+      <Label layoutX="55.0" layoutY="375.0" text="Adicionar produto">
          <font>
             <Font size="15.0" />
          </font>
       </Label>
-      <ImageView layoutX="51.0" layoutY="407.0">
+      <ImageView layoutX="52.0" layoutY="394.0">
          <image>
             <Image url="@../icones/produto.png" />
          </image>
@@ -124,7 +124,7 @@
       </ImageView>
       <Button fx:id="btnAdicionarServico" alignment="CENTER" contentDisplay="CENTER" layoutX="367.0" layoutY="276.0" mnemonicParsing="false" onAction="#abrirDialogoAdicionarServico" prefHeight="30.0" prefWidth="258.0" style="-fx-background-color: green;" text="Adicionar Servico" textFill="WHITE" />
       <ComboBox fx:id="comboBoxClientes" layoutX="395.0" layoutY="92.0" prefHeight="25.0" prefWidth="225.0" promptText="Se o cliente já existir..." />
-      <ComboBox fx:id="comboBoxProduto" layoutX="82.0" layoutY="411.0" prefHeight="25.0" prefWidth="225.0" promptText="Selecione o produto" />
+      <ComboBox fx:id="comboBoxProduto" layoutX="83.0" layoutY="398.0" prefHeight="25.0" prefWidth="225.0" promptText="Selecione o produto" />
       <ImageView fitHeight="30.0" fitWidth="32.0" layoutX="357.0" layoutY="410.0">
          <image>
             <Image url="@../icones/quantidade.png" />
@@ -136,9 +136,10 @@
             <Font size="15.0" />
          </font>
       </Label>
-      <Label fx:id="lblErroQuantidadeProduto" layoutX="399.0" layoutY="439.0" prefHeight="18.0" prefWidth="210.0" text="Erro na quantidade de produtos" textFill="RED" />
+      <Label fx:id="lblErroQuantidadeProduto" layoutX="399.0" layoutY="439.0" prefHeight="18.0" prefWidth="210.0" textFill="RED" />
       <CheckBox fx:id="checkBoxCliente" layoutX="368.0" layoutY="120.0" mnemonicParsing="false" onAction="#onCheckBoxCliente" text="Sem cliente" />
       <ComboBox fx:id="ccomboBoxTipoServico" layoutX="395.0" layoutY="244.0" onAction="#onComboBoxTipoServico" prefHeight="26.0" prefWidth="226.0" />
       <CheckBox fx:id="checkBoxPedido" layoutX="368.0" layoutY="460.0" mnemonicParsing="false" onAction="#onCheckBoxPedido" text="Sem pedido" />
+      <Label fx:id="lblErroProdutoSelecionado" layoutX="83.0" layoutY="423.0" prefHeight="18.0" prefWidth="210.0" textFill="RED" />
    </children>
 </AnchorPane>
