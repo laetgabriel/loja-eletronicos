@@ -231,7 +231,7 @@ public class PedidoController implements Initializable, PedidoObserver {
         }
     }
 
-    public void mudarEstado(TabelaPedidoDTO tabelaPedidoDTO) {
+    public void  mudarEstado(TabelaPedidoDTO tabelaPedidoDTO) {
         try {
             TextInputDialog dialog = new TextInputDialog();
             dialog.setTitle("Atualizar estado pedido");

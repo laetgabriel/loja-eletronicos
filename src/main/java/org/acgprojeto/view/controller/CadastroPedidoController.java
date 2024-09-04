@@ -17,7 +17,9 @@ import org.acgprojeto.model.chain.validacoesservico.ServicoValidator;
 import org.acgprojeto.model.chain.validacoescliente.ClienteValidator;
 import org.acgprojeto.model.entities.Cliente;
 import org.acgprojeto.model.entities.Pedido;
+import org.acgprojeto.model.enums.Estado;
 import org.acgprojeto.model.enums.Tipo;
+import org.acgprojeto.model.state.EstadoPedido;
 import org.acgprojeto.util.Alertas;
 import org.acgprojeto.util.Restricoes;
 import org.acgprojeto.view.observer.PedidoObserver;
@@ -125,7 +127,7 @@ public class CadastroPedidoController implements Initializable {
     }
 
     public void onComboBoxTipoServico(){
-        if(Tipo.valueOf(ccomboBoxTipoServico.getValue()) == Tipo.CONSERTO){
+        if(Tipo.valueOf(ccomboBoxTipoServico.getValue()) == Tipo.CONSERTO ){
             checkBoxCliente.setDisable(true);
             checkBoxCliente.setSelected(false);
             onCheckBoxCliente();
@@ -138,6 +140,12 @@ public class CadastroPedidoController implements Initializable {
             checkBoxPedido.setSelected(false);
             checkBoxPedido.setDisable(true);
             onCheckBoxPedido();
+        }
+
+        if(Tipo.valueOf(ccomboBoxTipoServico.getValue()) == Tipo.COMPRA){
+            checkBoxCliente.setDisable(true);
+            checkBoxCliente.setSelected(true);
+            onCheckBoxCliente();
         }
     }
 
@@ -164,6 +172,10 @@ public class CadastroPedidoController implements Initializable {
 
                 Cliente cliente = new Cliente(clienteDTO);
                 Pedido pedido = new Pedido(null, cliente, data.getValue());
+
+                if(tipo == Tipo.COMPRA || tipo == Tipo.VENDA){
+                }
+
                 PedidoDTO pedidoDTO = new PedidoDTO(pedido);
 
                 pedidoController.inserirPedido(pedidoDTO);
