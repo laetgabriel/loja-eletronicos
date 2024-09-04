@@ -15,6 +15,7 @@ import com.itextpdf.layout.properties.UnitValue;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Alert;
 import javafx.stage.Stage;
+import org.acgprojeto.dao.DAOFactory;
 import org.acgprojeto.dao.ProdutoDAO;
 import org.acgprojeto.dao.impl.ProdutoDAOImpl;
 import org.acgprojeto.db.DB;
@@ -29,7 +30,7 @@ import java.util.List;
 
 public class ProdutoController {
 
-    ProdutoDAO produtoDAO = new ProdutoDAOImpl(DB.getConexao());
+    ProdutoDAO produtoDAO = DAOFactory.criarProdutoDAO();
 
     public void inserirProduto(ProdutoDTO produtoDTO) {
         produtoDAO.inserirProduto(produtoDTO);

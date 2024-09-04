@@ -14,6 +14,7 @@ import com.itextpdf.layout.properties.TextAlignment;
 import com.itextpdf.layout.properties.UnitValue;
 import javafx.collections.ObservableList;
 import javafx.stage.Stage;
+import org.acgprojeto.dao.DAOFactory;
 import org.acgprojeto.dao.PedidoDAO;
 import org.acgprojeto.dao.impl.PedidoDAOImpl;
 import org.acgprojeto.db.DB;
@@ -29,7 +30,7 @@ import java.util.Set;
 
 public class PedidoController {
 
-    PedidoDAO pedidoDAO = new PedidoDAOImpl(DB.getConexao());
+    PedidoDAO pedidoDAO = DAOFactory.criarPedidoDAO();
 
     public void inserirPedido(PedidoDTO pedidoDTO) {
         pedidoDAO.inserirPedido(pedidoDTO);

@@ -16,6 +16,7 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 import org.acgprojeto.dao.ClienteDAO;
+import org.acgprojeto.dao.DAOFactory;
 import org.acgprojeto.dao.impl.ClienteDAOImpl;
 import org.acgprojeto.db.DB;
 import org.acgprojeto.dto.ClienteDTO;
@@ -28,7 +29,7 @@ import java.util.List;
 
 public class ClienteController {
 
-    ClienteDAO clienteDAO = new ClienteDAOImpl(DB.getConexao());
+    ClienteDAO clienteDAO = DAOFactory.criarClienteDAO();
 
     public void inserirCliente(ClienteDTO clienteDTO) {
         if (isEmailOrTelefoneCadastrado(clienteDTO.getEmail(), clienteDTO.getTelefone())) {

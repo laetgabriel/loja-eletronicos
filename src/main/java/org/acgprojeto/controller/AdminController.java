@@ -1,6 +1,7 @@
 package org.acgprojeto.controller;
 
 import org.acgprojeto.dao.AdminDAO;
+import org.acgprojeto.dao.DAOFactory;
 import org.acgprojeto.dao.impl.AdminDAOImpl;
 import org.acgprojeto.db.DB;
 import org.acgprojeto.dto.AdminDTO;
@@ -8,7 +9,7 @@ import org.acgprojeto.dto.AdminDTO;
 
 public class AdminController {
 
-    AdminDAO adminDAO = new AdminDAOImpl(DB.getConexao());
+    AdminDAO adminDAO = DAOFactory.criarAdminDAO();
 
     public void inserirAdmin(AdminDTO adminDTO) {
         adminDAO.inserirAdmin(adminDTO);

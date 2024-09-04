@@ -1,5 +1,6 @@
 package org.acgprojeto.controller;
 
+import org.acgprojeto.dao.DAOFactory;
 import org.acgprojeto.dao.PedidoProdutoDAO;
 import org.acgprojeto.dao.impl.PedidoProdutoDAOImpl;
 import org.acgprojeto.db.DB;
@@ -9,7 +10,7 @@ import java.util.List;
 
 public class PedidoProdutoController {
 
-    PedidoProdutoDAO pedidoProdutoDAO = new PedidoProdutoDAOImpl(DB.getConexao());
+    PedidoProdutoDAO pedidoProdutoDAO = DAOFactory.criarPedidoProdutoDAO();
 
     public void inserirPedidoProduto(PedidoProdutoDTO pedidoProdutoDTO) {
         pedidoProdutoDAO.inserirPedidoProduto(pedidoProdutoDTO);

@@ -14,6 +14,7 @@ import com.itextpdf.layout.properties.TextAlignment;
 import com.itextpdf.layout.properties.UnitValue;
 import javafx.collections.ObservableList;
 import javafx.stage.Stage;
+import org.acgprojeto.dao.DAOFactory;
 import org.acgprojeto.dao.ServicoDAO;
 import org.acgprojeto.dao.impl.ServicoDAOImpl;
 import org.acgprojeto.db.DB;
@@ -30,7 +31,7 @@ import java.util.List;
 
 public class ServicoController {
 
-    ServicoDAO servicoDAO = new ServicoDAOImpl(DB.getConexao());
+    ServicoDAO servicoDAO = DAOFactory.criarServicoDAO();
 
     public void inserirServico(ServicoDTO servicoDTO) {
         servicoDAO.inserirServico(servicoDTO);

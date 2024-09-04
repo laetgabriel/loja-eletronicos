@@ -1,5 +1,6 @@
 package org.acgprojeto.dao.impl;
 
+import org.acgprojeto.dao.DAOFactory;
 import org.acgprojeto.dao.PedidoDAO;
 import org.acgprojeto.db.exceptions.DBException;
 import org.acgprojeto.dto.*;
@@ -224,7 +225,7 @@ public class PedidoDAOImpl implements PedidoDAO {
         PedidoDTO pedido = new PedidoDTO();
         pedido.setIdPedido(rs.getInt("Id_Pedido"));
 
-        ClienteDTO clienteDTO = new ClienteDAOImpl(conexao).buscarClientePorId(rs.getInt("Id_Cliente"));
+        ClienteDTO clienteDTO = DAOFactory.criarClienteDAO().buscarClientePorId(rs.getInt("Id_Cliente"));
         if(clienteDTO == null) {
             clienteDTO = new ClienteDTO();
         }
@@ -249,7 +250,7 @@ public class PedidoDAOImpl implements PedidoDAO {
 
     private TabelaPedidoDTO instanciarTabelaPedidoServico(ResultSet rs) throws SQLException {
         TabelaPedidoDTO tabelaPedidoDTO = instanciarTabelaPedido(rs);
-        ServicoDTO servicoDTO = new ServicoDAOImpl(conexao).buscarServicoPorId(rs.getInt("Id_Servico"));
+        ServicoDTO servicoDTO = DAOFactory.criarServicoDAO().buscarServicoPorId(rs.getInt("Id_Servico"));
         if (servicoDTO == null){
             servicoDTO = new ServicoDTO();
         }
@@ -262,14 +263,14 @@ public class PedidoDAOImpl implements PedidoDAO {
     private TabelaPedidoDTO instanciarTabelaPedidoAll(ResultSet rs, Integer indiceServico) throws SQLException{
         TabelaPedidoDTO tabelaPedidoDTO = instanciarTabelaPedido(rs);
 
-        ProdutoDTO produtoDTO = new ProdutoDAOImpl(conexao).buscarProdutoPorId(rs.getInt("Id_Produto"));
+        ProdutoDTO produtoDTO = DAOFactory.criarProdutoDAO().buscarProdutoPorId(rs.getInt("Id_Produto"));
 
         if(produtoDTO == null){
             produtoDTO = ProdutoDTO.ProdutoDTOBuilder.aProdutoDTO().build();
         }
         tabelaPedidoDTO.setProdutoDTO(produtoDTO);
 
-        PedidoProdutoDTO pedidoProdutoDTO = new PedidoProdutoDAOImpl(conexao).buscarPedidoProduto(rs.getInt("Id_Pedido"),
+        PedidoProdutoDTO pedidoProdutoDTO = DAOFactory.criarPedidoProdutoDAO().buscarPedidoProduto(rs.getInt("Id_Pedido"),
                 rs.getInt("Id_Produto"));
 
         if (pedidoProdutoDTO == null){
@@ -277,7 +278,7 @@ public class PedidoDAOImpl implements PedidoDAO {
         }
         tabelaPedidoDTO.setPedidoProdutoDTO(pedidoProdutoDTO);
 
-        ServicoDTO servicoDTO = new ServicoDAOImpl(conexao).buscarServicoPorId(indiceServico);
+        ServicoDTO servicoDTO = DAOFactory.criarServicoDAO().buscarServicoPorId(indiceServico);
         if (servicoDTO == null){
             servicoDTO = new ServicoDTO();
         }
@@ -290,7 +291,7 @@ public class PedidoDAOImpl implements PedidoDAO {
     private PedidoDTO instanciarPedido(ResultSet rs) throws SQLException {
         Pedido pedido = new Pedido();
         pedido.setIdPedido(rs.getInt("Id_Pedido"));
-        pedido.setCliente(new Cliente(new ClienteDAOImpl(conexao).buscarClientePorId(rs.getInt("Id_Cliente"))));
+        pedido.setCliente(new Cliente(DAOFactory.criarClienteDAO().buscarClientePorId(rs.getInt("Id_Cliente"))));
         pedido.setData(rs.getDate("Data").toLocalDate());
 
         // Lê o valor do estado e garante que ele esteja em maiúsculas
