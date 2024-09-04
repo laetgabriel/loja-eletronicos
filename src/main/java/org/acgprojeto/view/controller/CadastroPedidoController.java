@@ -158,6 +158,8 @@ public class CadastroPedidoController implements Initializable {
         ProdutoDTO produto = comboBoxProduto.getValue();
         atualizarComboBoxProduto();
         ClienteDTO clienteDTO = null;
+        Pedido pedido = null;
+        PedidoDTO pedidoDTO = null;
 
         try{
             if (!checkBoxCliente.isSelected()) {
@@ -171,19 +173,22 @@ public class CadastroPedidoController implements Initializable {
                 }
 
                 Cliente cliente = new Cliente(clienteDTO);
-                Pedido pedido = new Pedido(null, cliente, data.getValue());
+                pedido = new Pedido(null, cliente, data.getValue());
 
-                if(tipo == Tipo.COMPRA || tipo == Tipo.VENDA){
-                }
-
-                PedidoDTO pedidoDTO = new PedidoDTO(pedido);
+               pedidoDTO = new PedidoDTO(pedido);
 
                 pedidoController.inserirPedido(pedidoDTO);
             } else{
-                Pedido pedido = new Pedido(null, new Cliente(), data.getValue());
-                PedidoDTO pedidoDTO = new PedidoDTO(pedido);
+                pedido = new Pedido(null, new Cliente(), data.getValue());
+                pedidoDTO = new PedidoDTO(pedido);
 
                 pedidoController.inserirPedidoSemCliente(pedidoDTO);
+            }
+
+            pedidoDTO = pedidoController.obterUltimoPedido();
+
+            if(tipo == Tipo.VENDA || tipo == Tipo.COMPRA){
+                pedidoController.mudarEstadoPedido(pedidoDTO, Estado.FINALIZADO.toString());
             }
 
             ServicoDTO servicoDTO = new ServicoDTO(

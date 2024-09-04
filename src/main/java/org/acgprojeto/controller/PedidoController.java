@@ -71,20 +71,17 @@ public class PedidoController {
         return pedidoDAO.obterUltimoPedido();
     }
 
-    public void mudarEstadoPedido(PedidoDTO pedidoDTO, String estadoDigitado) {
+    public boolean mudarEstadoPedido(PedidoDTO pedidoDTO, String estadoDigitado) {
         Pedido pedido = new Pedido(pedidoDTO);
         switch( estadoDigitado) {
             case "PRONTO":
-                pedido.concluir();
-                return;
+                return pedido.concluir();
             case "FINALIZADO":
-                pedido.finalizar();
-                return;
+                return pedido.finalizar();
             case "CANCELADO":
-                pedido.cancelar();
-                return;
+                return pedido.cancelar();
             default:
-                Alertas.mostrarAlerta("Erro", "Estado inválido! Tente novamente.", Alert.AlertType.ERROR);
+                return false;
         }
     }
 

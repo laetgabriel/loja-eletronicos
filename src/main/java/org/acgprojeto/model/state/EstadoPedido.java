@@ -3,9 +3,9 @@ package org.acgprojeto.model.state;
 import org.acgprojeto.dto.PedidoDTO;
 
 public interface EstadoPedido {
-    void finalizar();
-    void cancelar();
-    void concluir();
+    boolean finalizar();
+    boolean cancelar();
+    boolean concluir();
     String getNomeEstado();
     void setPedidoDTO(PedidoDTO pedidoDTO);
 }

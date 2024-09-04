@@ -10,26 +10,26 @@ public class EstadoAndamento extends AbstractEstadoPedido {
     }
 
     @Override
-    public void finalizar() {
-        Alertas.mostrarAlerta("Sucesso", "Estado do pedido atualizado com sucesso", Alert.AlertType.INFORMATION);
+    public boolean finalizar() {
         pedidoDTO.setEstado(Estado.FINALIZADO);
         pedidoController.atualizarEstadoPedido(pedidoDTO);
-
+        return true;
     }
 
     @Override
-    public void cancelar() {
-        Alertas.mostrarAlerta("Sucesso", "Estado do pedido atualizado com sucesso", Alert.AlertType.INFORMATION);
+    public boolean cancelar() {
         pedidoDTO.setEstado(Estado.CANCELADO);
         pedidoController.atualizarEstadoPedido(pedidoDTO);
+        return true;
     }
 
     @Override
-    public void concluir() {
-        Alertas.mostrarAlerta("Sucesso", "Estado do pedido atualizado com sucesso", Alert.AlertType.INFORMATION);
+    public boolean concluir() {
         pedidoDTO.setEstado(Estado.PRONTO);
         pedidoController.atualizarEstadoPedido(pedidoDTO);
+        return  true;
     }
+
     @Override
     public String getNomeEstado() {
         return "ANDAMENTO";

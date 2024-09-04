@@ -245,13 +245,19 @@ public class PedidoController implements Initializable, PedidoObserver {
                 String estadoDigitado = result.get().toUpperCase();
                 PedidoDTO pedidoDTO = tabelaPedidoDTO.getPedidoDTO();
                 try {
-                    controller.mudarEstadoPedido(pedidoDTO, estadoDigitado);
-                    atualizarTabelaPedidos();
+                    if (controller.mudarEstadoPedido(pedidoDTO, estadoDigitado)){
+                        Alertas.mostrarAlerta("Sucesso!", "Estado de pedido alterado com sucesso!", Alert.AlertType.CONFIRMATION);
+                        atualizarTabelaPedidos();
+                    }else{
+                        Alertas.mostrarAlerta("Erro", "Erro ao atualizar estado de pedido", Alert.AlertType.ERROR);
+                    }
                 } catch (IllegalArgumentException e) {
+                    Alertas.mostrarAlerta("Erro", "Erro ao atualizar estado de pedido", Alert.AlertType.ERROR);
                 }
             }
         } catch (DBException e) {
             Alertas.mostrarAlerta("Erro", "Erro ao atualizar estado de pedido", Alert.AlertType.ERROR);
+
         }
     }
 

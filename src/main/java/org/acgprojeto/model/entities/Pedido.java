@@ -52,16 +52,16 @@ public class Pedido {
         }
     }
 
-    public void concluir() {
-        estado.concluir();
+    public boolean concluir() {
+        return estado.concluir();
     }
 
-    public void finalizar() {
-        estado.finalizar();
+    public boolean finalizar() {
+        return estado.finalizar();
     }
 
-    public void cancelar() {
-        estado.cancelar();
+    public boolean cancelar() {
+        return estado.cancelar();
     }
 
     public Integer getIdPedido() {

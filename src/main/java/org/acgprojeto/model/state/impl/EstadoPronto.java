@@ -10,11 +10,10 @@ public class EstadoPronto extends AbstractEstadoPedido {
     }
 
     @Override
-    public void finalizar() {
-        Alertas.mostrarAlerta("Sucesso", "Estado do pedido atualizado com sucesso", Alert.AlertType.INFORMATION);
+    public boolean finalizar() {
         pedidoDTO.setEstado(Estado.FINALIZADO);
         pedidoController.atualizarEstadoPedido(pedidoDTO);
-
+        return true;
     }
 
     @Override
