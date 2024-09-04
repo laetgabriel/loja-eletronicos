@@ -16,5 +16,6 @@ public interface PedidoDAO {
     List<PedidoDTO> buscarPedidos();
     List<TabelaPedidoDTO> buscarPedidosParaTabelaPedidos();
     List<TabelaPedidoDTO> buscarPedidosParaTabelaRelPedidos();
+    PedidoDTO obterUltimoPedido();
 
 }

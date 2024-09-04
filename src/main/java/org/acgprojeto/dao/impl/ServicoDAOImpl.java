@@ -173,6 +173,8 @@ public class ServicoDAOImpl implements ServicoDAO {
         return tipoServicos;
     }
 
+
+
     private ServicoDTO instanciarServico(ResultSet rs) throws SQLException {
         Servico servico = new Servico();
         servico.setIdServico(rs.getInt("Id_Servico"));

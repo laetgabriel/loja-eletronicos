@@ -14,6 +14,15 @@ public class Restricoes {
         });
     }
 
+    public static void setTextFieldString(TextField txt) {
+        txt.textProperty().addListener((obs, oldValue, newValue) -> {
+            // Verifica se o novo valor contém apenas letras (A-Z e a-z)
+            if (newValue != null && !newValue.matches("[a-zA-Z]*")) {
+                txt.setText(oldValue);
+            }
+        });
+    }
+
     public static void setTextFieldMaxLength(TextField txt, int max) {
         txt.textProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue != null && newValue.length() > max) {

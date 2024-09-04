@@ -55,62 +55,71 @@ public class ClienteController {
         return clienteDAO.listarTodosOsClientes();
     }
 
+    public ClienteDTO obterUltimoCliente(){
+        return clienteDAO.obterUltimoCliente();
+    }
+
     private boolean isEmailOrTelefoneCadastrado(String email, String telefone) {
         List<ClienteDTO> clientes = listarTodosOsClientes();
         for (ClienteDTO cliente : clientes) {
-            if (cliente.getEmail().equalsIgnoreCase(email) || cliente.getTelefone().equals(telefone)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public void gerarRelatorioCliente(Stage stage, ObservableList<ClienteDTO> clientesTable) {
-        File file = FileChooserUtil.gerarFileChooser("Relatório_Cliente").showSaveDialog(stage);
-        if(file != null) {
-            try (PdfWriter writer = new PdfWriter(file);
-                 PdfDocument pdfDoc = new PdfDocument(writer);
-                 Document document = new Document(pdfDoc)) {
-
-                PdfFont font = PdfFontFactory.createRegisteredFont("Helvetica-Bold");
-                document.add(new Paragraph("Relatório de Clientes")
-                        .setFont(font)
-                        .setFontSize(20)
-                        .setTextAlignment(TextAlignment.CENTER));
-
-                Table tableClientes = new Table(UnitValue.createPercentArray(new float[]{1, 3, 3, 3}))
-                        .setWidth(UnitValue.createPercentValue(100));
-                tableClientes.addHeaderCell(new Cell()
-                        .add(new Paragraph("Cliente ID"))
-                        .setBackgroundColor(new DeviceRgb(0, 0, 255))
-                        .setFontColor(ColorConstants.WHITE));
-                tableClientes.addHeaderCell(new Cell().add(new Paragraph("Nome")));
-                tableClientes.addHeaderCell(new Cell().add(new Paragraph("Email")));
-                tableClientes.addHeaderCell(new Cell().add(new Paragraph("Telefone")));
-
-                for (ClienteDTO clienteDTO : clientesTable) {
-                    tableClientes.addCell(new Paragraph(
-                            clienteDTO.getIdCliente() != null ? clienteDTO.getIdCliente().toString() : "N/A"
-                    ));
-                    tableClientes.addCell(new Paragraph(
-                            clienteDTO.getNome() != null ? clienteDTO.getNome() : "N/A"
-                    ));
-                    tableClientes.addCell(new Paragraph(
-                            clienteDTO.getEmail() != null ? clienteDTO.getEmail() : "N/A"
-                    ));
-                    tableClientes.addCell(new Paragraph(
-                            clienteDTO.getTelefone() != null ? clienteDTO.getTelefone() : "N/A"
-                    ));
+            if (cliente.getEmail() != null) {
+                if (cliente.getEmail().isEmpty() && cliente.getTelefone().isEmpty()) {
+                    return false;
                 }
+                if (cliente.getEmail().equalsIgnoreCase(email) && cliente.getTelefone().equals(telefone)) {
+                    return true;
+                }
+            }
+        }
+            return false;
+        }
 
-                document.add(new Paragraph("Clientes:")
-                        .setFont(font)
-                        .setFontSize(14));
-                document.add(tableClientes);
+        public void gerarRelatorioCliente (Stage stage, ObservableList < ClienteDTO > clientesTable){
+            File file = FileChooserUtil.gerarFileChooser("Relatório_Cliente").showSaveDialog(stage);
+            if (file != null) {
+                try (PdfWriter writer = new PdfWriter(file);
+                     PdfDocument pdfDoc = new PdfDocument(writer);
+                     Document document = new Document(pdfDoc)) {
 
-            } catch (IOException e) {
-                throw new RuntimeException("Erro ao gerar relatório de clientes", e);
+                    PdfFont font = PdfFontFactory.createRegisteredFont("Helvetica-Bold");
+                    document.add(new Paragraph("Relatório de Clientes")
+                            .setFont(font)
+                            .setFontSize(20)
+                            .setTextAlignment(TextAlignment.CENTER));
+
+                    Table tableClientes = new Table(UnitValue.createPercentArray(new float[]{1, 3, 3, 3}))
+                            .setWidth(UnitValue.createPercentValue(100));
+                    tableClientes.addHeaderCell(new Cell()
+                            .add(new Paragraph("Cliente ID"))
+                            .setBackgroundColor(new DeviceRgb(0, 0, 255))
+                            .setFontColor(ColorConstants.WHITE));
+                    tableClientes.addHeaderCell(new Cell().add(new Paragraph("Nome")));
+                    tableClientes.addHeaderCell(new Cell().add(new Paragraph("Email")));
+                    tableClientes.addHeaderCell(new Cell().add(new Paragraph("Telefone")));
+
+                    for (ClienteDTO clienteDTO : clientesTable) {
+                        tableClientes.addCell(new Paragraph(
+                                clienteDTO.getIdCliente() != null ? clienteDTO.getIdCliente().toString() : "N/A"
+                        ));
+                        tableClientes.addCell(new Paragraph(
+                                clienteDTO.getNome() != null ? clienteDTO.getNome() : "N/A"
+                        ));
+                        tableClientes.addCell(new Paragraph(
+                                clienteDTO.getEmail() != null ? clienteDTO.getEmail() : "N/A"
+                        ));
+                        tableClientes.addCell(new Paragraph(
+                                clienteDTO.getTelefone() != null ? clienteDTO.getTelefone() : "N/A"
+                        ));
+                    }
+
+                    document.add(new Paragraph("Clientes:")
+                            .setFont(font)
+                            .setFontSize(14));
+                    document.add(tableClientes);
+
+                } catch (IOException e) {
+                    throw new RuntimeException("Erro ao gerar relatório de clientes", e);
+                }
             }
         }
     }
-}

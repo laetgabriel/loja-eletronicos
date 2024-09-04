@@ -105,6 +105,23 @@ public class ClienteDAOImpl implements ClienteDAO {
         return clientes;
     }
 
+    public ClienteDTO obterUltimoCliente() {
+        String sql = "SELECT * FROM Cliente ORDER BY Id_Cliente DESC LIMIT 1";
+        ClienteDTO ultimoCliente = null;
+
+        try (PreparedStatement stmt = conexao.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            if (rs.next()) {
+                ultimoCliente = instanciarClienteDTO(rs);
+            }
+        } catch (SQLException e) {
+            throw new DBException("Erro ao obter o último pedido: " + e.getMessage());
+        }
+
+        return ultimoCliente;
+    }
+
     private ClienteDTO instanciarClienteDTO(ResultSet rs) throws SQLException {
         return new ClienteDTO(
                 rs.getInt("Id_Cliente"),

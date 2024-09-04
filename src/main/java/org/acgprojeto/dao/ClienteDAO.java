@@ -12,4 +12,5 @@ public interface ClienteDAO {
     void excluirCliente(Integer id);
     ClienteDTO buscarClientePorId(Integer id);
     List<ClienteDTO> listarTodosOsClientes();
+    ClienteDTO obterUltimoCliente();
 }

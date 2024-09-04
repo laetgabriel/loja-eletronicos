@@ -76,6 +76,7 @@ public class ProdutoDAOImpl implements ProdutoDAO {
             stmt.setInt(1, id);
             stmt.executeUpdate();
         } catch (SQLException e) {
+            e.printStackTrace();
             throw new DBException("Erro ao excluir Produto de ID = " + id);
         }
     }

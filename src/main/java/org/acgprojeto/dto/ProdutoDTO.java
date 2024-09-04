@@ -124,4 +124,9 @@ public class ProdutoDTO {
             return new ProdutoDTO(idProduto, nomeProduto, categoria, preco, quantidadeEstoque);
         }
     }
+
+    @Override
+    public String toString() {
+        return nomeProduto + ". Categoria: " + categoria + ", R$" + String.format("%.2f", preco) + ". Quantidade: " + quantidadeEstoque;
+    }
 }
