@@ -4,9 +4,12 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.acgprojeto.controller.AdminController;
 import org.acgprojeto.dto.AdminDTO;
+import org.acgprojeto.util.Alertas;
 
 import java.io.IOException;
 
@@ -31,19 +34,22 @@ public class App extends Application {
             stage.centerOnScreen();
             stage.show();
 
-            if(adminDTO == null){
+            if(adminDTO == null) {
+                Stage telaBase = App.getMainStage();
                 Parent cadastroAdmin = FXMLLoader.load(getClass().getResource("/org/acgprojeto/view/CadastroAdmin.fxml"));
                 Stage palco = new Stage();
                 Scene scene = new Scene(cadastroAdmin);
                 palco.setScene(scene);
                 palco.setTitle("Cyber Tigre Inforcell");
                 palco.setResizable(true);
+                palco.initOwner(telaBase);
+                palco.initModality(Modality.WINDOW_MODAL);
                 palco.centerOnScreen();
-                palco.show();
+                palco.showAndWait();
             }
         }
-        catch (IOException e) {
-            e.printStackTrace();
+        catch (Exception e) {
+            Alertas.mostrarAlerta("Cadastre Admin", "Cadastre uma admin primeiro!", Alert.AlertType.ERROR);
         }
 
     }

@@ -1,8 +1,7 @@
-package org.acgprojeto.model.chain.validacoescliente;
+package org.acgprojeto.view.controller.chain.validacoescliente;
 
 import org.acgprojeto.dto.ClienteDTO;
-import org.acgprojeto.model.chain.ClienteHandler;
-import org.acgprojeto.model.chain.ServicoHandler;
+import org.acgprojeto.view.controller.chain.ClienteHandler;
 
 public class ClienteValidator {
 

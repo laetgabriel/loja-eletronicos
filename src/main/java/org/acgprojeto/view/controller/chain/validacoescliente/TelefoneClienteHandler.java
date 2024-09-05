@@ -1,12 +1,8 @@
-package org.acgprojeto.model.chain.validacoescliente;
+package org.acgprojeto.view.controller.chain.validacoescliente;
 
-import javafx.scene.control.Alert;
 import org.acgprojeto.dto.ClienteDTO;
-import org.acgprojeto.dto.ServicoDTO;
-import org.acgprojeto.model.chain.ClienteHandler;
-import org.acgprojeto.model.chain.ServicoHandler;
-import org.acgprojeto.model.chain.exceptions.ValidacaoException;
-import org.acgprojeto.util.Alertas;
+import org.acgprojeto.view.controller.chain.ClienteHandler;
+import org.acgprojeto.view.controller.chain.exceptions.ValidacaoException;
 
 public class TelefoneClienteHandler extends ClienteHandler {
 

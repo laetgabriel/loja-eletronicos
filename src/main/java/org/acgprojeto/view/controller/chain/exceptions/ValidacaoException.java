@@ -1,4 +1,4 @@
-package org.acgprojeto.model.chain.exceptions;
+package org.acgprojeto.view.controller.chain.exceptions;
 
 public class ValidacaoException extends RuntimeException {
 

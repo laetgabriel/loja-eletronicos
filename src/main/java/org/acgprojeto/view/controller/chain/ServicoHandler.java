@@ -1,4 +1,4 @@
-package org.acgprojeto.model.chain;
+package org.acgprojeto.view.controller.chain;
 
 import org.acgprojeto.dto.ServicoDTO;
 

@@ -1,7 +1,7 @@
-package org.acgprojeto.model.chain.validacoesservico;
+package org.acgprojeto.view.controller.chain.validacoesservico;
 
 import org.acgprojeto.dto.ServicoDTO;
-import org.acgprojeto.model.chain.ServicoHandler;
+import org.acgprojeto.view.controller.chain.ServicoHandler;
 
 
 public class ServicoValidator {

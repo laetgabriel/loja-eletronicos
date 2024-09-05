@@ -41,19 +41,22 @@ public class LoginController {
 
     @FXML
     public void onBtnLogin() {
+        try{
+            adminController = new AdminController();
+            adminDTO = adminController.buscarAdminPorId(1);
 
-        adminController = new AdminController();
-        adminDTO = adminController.buscarAdminPorId(1);
+            if (!adminDTO.getNome().equals(txtUsername.getText())) {
+                txtErroUsername.setText("Erro no nome do usuário!");
+                txtErroSenha.setText(null);
 
-        if (!adminDTO.getNome().equals(txtUsername.getText())) {
-            txtErroUsername.setText("Erro no nome do usuário!");
-            txtErroSenha.setText(null);
-
-        }else if (!adminDTO.getSenha().equals(txtPassword.getText())) {
-            txtErroUsername.setText(null);
-            txtErroSenha.setText("Erro na senha!");
-        }else {
-            loadView("/org/acgprojeto/view/Pedido.fxml");
+            }else if (!adminDTO.getSenha().equals(txtPassword.getText())) {
+                txtErroUsername.setText(null);
+                txtErroSenha.setText("Erro na senha!");
+            }else {
+                loadView("/org/acgprojeto/view/Pedido.fxml");
+            }
+        }catch (Exception e){
+            Alertas.mostrarAlerta("Cadastre Admin", "Cadastre um admin primeiro!", Alert.AlertType.ERROR);
         }
     }
 
@@ -98,6 +101,7 @@ public class LoginController {
 
         } catch (IOException e) {
             Alertas.mostrarAlerta("Erro", "Erro ao carregar tela de pedido", Alert.AlertType.ERROR);
+
         }
     }
 }

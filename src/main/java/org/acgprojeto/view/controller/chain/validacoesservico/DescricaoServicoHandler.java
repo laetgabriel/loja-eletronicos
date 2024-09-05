@@ -1,8 +1,8 @@
-package org.acgprojeto.model.chain.validacoesservico;
+package org.acgprojeto.view.controller.chain.validacoesservico;
 
 import org.acgprojeto.dto.ServicoDTO;
-import org.acgprojeto.model.chain.ServicoHandler;
-import org.acgprojeto.model.chain.exceptions.ValidacaoException;
+import org.acgprojeto.view.controller.chain.ServicoHandler;
+import org.acgprojeto.view.controller.chain.exceptions.ValidacaoException;
 
 public class DescricaoServicoHandler extends ServicoHandler {
 
