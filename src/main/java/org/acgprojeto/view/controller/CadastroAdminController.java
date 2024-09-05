@@ -69,7 +69,7 @@ public class CadastroAdminController implements Initializable {
             setLblErros(e.getErrors());
         } catch (Exception e) {
             Alertas.mostrarAlerta("Erro", "Erro ao salvar/editar administrador!", Alert.AlertType.ERROR);
-            e.printStackTrace(); // Exibe o stack trace no console para depuração
+            e.printStackTrace();
         }
     }
 

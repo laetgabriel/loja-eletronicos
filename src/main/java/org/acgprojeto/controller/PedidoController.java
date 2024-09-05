@@ -27,10 +27,7 @@ import org.acgprojeto.util.FileChooserUtil;
 import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class PedidoController {
 
@@ -95,8 +92,8 @@ public class PedidoController {
                  PdfDocument pdfDoc = new PdfDocument(writer);
                  Document document = new Document(pdfDoc)) {
 
-                BigDecimal valorTotalGeralVendas = BigDecimal.ZERO;  // Valor total das vendas
-                BigDecimal valorTotalGeralCompras = BigDecimal.ZERO;  // Valor total das compras
+                BigDecimal valorTotalGeralVendas = BigDecimal.ZERO;
+                BigDecimal valorTotalGeralCompras = BigDecimal.ZERO;
                 PdfFont font = PdfFontFactory.createRegisteredFont("Helvetica-Bold");
                 document.add(new Paragraph("Relatório de Pedido")
                         .setFont(font)
@@ -105,29 +102,33 @@ public class PedidoController {
 
                 Set<Integer> pedidosAdicionados = new HashSet<>();
 
+
                 for (TabelaPedidoDTO tabelaPedidoDTO : pedidos) {
                     if(tabelaPedidoDTO.getPedidoDTO().getEstado() != Estado.CANCELADO){
                         if (!pedidosAdicionados.contains(tabelaPedidoDTO.getPedidoDTO().getIdPedido())) {
                             pedidosAdicionados.add(tabelaPedidoDTO.getPedidoDTO().getIdPedido());  // Marca o pedido como incluído
-                            BigDecimal valorTotalPedido = BigDecimal.ZERO;  // Valor total do pedido atual
-                            BigDecimal valorTotalCompra = BigDecimal.ZERO;  // Valor total dos serviços de compra
-
+                            BigDecimal valorTotalPedido = BigDecimal.ZERO;
+                            BigDecimal valorTotalCompra = BigDecimal.ZERO;
                             gerarDetalhesPedido(document, tabelaPedidoDTO, font);
+
                             gerarTabelaProdutos(document, tabelaPedidoDTO, font);
                             List<BigDecimal> valores = gerarTabelaServicos(document, tabelaPedidoDTO, font, valorTotalPedido, valorTotalCompra);
 
-                            document.add(new Paragraph("Valor total do Pedido: R$" + valores.getFirst())
+                            BigDecimal valorTotalPedidoAtual = valores.get(0); // Valor total do pedido atual
+                            BigDecimal valorTotalCompraAtual = valores.get(1); // Valor total de compras atual
+
+                            document.add(new Paragraph("Valor total do Pedido: R$" + valorTotalPedidoAtual)
                                     .setFont(font)
                                     .setFontSize(14));
-                            document.add(new Paragraph("Valor do serviço de compra: - R$" + valores.getLast())
+                            document.add(new Paragraph("Valor do serviço de compra: - R$" + valorTotalCompraAtual)
                                     .setFont(font)
                                     .setFontSize(14)
                                     .setTextAlignment(TextAlignment.LEFT)
-                                    .setFontColor(ColorConstants.RED)); //
-                            document.add(new Paragraph("\n"));
+                                    .setFontColor(ColorConstants.RED));
 
-                            valorTotalGeralVendas = valorTotalGeralVendas.add(valores.getFirst());
-                            valorTotalGeralCompras = valorTotalGeralCompras.add(valores.getLast());
+                            valorTotalGeralVendas = valorTotalGeralVendas.add(valorTotalPedidoAtual);
+                            valorTotalGeralCompras = valorTotalGeralCompras.add(valorTotalCompraAtual);
+
                         }
                     }
                 }
@@ -193,7 +194,6 @@ public class PedidoController {
     private List<BigDecimal> gerarTabelaServicos(Document document, TabelaPedidoDTO pedidoDTO, PdfFont font, BigDecimal valorTotalPedido, BigDecimal valorTotalCompra) {
         ServicoController servicoController = new ServicoController();
         List<ServicoDTO> servicos = servicoController.listarServicosPorPedido(pedidoDTO);
-        List<BigDecimal> valores = new ArrayList<BigDecimal>();
 
         Table tableServicos = new Table(UnitValue.createPercentArray(new float[]{2, 4, 2, 2}))
                 .setWidth(UnitValue.createPercentValue(100));
@@ -212,12 +212,8 @@ public class PedidoController {
 
             if (Tipo.COMPRA.equals(servico.getTipo())) {
                 valorTotalCompra = valorTotalCompra.add(servico.getPreco());
-                valores.add(valorTotalPedido);
-                valores.add(valorTotalCompra);
             } else {
                 valorTotalPedido = valorTotalPedido.add(servico.getPreco());
-                valores.add(valorTotalPedido);
-                valores.add(valorTotalCompra);
             }
         }
 
@@ -225,7 +221,7 @@ public class PedidoController {
         document.add(tableServicos);
         document.add(new Paragraph("\n"));
 
-        return valores;
+        return Arrays.asList(valorTotalPedido, valorTotalCompra);
     }
 }
 
