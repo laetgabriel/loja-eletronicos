@@ -138,8 +138,8 @@
       </Label>
       <Label fx:id="lblErroQuantidadeProduto" layoutX="399.0" layoutY="439.0" prefHeight="18.0" prefWidth="210.0" textFill="RED" />
       <CheckBox fx:id="checkBoxCliente" layoutX="368.0" layoutY="120.0" mnemonicParsing="false" onAction="#onCheckBoxCliente" text="Sem cliente" />
-      <ComboBox fx:id="ccomboBoxTipoServico" layoutX="395.0" layoutY="244.0" onAction="#onComboBoxTipoServico" prefHeight="26.0" prefWidth="226.0" />
-      <CheckBox fx:id="checkBoxPedido" layoutX="368.0" layoutY="460.0" mnemonicParsing="false" onAction="#onCheckBoxPedido" text="Sem pedido" />
+      <ComboBox fx:id="comboBoxTipoServico" layoutX="395.0" layoutY="244.0" onAction="#onComboBoxTipoServico" prefHeight="26.0" prefWidth="226.0" />
+      <CheckBox fx:id="checkBoxPedido" layoutX="367.0" layoutY="460.0" mnemonicParsing="false" onAction="#onCheckBoxPedido" text="Sem pedido" />
       <Label fx:id="lblErroProdutoSelecionado" layoutX="83.0" layoutY="423.0" prefHeight="18.0" prefWidth="210.0" textFill="RED" />
    </children>
 </AnchorPane>

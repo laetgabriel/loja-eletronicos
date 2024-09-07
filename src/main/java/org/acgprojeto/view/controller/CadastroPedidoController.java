@@ -30,16 +30,13 @@ import java.util.*;
 public class CadastroPedidoController implements Initializable {
 
     @FXML
-    private ComboBox<String> ccomboBoxTipoServico;
+    private ComboBox<String> comboBoxTipoServico;
     @FXML
     private ComboBox<ClienteDTO> comboBoxClientes;
-
     @FXML
     private CheckBox checkBoxCliente;
-
     @FXML
     private CheckBox checkBoxPedido;
-
     @FXML
     private ComboBox<ProdutoDTO> comboBoxProduto;
     @FXML
@@ -80,12 +77,12 @@ public class CadastroPedidoController implements Initializable {
     private Button btnAdicionarServico;
 
     private List<PedidoObserver> observers = new ArrayList<>();
+    private ObservableList<ClienteDTO> clientes;
     private final ProdutoController produtoController = new ProdutoController();
     private final ClienteController clienteController = new ClienteController();
     private final PedidoController pedidoController = new PedidoController();
     private final ServicoController servicoController = new ServicoController();
     private final PedidoProdutoController pedidoProdutoController = new PedidoProdutoController();
-    private ObservableList<ClienteDTO> clientes;
     private final ServicoValidator chainServico = new ServicoValidator();
     private final ClienteValidator clienteValidator = new ClienteValidator();
 
@@ -126,7 +123,7 @@ public class CadastroPedidoController implements Initializable {
     }
 
     public void onComboBoxTipoServico() {
-        if (Tipo.valueOf(ccomboBoxTipoServico.getValue()) == Tipo.CONSERTO) {
+        if (Tipo.valueOf(comboBoxTipoServico.getValue()).equals(Tipo.CONSERTO) || Tipo.valueOf(comboBoxTipoServico.getValue()).equals(Tipo.COMPRA)) {
             checkBoxCliente.setDisable(true);
             checkBoxCliente.setSelected(false);
             onCheckBoxCliente();
@@ -147,7 +144,7 @@ public class CadastroPedidoController implements Initializable {
     private void salvarPedido() {
         String quantidadeString = txtQuantidadeProduto.getText();
         int quantidadeInt = 0;
-        Tipo tipo = TipoStringParaEnum(ccomboBoxTipoServico.getValue());
+        Tipo tipo = TipoStringParaEnum(comboBoxTipoServico.getValue());
         ProdutoDTO produto = comboBoxProduto.getValue();
         atualizarComboBoxProduto();
         ClienteDTO clienteDTO = null;
@@ -200,6 +197,7 @@ public class CadastroPedidoController implements Initializable {
                                 quantidadeInt));
             }
 
+
             servicoController.inserirServico(servicoDTO);
 
             txtNomeCliente.setDisable(true);
@@ -210,21 +208,21 @@ public class CadastroPedidoController implements Initializable {
             txtQuantidadeProduto.setDisable(true);
             comboBoxProduto.setDisable(true);
             comboBoxClientes.setDisable(true);
-            ccomboBoxTipoServico.setDisable(true);
+            comboBoxTipoServico.setDisable(true);
+            data.setDisable(true);
+            btnSalvar.setDisable(true);
+
             lblErroProdutoSelecionado.setText("");
             lblErroQuantidadeProduto.setText("");
 
-
             btnAdicionarServico.setDisable(false);
             btnAdicionarProduto.setDisable(false);
-            data.setDisable(true);
-            btnSalvar.setDisable(false);
 
             notificarOuvintes();
 
-            Optional<ButtonType> ocpcao = Alertas.showConfirmation("Pedido criado", "Pedido adicionado! Adicionar mais produtos ou serviços?");
+            Optional<ButtonType> opcao = Alertas.showConfirmation("Pedido criado", "Pedido adicionado! Adicionar mais produtos ou serviços?");
 
-            if (ocpcao.get() == ButtonType.CANCEL) {
+            if (opcao.get() == ButtonType.CANCEL) {
                 Stage stage = (Stage) btnCancelar.getScene().getWindow();
                 stage.close();
             }
@@ -260,7 +258,7 @@ public class CadastroPedidoController implements Initializable {
                 lblErroPrecoServico.setText(e.getMessage());
             } else if (e.getMessage().contains("produto")) {
                 lblErroProdutoSelecionado.setText(e.getMessage());
-            } else if (e.getMessage().contains("indisponível") || e.getMessage().contains("inválida") ||  e.getMessage().contains("zero")) {
+            } else if (e.getMessage().contains("indisponível") || e.getMessage().contains("inválida") || e.getMessage().contains("zero")) {
                 lblErroQuantidadeProduto.setText(e.getMessage());
             }
 
@@ -269,7 +267,7 @@ public class CadastroPedidoController implements Initializable {
     }
 
     @FXML
-    public void onBtnCancelar() {
+    private void onBtnCancelar() {
         Stage stage = (Stage) btnCancelar.getScene().getWindow();
         stage.close();
         notificarOuvintes();
@@ -327,7 +325,7 @@ public class CadastroPedidoController implements Initializable {
     }
 
     @FXML
-    public void abrirDialogProduto() {
+    private void abrirDialogProduto() {
         Dialog<ButtonType> dialog = new Dialog<>();
         dialog.setTitle("Adicionar Produto");
         dialog.setHeaderText("Selecione um produto");
@@ -381,7 +379,7 @@ public class CadastroPedidoController implements Initializable {
         };
     }
 
-    public void atualizarComboBoxProduto() {
+    private void atualizarComboBoxProduto() {
         List<ProdutoDTO> listaProdutos = produtoController.listarTodosOsProdutos();
         listaProdutos.removeIf(produtoDTO -> produtoDTO.getQuantidadeEstoque() == 0);
         ObservableList<ProdutoDTO> produtos = FXCollections.observableArrayList(listaProdutos);
@@ -407,8 +405,8 @@ public class CadastroPedidoController implements Initializable {
         btnAdicionarProduto.setDisable(true);
         btnAdicionarServico.setDisable(true);
 
-        ccomboBoxTipoServico.getItems().addAll("COMPRA", "VENDA", "CONSERTO");
-        ccomboBoxTipoServico.setValue("VENDA");
+        comboBoxTipoServico.getItems().addAll("COMPRA", "VENDA", "CONSERTO");
+        comboBoxTipoServico.setValue("VENDA");
 
         try {
             List<ClienteDTO> listaClientes = clienteController.listarTodosOsClientes();
@@ -438,7 +436,7 @@ public class CadastroPedidoController implements Initializable {
         }
     }
 
-    private void validarProdutoEQuantidade(String quantidadeTxt, ProdutoDTO produtoDTO)  {
+    private void validarProdutoEQuantidade(String quantidadeTxt, ProdutoDTO produtoDTO) {
         if (produtoDTO == null) {
             throw new ValidacaoException("Selecione um produto para adicionar");
         }
@@ -457,7 +455,7 @@ public class CadastroPedidoController implements Initializable {
         }
     }
 
-    private void validacaoProdutoeQuantidadeCompleta(String quantidadeTxt, ProdutoDTO produtoDTO) throws ValidacaoException{
+    private void validacaoProdutoeQuantidadeCompleta(String quantidadeTxt, ProdutoDTO produtoDTO) throws ValidacaoException {
         validarProdutoEQuantidade(quantidadeTxt, produtoDTO);
 
     }

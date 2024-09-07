@@ -259,7 +259,6 @@ public class PedidoDAOImpl implements PedidoDAO {
         pedido.setCliente(clienteDTO);
         pedido.setData(rs.getDate("Data").toLocalDate());
 
-        // Lê o valor do estado e garante que ele esteja em maiúsculas
         String estadoString = rs.getString("Estado");
         Estado estadoEnum;
         try {

@@ -13,7 +13,6 @@ import com.itextpdf.layout.element.Table;
 import com.itextpdf.layout.properties.TextAlignment;
 import com.itextpdf.layout.properties.UnitValue;
 import javafx.collections.ObservableList;
-import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 import org.acgprojeto.dao.DAOFactory;
 import org.acgprojeto.dao.PedidoDAO;
@@ -21,7 +20,6 @@ import org.acgprojeto.dto.*;
 import org.acgprojeto.model.entities.Pedido;
 import org.acgprojeto.model.enums.Estado;
 import org.acgprojeto.model.enums.Tipo;
-import org.acgprojeto.util.Alertas;
 import org.acgprojeto.util.FileChooserUtil;
 
 import java.io.File;
@@ -102,33 +100,30 @@ public class PedidoController {
 
                 Set<Integer> pedidosAdicionados = new HashSet<>();
 
-
                 for (TabelaPedidoDTO tabelaPedidoDTO : pedidos) {
-                    if(tabelaPedidoDTO.getPedidoDTO().getEstado() != Estado.CANCELADO){
+                    if(tabelaPedidoDTO.getPedidoDTO().getEstado() != Estado.CANCELADO && tabelaPedidoDTO.getPedidoDTO().getEstado() != Estado.ANDAMENTO){
                         if (!pedidosAdicionados.contains(tabelaPedidoDTO.getPedidoDTO().getIdPedido())) {
-                            pedidosAdicionados.add(tabelaPedidoDTO.getPedidoDTO().getIdPedido());  // Marca o pedido como incluído
+                            pedidosAdicionados.add(tabelaPedidoDTO.getPedidoDTO().getIdPedido());
                             BigDecimal valorTotalPedido = BigDecimal.ZERO;
                             BigDecimal valorTotalCompra = BigDecimal.ZERO;
-                            gerarDetalhesPedido(document, tabelaPedidoDTO, font);
 
+                            gerarDetalhesPedido(document, tabelaPedidoDTO, font);
                             gerarTabelaProdutos(document, tabelaPedidoDTO, font);
                             List<BigDecimal> valores = gerarTabelaServicos(document, tabelaPedidoDTO, font, valorTotalPedido, valorTotalCompra);
-
-                            BigDecimal valorTotalPedidoAtual = valores.get(0); // Valor total do pedido atual
-                            BigDecimal valorTotalCompraAtual = valores.get(1); // Valor total de compras atual
-
-                            document.add(new Paragraph("Valor total do Pedido: R$" + valorTotalPedidoAtual)
+                            valorTotalPedido = valores.getFirst();
+                            valorTotalCompra = valores.getLast();
+                            document.add(new Paragraph("Valor total do Pedido: R$" + valores.getFirst())
                                     .setFont(font)
                                     .setFontSize(14));
-                            document.add(new Paragraph("Valor do serviço de compra: - R$" + valorTotalCompraAtual)
+                            document.add(new Paragraph("Valor do serviço de compra: - R$" + valores.getLast())
                                     .setFont(font)
                                     .setFontSize(14)
                                     .setTextAlignment(TextAlignment.LEFT)
                                     .setFontColor(ColorConstants.RED));
+                            document.add(new Paragraph("\n"));
 
-                            valorTotalGeralVendas = valorTotalGeralVendas.add(valorTotalPedidoAtual);
-                            valorTotalGeralCompras = valorTotalGeralCompras.add(valorTotalCompraAtual);
-
+                            valorTotalGeralVendas = valorTotalGeralVendas.add(valorTotalPedido);
+                            valorTotalGeralCompras = valorTotalGeralCompras.add(valorTotalCompra);
                         }
                     }
                 }
