@@ -3,7 +3,10 @@ package org.acgprojeto.view.controller;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -22,6 +25,7 @@ import org.acgprojeto.util.Alertas;
 import org.acgprojeto.util.Restricoes;
 import org.acgprojeto.view.observer.PedidoObserver;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.net.URL;
 import java.time.LocalDate;
@@ -220,6 +224,13 @@ public class CadastroPedidoController implements Initializable {
 
             notificarOuvintes();
 
+            if (tipo.equals(Tipo.COMPRA)){
+                Optional<ButtonType> opcaoCompra = Alertas.showConfirmation("Pedido de compra criado", "Compra feita! Se for um produto, deseja cadastrar ao estoque?");
+                if (opcaoCompra.get() == ButtonType.OK) {
+                    abrirTelaCadastroProduto();
+                }
+            }
+
             Optional<ButtonType> opcao = Alertas.showConfirmation("Pedido criado", "Pedido adicionado! Adicionar mais produtos ou serviços?");
 
             if (opcao.get() == ButtonType.CANCEL) {
@@ -271,6 +282,27 @@ public class CadastroPedidoController implements Initializable {
         Stage stage = (Stage) btnCancelar.getScene().getWindow();
         stage.close();
         notificarOuvintes();
+    }
+
+    private void abrirTelaCadastroProduto() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/acgprojeto/view/CadastroProduto.fxml"));
+            Parent root = loader.load();
+
+            CadastroProdutoController cadastroProdutoController = loader.getController();
+
+            // Configurar o produto se necessário (você pode passar um ProdutoDTO já criado ou deixá-lo vazio para novo cadastro)
+            cadastroProdutoController.setProdutoDTO(null);
+
+            Stage stage = new Stage();
+            stage.setTitle("Cadastrar Produto no Estoque");
+            stage.setScene(new Scene(root));
+            stage.showAndWait();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            Alertas.mostrarAlerta("Erro", "Erro ao abrir a tela de cadastro de produto!", Alert.AlertType.ERROR);
+        }
     }
 
     @FXML
