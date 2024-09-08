@@ -34,7 +34,6 @@ O projeto utiliza diversos padrões de projeto, tais como:
 - **JavaMail**: Para envio de notificações por email.
 - **MySQL**: Como banco de dados.
 
-## Como Executar o Projeto
 
 ### Pré-requisitos
 
