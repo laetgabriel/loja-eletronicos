@@ -15,6 +15,7 @@ import org.acgprojeto.controller.PedidoController;
 import org.acgprojeto.controller.ProdutoController;
 import org.acgprojeto.db.exceptions.DBException;
 import org.acgprojeto.dto.*;
+import org.acgprojeto.model.enums.Estado;
 import org.acgprojeto.view.controller.chain.exceptions.ValidacaoException;
 import org.acgprojeto.view.controller.chain.validacoesservico.ServicoValidator;
 import org.acgprojeto.view.controller.chain.validacoescliente.ClienteValidator;
@@ -222,18 +223,25 @@ public class CadastroPedidoController implements Initializable {
             btnAdicionarServico.setDisable(false);
             btnAdicionarProduto.setDisable(false);
 
-            notificarOuvintes();
 
-            if (tipo.equals(Tipo.COMPRA)){
-                Optional<ButtonType> opcaoCompra = Alertas.showConfirmation("Pedido de compra criado", "Compra feita! Se for um produto, deseja cadastrar ao estoque?");
-                if (opcaoCompra.get() == ButtonType.OK) {
-                    abrirTelaCadastroProduto();
+
+            if (tipo.equals(Tipo.COMPRA) || tipo.equals(Tipo.VENDA)){
+                PedidoDTO pedido = pedidoController.obterUltimoPedido();
+                if (tipo.equals(Tipo.COMPRA)){
+                    Optional<ButtonType> opcaoCompra = Alertas.showConfirmation("Pedido de compra criado", "Compra feita! Se for um produto, deseja cadastrar ao estoque?");
+                    if (opcaoCompra.isPresent() && opcaoCompra.get() == ButtonType.OK) {
+                        abrirTelaCadastroProduto();
+                    }
                 }
+                pedido.setEstado(Estado.FINALIZADO);
+                pedidoController.atualizarPedido(pedido);
             }
+
+            notificarOuvintes();
 
             Optional<ButtonType> opcao = Alertas.showConfirmation("Pedido criado", "Pedido adicionado! Adicionar mais produtos ou serviços?");
 
-            if (opcao.get() == ButtonType.CANCEL) {
+            if (opcao.isPresent() && opcao.get() == ButtonType.CANCEL) {
                 Stage stage = (Stage) btnCancelar.getScene().getWindow();
                 stage.close();
             }
@@ -291,7 +299,6 @@ public class CadastroPedidoController implements Initializable {
 
             CadastroProdutoController cadastroProdutoController = loader.getController();
 
-            // Configurar o produto se necessário (você pode passar um ProdutoDTO já criado ou deixá-lo vazio para novo cadastro)
             cadastroProdutoController.setProdutoDTO(null);
 
             Stage stage = new Stage();
@@ -300,7 +307,6 @@ public class CadastroPedidoController implements Initializable {
             stage.showAndWait();
 
         } catch (IOException e) {
-            e.printStackTrace();
             Alertas.mostrarAlerta("Erro", "Erro ao abrir a tela de cadastro de produto!", Alert.AlertType.ERROR);
         }
     }
@@ -468,7 +474,7 @@ public class CadastroPedidoController implements Initializable {
         }
     }
 
-    private void validarProdutoEQuantidade(String quantidadeTxt, ProdutoDTO produtoDTO) {
+    private void validacaoProdutoeQuantidadeCompleta(String quantidadeTxt, ProdutoDTO produtoDTO) throws ValidacaoException{
         if (produtoDTO == null) {
             throw new ValidacaoException("Selecione um produto para adicionar");
         }
@@ -485,11 +491,6 @@ public class CadastroPedidoController implements Initializable {
         if (quantidade > produtoDTO.getQuantidadeEstoque()) {
             throw new ValidacaoException("Quantidade indisponível");
         }
-    }
-
-    private void validacaoProdutoeQuantidadeCompleta(String quantidadeTxt, ProdutoDTO produtoDTO) throws ValidacaoException {
-        validarProdutoEQuantidade(quantidadeTxt, produtoDTO);
-
     }
 
     private void validacaoCompletaCliente(ClienteDTO clienteDTO) throws ValidacaoException {

@@ -1,4 +1,4 @@
-package org.acgprojeto.view;
+package org.acgprojeto.application;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -10,8 +10,6 @@ import javafx.stage.Stage;
 import org.acgprojeto.controller.AdminController;
 import org.acgprojeto.dto.AdminDTO;
 import org.acgprojeto.util.Alertas;
-
-import java.io.IOException;
 
 public class App extends Application {
 
@@ -26,7 +24,7 @@ public class App extends Application {
 
             this.stage = stage;
 
-            Parent login = FXMLLoader.load(getClass().getResource("/org/acgprojeto/view/login.fxml"));
+            Parent login = FXMLLoader.load(getClass().getResource("/org/acgprojeto/view/Login.fxml"));
             Scene cenaLogin = new Scene(login);
             stage.setScene(cenaLogin);
             stage.setTitle("Cyber Tigre Inforcell");
@@ -49,6 +47,8 @@ public class App extends Application {
             }
         }
         catch (Exception e) {
+            e.printStackTrace();
+            System.out.println(e.getMessage());
             Alertas.mostrarAlerta("Cadastre Admin", "Cadastre uma admin primeiro!", Alert.AlertType.ERROR);
         }
 

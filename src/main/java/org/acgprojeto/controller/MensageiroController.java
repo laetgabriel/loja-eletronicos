@@ -11,7 +11,7 @@ public class MensageiroController extends SimpleEmail {
         setHostName("smtp.gmail.com");
         setSmtpPort(587);
         setAuthenticator(new DefaultAuthenticator("cybertigre85@gmail.com", "znvb phtq qjxw vraz"));
-        setSSLOnConnect(true);
+        setStartTLSEnabled(true);
         try {
             setFrom("cybertigre85@gmail.com");
         } catch (EmailException e) {

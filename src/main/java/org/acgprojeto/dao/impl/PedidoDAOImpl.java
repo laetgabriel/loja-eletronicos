@@ -85,7 +85,7 @@ public class PedidoDAOImpl implements PedidoDAO {
 
         try (PreparedStatement stmt = conexao.prepareStatement(sql)) {
             stmt.setInt(1, pedido.getCliente().getIdCliente());
-            stmt.setString(2, pedido.getEstado().toString());
+            stmt.setString(2, pedido.getEstado().getNomeEstado());
             stmt.setDate(3, Date.valueOf(pedido.getData()));
             stmt.setInt(4, pedido.getIdPedido());
 

@@ -127,7 +127,7 @@ public class CadastroProdutoController implements Initializable {
         ProdutoDTO produtoDTO;
 
         if(!isAtualizarProduto){
-            produtoDTO= ProdutoDTO.ProdutoDTOBuilder.aProdutoDTO()
+            produtoDTO = ProdutoDTO.ProdutoDTOBuilder.aProdutoDTO()
                 .idProduto(null)
                 .nomeProduto(nome)
                 .categoria(categoria)

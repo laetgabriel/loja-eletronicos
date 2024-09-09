@@ -1,21 +1,26 @@
 package org.acgprojeto.view.controller;
 
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import org.acgprojeto.controller.AdminController;
 import org.acgprojeto.controller.MensageiroController;
 import org.acgprojeto.dto.AdminDTO;
 import org.acgprojeto.dto.MensagemDTO;
-import org.acgprojeto.view.App;
+import org.acgprojeto.application.App;
 import org.acgprojeto.util.Alertas;
-import org.apache.commons.mail.EmailException;
 
 import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
 
-public class LoginController {
+public class LoginController implements Initializable {
 
     private AdminController adminController;
     private AdminDTO adminDTO;
@@ -58,29 +63,37 @@ public class LoginController {
         }catch (Exception e){
             Alertas.mostrarAlerta("Cadastre Admin", "Cadastre um admin primeiro!", Alert.AlertType.ERROR);
         }
+
     }
 
     @FXML
     public void onBtnEsqueceuSenha() {
-        try {
+        Alert alertaProgresso = Alertas.retornaAlerta("ENVIANDO SENHA PARA O EMAIL", "Senha de login sendo enviada para o email!", Alert.AlertType.INFORMATION);
+        alertaProgresso.show();
 
-            adminController = new AdminController();
-            adminDTO = adminController.buscarAdminPorId(1);
-            mensageiro = new MensageiroController();
+        Task<Void> tarefaEnvioEmail = new Task<>() {
+            @Override
+            protected Void call() throws Exception {
+                adminController = new AdminController();
+                adminDTO = adminController.buscarAdminPorId(1);
+                mensageiro = new MensageiroController();
 
-            Alert alertaSenha = Alertas.retornaAlerta("ENVIANDO SENHA PARA O EMAIL!","Senha de login sendo enviada para o email!", Alert.AlertType.INFORMATION);
-            alertaSenha.show();
+                mensageiro.enviarEmail(new MensagemDTO("Senha de login", "Sua senha é: " + adminDTO.getSenha(), adminDTO.getEmail()));
+                return null;
+            }
+        };
 
-            mensageiro.enviarEmail(new MensagemDTO(adminDTO.getEmail(), "Senha de login", "Sua senha é: " + adminDTO.getSenha()));
+        tarefaEnvioEmail.setOnSucceeded(e -> {
+            alertaProgresso.close();
+            Alertas.mostrarAlerta("Envio de senha", "Senha de login enviada para o e-mail!", Alert.AlertType.INFORMATION);
+        });
 
-            alertaSenha.close();
+        tarefaEnvioEmail.setOnFailed(e -> {
+            alertaProgresso.close();
+            Alertas.mostrarAlerta("Erro no envio de senha", "Ocorreu um erro ao enviar a senha de login!", Alert.AlertType.ERROR);
+        });
 
-            Alertas.mostrarAlerta("Envio senha", "Senha de login enviada para o email!", Alert.AlertType.INFORMATION);
-
-        }
-        catch (EmailException e){
-            Alertas.mostrarAlerta("Erro envio de senha","Erro no envio da senha de login!", Alert.AlertType.ERROR);
-        }
+        new Thread(tarefaEnvioEmail).start();
     }
 
     private void loadView(String caminho) {
@@ -103,5 +116,18 @@ public class LoginController {
             Alertas.mostrarAlerta("Erro", "Erro ao carregar tela de pedido", Alert.AlertType.ERROR);
 
         }
+    }
+
+    private void onPressionaKeyEnter(KeyEvent event) {
+        if(event.getCode() == KeyCode.ENTER){
+            onBtnLogin();
+        }
+    }
+
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        txtPassword.setOnKeyPressed(this::onPressionaKeyEnter);
+        txtUsername.setOnKeyPressed(this::onPressionaKeyEnter);
     }
 }
