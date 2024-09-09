@@ -14,7 +14,7 @@ public class Pedido {
 
     private Integer idPedido;
     private Cliente cliente;
-    private EstadoPedido estado ;
+    private EstadoPedido estado;
     private LocalDate data;
 
     public Pedido(Integer idPedido, Cliente cliente, LocalDate data) {

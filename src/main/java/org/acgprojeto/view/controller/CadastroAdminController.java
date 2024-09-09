@@ -6,7 +6,6 @@ import javafx.scene.control.*;
 import javafx.stage.Stage;
 import org.acgprojeto.controller.AdminController;
 import org.acgprojeto.dto.AdminDTO;
-import org.acgprojeto.dto.ProdutoDTO;
 import org.acgprojeto.model.exceptions.ValidacaoCadastrosException;
 import org.acgprojeto.util.Alertas;
 import org.acgprojeto.util.Restricoes;
@@ -15,7 +14,6 @@ import java.net.URL;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Set;
-import java.util.regex.Pattern;
 
 public class CadastroAdminController implements Initializable {
 

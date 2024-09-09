@@ -8,14 +8,19 @@ import javafx.scene.control.Alert;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.acgprojeto.controller.AdminController;
+import org.acgprojeto.db.exceptions.DBException;
 import org.acgprojeto.dto.AdminDTO;
 import org.acgprojeto.util.Alertas;
+
+import java.io.IOException;
+import java.sql.SQLException;
 
 public class App extends Application {
 
     private static Stage stage;
     private AdminController adminController;
     private AdminDTO adminDTO;
+
     @Override
     public void start(Stage stage) {
         try {
@@ -46,10 +51,8 @@ public class App extends Application {
                 palco.showAndWait();
             }
         }
-        catch (Exception e) {
-            e.printStackTrace();
-            System.out.println(e.getMessage());
-            Alertas.mostrarAlerta("Cadastre Admin", "Cadastre uma admin primeiro!", Alert.AlertType.ERROR);
+        catch (IOException | DBException e) {
+            Alertas.mostrarAlerta("Admin", e.getMessage(), Alert.AlertType.ERROR);
         }
 
     }

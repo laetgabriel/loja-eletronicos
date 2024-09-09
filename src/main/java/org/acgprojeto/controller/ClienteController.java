@@ -17,8 +17,6 @@ import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 import org.acgprojeto.dao.ClienteDAO;
 import org.acgprojeto.dao.DAOFactory;
-import org.acgprojeto.dao.impl.ClienteDAOImpl;
-import org.acgprojeto.db.DB;
 import org.acgprojeto.dto.ClienteDTO;
 import org.acgprojeto.util.Alertas;
 import org.acgprojeto.util.FileChooserUtil;

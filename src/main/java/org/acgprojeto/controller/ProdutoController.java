@@ -13,15 +13,11 @@ import com.itextpdf.layout.element.Table;
 import com.itextpdf.layout.properties.TextAlignment;
 import com.itextpdf.layout.properties.UnitValue;
 import javafx.collections.ObservableList;
-import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 import org.acgprojeto.dao.DAOFactory;
 import org.acgprojeto.dao.ProdutoDAO;
-import org.acgprojeto.dao.impl.ProdutoDAOImpl;
-import org.acgprojeto.db.DB;
 import org.acgprojeto.dto.ProdutoDTO;
 import org.acgprojeto.model.enums.Categoria;
-import org.acgprojeto.util.Alertas;
 import org.acgprojeto.util.FileChooserUtil;
 
 import java.io.File;

@@ -1,6 +1,5 @@
 package org.acgprojeto.dto;
 
-import org.acgprojeto.model.entities.Pedido;
 import org.acgprojeto.model.enums.Categoria;
 import org.acgprojeto.model.enums.Estado;
 import org.acgprojeto.model.enums.Tipo;

@@ -4,7 +4,6 @@ import org.acgprojeto.dao.PedidoDAO;
 import org.acgprojeto.dao.PedidoProdutoDAO;
 import org.acgprojeto.dao.ProdutoDAO;
 import org.acgprojeto.db.exceptions.DBException;
-import org.acgprojeto.dto.ClienteDTO;
 import org.acgprojeto.dto.PedidoProdutoDTO;
 import org.acgprojeto.model.entities.Pedido;
 import org.acgprojeto.model.entities.PedidoProduto;

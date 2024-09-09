@@ -58,7 +58,7 @@ public class LoginController implements Initializable {
                 txtErroUsername.setText(null);
                 txtErroSenha.setText("Erro na senha!");
             }else {
-                loadView("/org/acgprojeto/view/Pedido.fxml");
+                loadView();
             }
         }catch (Exception e){
             Alertas.mostrarAlerta("Cadastre Admin", "Cadastre um admin primeiro!", Alert.AlertType.ERROR);
@@ -96,11 +96,11 @@ public class LoginController implements Initializable {
         new Thread(tarefaEnvioEmail).start();
     }
 
-    private void loadView(String caminho) {
+    private void loadView() {
         try {
             Stage loginStage = App.getMainStage();
 
-            FXMLLoader loader = new FXMLLoader(getClass().getResource(caminho));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/acgprojeto/view/Pedido.fxml"));
             ScrollPane telaPedido = loader.load();
 
             telaPedido.setFitToHeight(true);

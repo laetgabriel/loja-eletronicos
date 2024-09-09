@@ -1,10 +1,8 @@
 package org.acgprojeto.model.state.impl;
 
-import javafx.scene.control.Alert;
 import org.acgprojeto.controller.PedidoController;
 import org.acgprojeto.dto.PedidoDTO;
 import org.acgprojeto.model.state.EstadoPedido;
-import org.acgprojeto.util.Alertas;
 
 public abstract class AbstractEstadoPedido implements EstadoPedido {
 

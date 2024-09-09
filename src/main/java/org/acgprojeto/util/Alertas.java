@@ -8,10 +8,7 @@ import java.util.Optional;
 public class Alertas {
 
     public static void mostrarAlerta(String title,   String content, AlertType type) {
-        Alert alert = new Alert(type);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(content);
+        Alert alert = retornaAlerta(title, content, type);
         alert.show();
     }
 

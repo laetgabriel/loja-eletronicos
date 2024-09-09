@@ -16,8 +16,6 @@ import javafx.collections.ObservableList;
 import javafx.stage.Stage;
 import org.acgprojeto.dao.DAOFactory;
 import org.acgprojeto.dao.ServicoDAO;
-import org.acgprojeto.dao.impl.ServicoDAOImpl;
-import org.acgprojeto.db.DB;
 import org.acgprojeto.dto.PedidoDTO;
 import org.acgprojeto.dto.ServicoDTO;
 import org.acgprojeto.dto.TabelaPedidoDTO;
