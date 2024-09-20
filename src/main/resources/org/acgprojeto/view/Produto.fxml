@@ -20,7 +20,7 @@
                     </font>
                 </Label>
 
-                <Button fx:id="btnNovo" alignment="CENTER" contentDisplay="CENTER" layoutX="14.0" layoutY="126.0" mnemonicParsing="false" onAction="#onBtnNovo" prefHeight="26.0" prefWidth="105.0" style="-fx-background-color: green;" text="Novo" textFill="WHITE" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="126.0">
+                <Button fx:id="btnNovo" alignment="CENTER" contentDisplay="CENTER" layoutX="14.0" layoutY="126.0" mnemonicParsing="false" onAction="#onBtnNovo" prefHeight="26.0" prefWidth="105.0" style="-fx-background-color: blue;" text="Novo" textFill="WHITE" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="126.0">
                <font>
                   <Font name="System Bold" size="12.0" />
                </font></Button>

@@ -28,63 +28,70 @@ CREATE DATABASE lojaeletronicos;
 ### 3 - Crie as tabelas uma por uma, não faça de uma vez
 
 ````sql
-CREATE TABLE admin (
+CREATE TABLE admin
+(
     Id_Admin INT PRIMARY KEY AUTO_INCREMENT,
-    Nome VARCHAR(100) NOT NULL,
-    Email VARCHAR(100) NOT NULL UNIQUE,
-    Senha VARCHAR(255) NOT NULL
+    Nome     VARCHAR(100) NOT NULL,
+    Email    VARCHAR(100) NOT NULL UNIQUE,
+    Senha    VARCHAR(255) NOT NULL
 );
 ````
 
 ````sql
-CREATE TABLE Cliente(
-    Id_Cliente SMALLINT PRIMARY KEY,
-    Nome VARCHAR(100) NOT NULL,
-    Email VARCHAR(50),
-    Telefone VARCHAR(10)
+CREATE TABLE Cliente
+(
+    Id_Cliente SMALLINT AUTO_INCREMENT PRIMARY KEY,
+    Nome       VARCHAR(100) NOT NULL,
+    Email      VARCHAR(50),
+    Telefone   VARCHAR(10)
 );
 ````
 
 ````sql
-CREATE TABLE Pedido (
-    Id_Pedido SMALLINT AUTO_INCREMENT PRIMARY KEY,
+CREATE TABLE Pedido
+(
+    Id_Pedido  SMALLINT AUTO_INCREMENT PRIMARY KEY,
     Id_Cliente SMALLINT,
-    Estado VARCHAR(20) NOT NULL,
-    Data DATE NOT NULL,
+    Estado     VARCHAR(20) NOT NULL,
+    Data       DATE        NOT NULL,
     CONSTRAINT fk_Pedido_Cliente FOREIGN KEY (Id_Cliente) REFERENCES Cliente (Id_Cliente)
 );
+
 ````
 
 ````sql
-REATE TABLE Servico (
-    Id_Servico SMALLINT  AUTO_INCREMENT PRIMARY KEY,
-    Id_Pedido SMALLINT NOT NULL,
-    Descricao VARCHAR(255),
-    Preco DECIMAL NOT NULL,
-    Tipo VARCHAR(20) NOT NULL,
-    CONSTRAINT fk_Pedido FOREIGN KEY (Id_Pedido) REFERENCES Pedido (Id_Pedido)
+CREATE TABLE Servico
+(
+    Id_Servico SMALLINT AUTO_INCREMENT PRIMARY KEY,
+    Id_Pedido  SMALLINT       NOT NULL,
+    Descricao  VARCHAR(255),
+    Preco      DECIMAL(10, 2) NOT NULL,
+    Tipo       VARCHAR(20)    NOT NULL,
+    CONSTRAINT fk_Pedido_Servico FOREIGN KEY (Id_Pedido) REFERENCES Pedido (Id_Pedido)
 );
 ````
 
 ````sql
-CREATE TABLE Produto (
-    Id_Produto SMALLINT AUTO_INCREMENT PRIMARY KEY,
-    Nome VARCHAR(100) NOT NULL,
-    Categoria VARCHAR(50) NOT NULL,
-    Preco DECIMAL(10, 2) NOT NULL,
-    Quant_Estoque SMALLINT NOT NULL
+CREATE TABLE Produto
+(
+    Id_Produto    SMALLINT AUTO_INCREMENT PRIMARY KEY,
+    Nome          VARCHAR(100)   NOT NULL,
+    Categoria     VARCHAR(50)    NOT NULL,
+    Preco         DECIMAL(10, 2) NOT NULL,
+    Quant_Estoque SMALLINT       NOT NULL
 );
 ````
 
 ````sql
-CREATE TABLE Pedido_Possui_Produto (
-    Id_Pedido SMALLINT NOT NULL,
-    Id_Produto SMALLINT NOT NULL,
-    Preco DECIMAL(10, 2) NOT NULL,
-    Quant SMALLINT NOT NULL,
+CREATE TABLE Pedido_Possui_Produto
+(
+    Id_Pedido  SMALLINT       NOT NULL,
+    Id_Produto SMALLINT       NOT NULL,
+    Preco      DECIMAL(10, 2) NOT NULL,
+    Quant      SMALLINT       NOT NULL,
     PRIMARY KEY (Id_Pedido, Id_Produto),
-    CONSTRAINT fk_Pedido_Produto FOREIGN KEY (Id_Pedido) REFERENCES Pedido (Id_Pedido),
-    CONSTRAINT fk_Produto_Pedido FOREIGN KEY (Id_Produto) REFERENCES Produto (Id_Produto)
+    CONSTRAINT fk_Pedido_Produto FOREIGN KEY (Id_Pedido) REFERENCES Pedido (Id_Pedido) ON DELETE CASCADE,
+    CONSTRAINT fk_Produto_Pedido FOREIGN KEY (Id_Produto) REFERENCES Produto (Id_Produto) ON DELETE CASCADE
 );
 ````
 

@@ -39,7 +39,7 @@
             <Font size="20.0" />
          </font>
       </Label>
-      <Button fx:id="btnSalvar" layoutX="133.0" layoutY="477.0" mnemonicParsing="false" onAction="#onBtnSalvar" prefHeight="32.0" prefWidth="159.0" style="-fx-background-color: green;" text="Salvar" textFill="WHITE" />
+      <Button fx:id="btnSalvar" layoutX="133.0" layoutY="477.0" mnemonicParsing="false" onAction="#onBtnSalvar" prefHeight="32.0" prefWidth="159.0" style="-fx-background-color: blue;" text="Salvar" textFill="WHITE" />
       <Label fx:id="lblErroNome" layoutX="167.0" layoutY="164.0" prefHeight="18.0" prefWidth="338.0" textFill="RED" />
       <Label fx:id="lblErroPreco" layoutX="172.0" layoutY="322.0" prefHeight="18.0" prefWidth="338.0" textFill="RED" />
       <Label fx:id="lblErroQtdEstoque" layoutX="171.0" layoutY="410.0" prefHeight="18.0" prefWidth="338.0" textFill="RED" />
@@ -64,7 +64,7 @@
             <Image url="@../icones/quantidade.png" />
          </image>
       </ImageView>
-      <Button fx:id="btnCancelar" layoutX="348.0" layoutY="477.0" mnemonicParsing="false" onAction="#onBtnCancelar" prefHeight="32.0" prefWidth="159.0" style="-fx-background-color: green;" text="Cancelar" textFill="WHITE" />
+      <Button fx:id="btnCancelar" layoutX="348.0" layoutY="477.0" mnemonicParsing="false" onAction="#onBtnCancelar" prefHeight="32.0" prefWidth="159.0" style="-fx-background-color: blue;" text="Cancelar" textFill="WHITE" />
       <Label fx:id="lblErroCategoria" layoutX="172.0" layoutY="249.0" prefHeight="18.0" prefWidth="338.0" textFill="RED" />
    </children>
 </AnchorPane>

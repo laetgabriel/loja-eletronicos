@@ -35,9 +35,9 @@
          </font>
       </Label>
 
-      <Button fx:id="btnLogin" layoutX="525.0" layoutY="476.0" mnemonicParsing="false" onAction="#onBtnLogin" prefHeight="44.0" prefWidth="158.0" style="-fx-background-color: green;" text="Login" textFill="WHITE" />
+      <Button fx:id="btnLogin" layoutX="525.0" layoutY="476.0" mnemonicParsing="false" onAction="#onBtnLogin" prefHeight="44.0" prefWidth="158.0" style="-fx-background-color: blue;" text="Login" textFill="WHITE" />
 
-      <Button fx:id="btnEsqueceuSenha" layoutX="237.0" layoutY="476.0" mnemonicParsing="false" onAction="#onBtnEsqueceuSenha" prefHeight="44.0" prefWidth="158.0" style="-fx-background-color: green;" text="Esqueceu a senha" textFill="WHITE" />
+      <Button fx:id="btnEsqueceuSenha" layoutX="237.0" layoutY="476.0" mnemonicParsing="false" onAction="#onBtnEsqueceuSenha" prefHeight="44.0" prefWidth="158.0" style="-fx-background-color: blue;" text="Esqueceu a senha" textFill="WHITE" />
 
       <ImageView fitHeight="32.0" fitWidth="38.0" layoutX="237.0" layoutY="246.0">
          <image>

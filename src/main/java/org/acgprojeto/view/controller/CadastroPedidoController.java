@@ -224,18 +224,7 @@ public class CadastroPedidoController implements Initializable {
             btnAdicionarProduto.setDisable(false);
 
 
-
-            if (tipo.equals(Tipo.COMPRA) || tipo.equals(Tipo.VENDA)){
-                PedidoDTO pedido = pedidoController.obterUltimoPedido();
-                if (tipo.equals(Tipo.COMPRA)){
-                    Optional<ButtonType> opcaoCompra = Alertas.showConfirmation("Pedido de compra criado", "Compra feita! Se for um produto, deseja cadastrar ao estoque?");
-                    if (opcaoCompra.isPresent() && opcaoCompra.get() == ButtonType.OK) {
-                        abrirTelaCadastroProduto();
-                    }
-                }
-                pedido.setEstado(Estado.FINALIZADO);
-                pedidoController.atualizarPedido(pedido);
-            }
+            verificarTipoServico(tipo);
 
             notificarOuvintes();
 
@@ -344,6 +333,8 @@ public class CadastroPedidoController implements Initializable {
             String tipoServico = choiceBoxTipoServico.getValue();
             Tipo tipo = TipoStringParaEnum(tipoServico);
 
+            verificarTipoServico(tipo);
+
             try {
                 ServicoDTO servicoDTO = new ServicoDTO(
                         null,
@@ -359,6 +350,19 @@ public class CadastroPedidoController implements Initializable {
             } catch (ValidacaoException e) {
                 Alertas.mostrarAlerta("ERRO", e.getMessage(), Alert.AlertType.ERROR);
             }
+        }
+    }
+
+    private void verificarTipoServico(Tipo tipo) {
+        if (tipo.equals(Tipo.COMPRA) || tipo.equals(Tipo.VENDA)){
+            PedidoDTO pedido = pedidoController.obterUltimoPedido();
+            if (tipo.equals(Tipo.COMPRA)){
+                Optional<ButtonType> opcaoCompra = Alertas.showConfirmation("Pedido de compra criado", "Compra feita! Se for um produto, deseja cadastrar ao estoque?");
+                if (opcaoCompra.isPresent() && opcaoCompra.get() == ButtonType.OK) {
+                    abrirTelaCadastroProduto();
+                }
+            }
+            pedidoController.atualizarPedido(pedido);
         }
     }
 
